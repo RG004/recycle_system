@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.recycle_system_springboot.dao.RecycleOrdersDao">
+  <resultMap id="BaseResultMap" type="com.example.recycle_system_springboot.pojo.entity.RecycleOrders">
+    <id column="Recycle_Order_ID" jdbcType="INTEGER" property="recycleOrderId" />
+    <result column="Address_ID" jdbcType="INTEGER" property="addressId" />
+    <result column="Collector_Person_ID" jdbcType="INTEGER" property="collectorPersonId" />
+    <result column="Evaluation_ID" jdbcType="INTEGER" property="evaluationId" />
+    <result column="User_ID" jdbcType="INTEGER" property="userId" />
+    <result column="Scheduled_Time" jdbcType="TIMESTAMP" property="scheduledTime" />
+    <result column="Finished_Time" jdbcType="TIMESTAMP" property="finishedTime" />
+    <result column="Total_Amount" jdbcType="DOUBLE" property="totalAmount" />
+  </resultMap>
+  <resultMap id="AllOrderResultMap" type="com.example.recycle_system_springboot.pojo.vo.RecycleOrdersVo">
+    <id column="Recycle_Order_ID" jdbcType="INTEGER" property="recycleOrderId" />
+    <result column="Scheduled_Time" jdbcType="VARCHAR" property="scheduledTime" />
+    <result column="Finished_Time" jdbcType="VARCHAR" property="finishedTime" />
+    <result column="Address_Details" jdbcType="VARCHAR" property="addressDetails" />
+    <result column="Collector_Name" jdbcType="VARCHAR" property="collectorName" />
+    <result column="Phone" jdbcType="VARCHAR" property="phone" />
+  </resultMap>
+  <resultMap id="DoingOrderResultMap" type="com.example.recycle_system_springboot.pojo.vo.DoingOrdersVo">
+    <id column="Recycle_Order_ID" jdbcType="INTEGER" property="recycleOrderId" />
+    <result column="Scheduled_Time" jdbcType="VARCHAR" property="scheduledTime" />
+    <result column="Address_Details" jdbcType="VARCHAR" property="addressDetails" />
+    <result column="Collector_Name" jdbcType="VARCHAR" property="collectorName" />
+    <result column="Phone" jdbcType="VARCHAR" property="phone" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    Recycle_Order_ID, Address_ID, Collector_Person_ID, Evaluation_ID, User_ID, Scheduled_Time,
+    Finished_Time, Total_Amount
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from recycle_orders
+    where Recycle_Order_ID = #{recycleOrderId,jdbcType=INTEGER}
+  </select>
+  <select id="selectOrderByUserId" resultMap="AllOrderResultMap">
+      select
+      r.Recycle_Order_ID,r.Scheduled_Time,r.Finished_Time,a.Address_Details,c.Collector_Name,c.Phone
+      from recycle_orders r
+      left join address a
+      on r.Address_ID=a.Address_ID
+      left join collector c
+      on r.Collector_Person_ID=c.Collector_Person_ID
+      where r.User_ID=#{userid,jdbcType=INTEGER}
+      order by r.Recycle_Order_ID asc
+  </select>
+  <select id="selectDoingOrderByUserId" resultMap="DoingOrderResultMap">
+      select
+      r.Recycle_Order_ID,r.Scheduled_Time,a.Address_Details,c.Collector_Name,c.Phone
+      from recycle_orders r
+      left join address a
+      on r.Address_ID=a.Address_ID
+      left join collector c
+      on r.Collector_Person_ID=c.Collector_Person_ID
+      where r.User_ID=#{userid,jdbcType=INTEGER} and r.Finished_Time is null
+      order by r.Recycle_Order_ID asc
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from recycle_orders
+    where Recycle_Order_ID = #{recycleOrderId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" keyColumn="Recycle_Order_ID" keyProperty="recycleOrderId" parameterType="com.example.recycle_system_springboot.pojo.entity.RecycleOrders" useGeneratedKeys="true">
+    insert into recycle_orders (Address_ID, Collector_Person_ID, Evaluation_ID,
+      User_ID, Scheduled_Time, Finished_Time,
+      Total_Amount)
+    values (#{addressId,jdbcType=INTEGER}, #{collectorPersonId,jdbcType=INTEGER}, #{evaluationId,jdbcType=INTEGER},
+      #{userId,jdbcType=INTEGER}, #{scheduledTime,jdbcType=TIMESTAMP}, #{finishedTime,jdbcType=TIMESTAMP},
+      #{totalAmount,jdbcType=DOUBLE})
+  </insert>
+  <insert id="insertSelective" keyColumn="Recycle_Order_ID" keyProperty="recycleOrderId" parameterType="com.example.recycle_system_springboot.pojo.entity.RecycleOrders" useGeneratedKeys="true">
+    insert into recycle_orders
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="addressId != null">
+        Address_ID,
+      </if>
+      <if test="collectorPersonId != null">
+        Collector_Person_ID,
+      </if>
+      <if test="evaluationId != null">
+        Evaluation_ID,
+      </if>
+      <if test="userId != null">
+        User_ID,
+      </if>
+      <if test="scheduledTime != null">
+        Scheduled_Time,
+      </if>
+      <if test="finishedTime != null">
+        Finished_Time,
+      </if>
+      <if test="totalAmount != null">
+        Total_Amount,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="addressId != null">
+        #{addressId,jdbcType=INTEGER},
+      </if>
+      <if test="collectorPersonId != null">
+        #{collectorPersonId,jdbcType=INTEGER},
+      </if>
+      <if test="evaluationId != null">
+        #{evaluationId,jdbcType=INTEGER},
+      </if>
+      <if test="userId != null">
+        #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="scheduledTime != null">
+        #{scheduledTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="finishedTime != null">
+        #{finishedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="totalAmount != null">
+        #{totalAmount,jdbcType=DOUBLE},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.example.recycle_system_springboot.pojo.entity.RecycleOrders">
+    update recycle_orders
+    <set>
+      <if test="addressId != null">
+        Address_ID = #{addressId,jdbcType=INTEGER},
+      </if>
+      <if test="collectorPersonId != null">
+        Collector_Person_ID = #{collectorPersonId,jdbcType=INTEGER},
+      </if>
+      <if test="evaluationId != null">
+        Evaluation_ID = #{evaluationId,jdbcType=INTEGER},
+      </if>
+      <if test="userId != null">
+        User_ID = #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="scheduledTime != null">
+        Scheduled_Time = #{scheduledTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="finishedTime != null">
+        Finished_Time = #{finishedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="totalAmount != null">
+        Total_Amount = #{totalAmount,jdbcType=DOUBLE},
+      </if>
+    </set>
+    where Recycle_Order_ID = #{recycleOrderId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.example.recycle_system_springboot.pojo.entity.RecycleOrders">
+    update recycle_orders
+    set Address_ID = #{addressId,jdbcType=INTEGER},
+      Collector_Person_ID = #{collectorPersonId,jdbcType=INTEGER},
+      Evaluation_ID = #{evaluationId,jdbcType=INTEGER},
+      User_ID = #{userId,jdbcType=INTEGER},
+      Scheduled_Time = #{scheduledTime,jdbcType=TIMESTAMP},
+      Finished_Time = #{finishedTime,jdbcType=TIMESTAMP},
+      Total_Amount = #{totalAmount,jdbcType=DOUBLE}
+    where Recycle_Order_ID = #{recycleOrderId,jdbcType=INTEGER}
+  </update>
+</mapper>
