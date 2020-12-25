@@ -32,4 +32,12 @@ public class RecycleOrderServiceImpl implements RecycleOrderService {
         PageInfo<DoingOrdersVo> result= new PageInfo<>(list);
         return result;
     }
+    
+    @Override
+    public PageInfo<RecycleOrdersVo> userfindOrdersBycellector(int id,String cellectorname,int start,int limit){
+        PageHelper.startPage(start,limit);
+        Page<RecycleOrdersVo> list = recycleOrdersDao.selectOrderBycellector(id,cellectorname);
+        PageInfo<RecycleOrdersVo> result= new PageInfo<>(list);
+        return result;
+    }
 }

@@ -38,6 +38,11 @@ public class RecycleOrderController {
         return result;
     }
 
-
+    @GetMapping("/userFindordersBycellectorname/{id}/{cellectorname}/{start}/{limit}")
+    @ResponseBody
+    public PageInfo<RecycleOrdersVo> selectOrderBycellector(@PathVariable("id") int id,@PathVariable("cellectorname") String cellectorname,@PathVariable("start") int start, @PathVariable("limit") int limit){
+        PageInfo<RecycleOrdersVo> result = recycleOrderService.userfindOrdersBycellector(id,cellectorname,start,limit);
+        return result;
+    }
 
 }

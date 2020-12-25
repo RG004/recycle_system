@@ -10,4 +10,6 @@ public interface RecycleOrderService {
     PageInfo<RecycleOrdersVo> userfindAllOrders(int id,int start,int limit);
 
     PageInfo<DoingOrdersVo> userfindDoingOrders(int id,int start,int limit);
+
+    PageInfo<RecycleOrdersVo> userfindOrdersBycellector(int id,String cellectorname,int start,int limit);
 }

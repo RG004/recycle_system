@@ -26,6 +26,17 @@
     <result column="Collector_Name" jdbcType="VARCHAR" property="collectorName" />
     <result column="Phone" jdbcType="VARCHAR" property="phone" />
   </resultMap>
+  <select id="selectOrderBycellector" resultMap="AllOrderResultMap">
+    select
+      r.Recycle_Order_ID,r.Scheduled_Time,r.Finished_Time,a.Address_Details,c.Collector_Name,c.Phone
+    from recycle_orders r
+           left join address a
+                     on r.Address_ID=a.Address_ID
+           left join collector c
+                     on r.Collector_Person_ID=c.Collector_Person_ID
+    where r.User_ID=#{userid,jdbcType=INTEGER} and c.Collector_Name like "%"#{cellectorname,jdbcType=VARCHAR}"%"
+    order by r.Recycle_Order_ID asc
+  </select>
   <sql id="Base_Column_List">
     Recycle_Order_ID, Address_ID, Collector_Person_ID, Evaluation_ID, User_ID, Scheduled_Time,
     Finished_Time, Total_Amount

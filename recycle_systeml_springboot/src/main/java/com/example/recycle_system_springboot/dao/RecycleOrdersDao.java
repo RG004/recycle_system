@@ -22,5 +22,7 @@ public interface RecycleOrdersDao {
 
     Page<RecycleOrdersVo> selectOrderByUserId(Integer userid);
 
+    Page<RecycleOrdersVo> selectOrderBycellector(Integer userid,String cellectorname);
+
     Page<DoingOrdersVo> selectDoingOrderByUserId(Integer userid);
 }
