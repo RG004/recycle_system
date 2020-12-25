@@ -25,4 +25,8 @@ public interface RecycleOrdersDao {
     Page<RecycleOrdersVo> selectOrderBycellector(Integer userid,String cellectorname);
 
     Page<DoingOrdersVo> selectDoingOrderByUserId(Integer userid);
+
+    Page<RecycleOrdersVo> selectOrderByDay(Integer userid, String day);
+
+    Page<RecycleOrdersVo> selectOrderByMonth(Integer userid, String month);
 }

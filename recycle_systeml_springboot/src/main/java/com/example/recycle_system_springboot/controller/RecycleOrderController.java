@@ -45,4 +45,19 @@ public class RecycleOrderController {
         return result;
     }
 
+    @GetMapping("/userDayorders/{id}/{start}/{limit}/{day}")
+    @ResponseBody
+    public PageInfo<RecycleOrdersVo> userfindDayOrders(@PathVariable("id") int id,@PathVariable("start") int start, @PathVariable("limit") int limit,@PathVariable("day") String day){
+        PageInfo<RecycleOrdersVo> result =recycleOrderService.userfindDayOrders(id,start,limit,day);
+        return result;
+    }
+    @GetMapping("/userMonthorders/{id}/{start}/{limit}/{month}")
+
+    @ResponseBody
+    public PageInfo<RecycleOrdersVo> userfindMonthOrders(@PathVariable("id") int id,@PathVariable("start") int start, @PathVariable("limit") int limit,@PathVariable("month") String month){
+        PageInfo<RecycleOrdersVo> result =recycleOrderService.userfindMonthOrders(id,start,limit,month);
+        return result;
+    }
+
+
 }

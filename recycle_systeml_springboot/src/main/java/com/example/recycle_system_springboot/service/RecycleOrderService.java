@@ -12,4 +12,8 @@ public interface RecycleOrderService {
     PageInfo<DoingOrdersVo> userfindDoingOrders(int id,int start,int limit);
 
     PageInfo<RecycleOrdersVo> userfindOrdersBycellector(int id,String cellectorname,int start,int limit);
+
+    PageInfo<RecycleOrdersVo> userfindDayOrders(int id, int start, int limit, String day);
+
+    PageInfo<RecycleOrdersVo> userfindMonthOrders(int id, int start, int limit, String month);
 }
