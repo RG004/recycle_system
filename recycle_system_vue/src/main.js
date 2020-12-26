@@ -7,6 +7,7 @@ import store from './store'
 import './plugins/axios.js'
 import './plugins/element.js'
 import  VueParticles  from   'vue-particles'
+import id from 'element-ui/src/locale/lang/id'
 
 Vue.config.productionTip = false
 Vue.use(VueParticles)
@@ -17,4 +18,27 @@ new Vue({
   store,
   components: {App},
   template: '<App/>'
+})
+router.beforeEach((to, from, next) => {
+  let Token=sessionStorage.token
+  let identity=sessionStorage.identity
+  if (to.meta.needLogin) {
+    if (Token) {
+      next()
+        if(to.meta.needUser){
+            if(identity==1){
+              next()
+            }
+            else next({path: '/404error'})
+        }else if(to.meta.needCollector){
+          if(identity==2){
+            next()
+          }
+          else next({path:'/404error'})
+        }
+    }
+    else next({path:'login'})
+  } else {
+    next()
+  }
 })

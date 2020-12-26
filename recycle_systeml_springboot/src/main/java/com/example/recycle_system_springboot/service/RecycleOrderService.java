@@ -1,5 +1,7 @@
 package com.example.recycle_system_springboot.service;
 
+import com.example.recycle_system_springboot.pojo.vo.CollectorDoingOrdersVo;
+import com.example.recycle_system_springboot.pojo.vo.CollectorOrdersVo;
 import com.example.recycle_system_springboot.pojo.vo.DoingOrdersVo;
 import com.example.recycle_system_springboot.pojo.vo.RecycleOrdersVo;
 import com.github.pagehelper.Page;
@@ -11,9 +13,7 @@ public interface RecycleOrderService {
 
     PageInfo<DoingOrdersVo> userfindDoingOrders(int id,int start,int limit);
 
-    PageInfo<RecycleOrdersVo> userfindOrdersBycellector(int id,String cellectorname,int start,int limit);
+    PageInfo<CollectorOrdersVo> collectorfindAllOrders(int id,int start,int limit);
 
-    PageInfo<RecycleOrdersVo> userfindDayOrders(int id, int start, int limit, String day);
-
-    PageInfo<RecycleOrdersVo> userfindMonthOrders(int id, int start, int limit, String month);
+    PageInfo<CollectorDoingOrdersVo> collectorfindDoingOrders(int id, int start, int limit);
 }

@@ -1,6 +1,8 @@
 package com.example.recycle_system_springboot.controller;
 
 import com.example.recycle_system_springboot.dao.RecycleOrdersDao;
+import com.example.recycle_system_springboot.pojo.vo.CollectorDoingOrdersVo;
+import com.example.recycle_system_springboot.pojo.vo.CollectorOrdersVo;
 import com.example.recycle_system_springboot.pojo.vo.DoingOrdersVo;
 import com.example.recycle_system_springboot.pojo.vo.RecycleOrdersVo;
 import com.example.recycle_system_springboot.service.RecycleOrderService;
@@ -38,26 +40,18 @@ public class RecycleOrderController {
         return result;
     }
 
-    @GetMapping("/userFindordersBycellectorname/{id}/{cellectorname}/{start}/{limit}")
+    @GetMapping("/collectorAllorders/{id}/{start}/{limit}")
     @ResponseBody
-    public PageInfo<RecycleOrdersVo> selectOrderBycellector(@PathVariable("id") int id,@PathVariable("cellectorname") String cellectorname,@PathVariable("start") int start, @PathVariable("limit") int limit){
-        PageInfo<RecycleOrdersVo> result = recycleOrderService.userfindOrdersBycellector(id,cellectorname,start,limit);
+    public PageInfo<CollectorOrdersVo> collectorfindAllOrders(@PathVariable("id") int id, @PathVariable("start") int start, @PathVariable("limit") int limit){
+        PageInfo<CollectorOrdersVo> result = recycleOrderService.collectorfindAllOrders(id,start,limit);
         return result;
     }
 
-    @GetMapping("/userDayorders/{id}/{start}/{limit}/{day}")
+    @GetMapping("/collectorDoingorders/{id}/{start}/{limit}")
     @ResponseBody
-    public PageInfo<RecycleOrdersVo> userfindDayOrders(@PathVariable("id") int id,@PathVariable("start") int start, @PathVariable("limit") int limit,@PathVariable("day") String day){
-        PageInfo<RecycleOrdersVo> result =recycleOrderService.userfindDayOrders(id,start,limit,day);
+    public PageInfo<CollectorDoingOrdersVo> collectorfindDoingOrders(@PathVariable("id") int id, @PathVariable("start") int start, @PathVariable("limit") int limit){
+        PageInfo<CollectorDoingOrdersVo> result = recycleOrderService.collectorfindDoingOrders(id,start,limit);
         return result;
     }
-    @GetMapping("/userMonthorders/{id}/{start}/{limit}/{month}")
-
-    @ResponseBody
-    public PageInfo<RecycleOrdersVo> userfindMonthOrders(@PathVariable("id") int id,@PathVariable("start") int start, @PathVariable("limit") int limit,@PathVariable("month") String month){
-        PageInfo<RecycleOrdersVo> result =recycleOrderService.userfindMonthOrders(id,start,limit,month);
-        return result;
-    }
-
 
 }

@@ -1,6 +1,8 @@
 package com.example.recycle_system_springboot.dao;
 
 import com.example.recycle_system_springboot.pojo.entity.RecycleOrders;
+import com.example.recycle_system_springboot.pojo.vo.CollectorDoingOrdersVo;
+import com.example.recycle_system_springboot.pojo.vo.CollectorOrdersVo;
 import com.example.recycle_system_springboot.pojo.vo.DoingOrdersVo;
 import com.example.recycle_system_springboot.pojo.vo.RecycleOrdersVo;
 import com.github.pagehelper.Page;
@@ -22,11 +24,9 @@ public interface RecycleOrdersDao {
 
     Page<RecycleOrdersVo> selectOrderByUserId(Integer userid);
 
-    Page<RecycleOrdersVo> selectOrderBycellector(Integer userid,String cellectorname);
-
     Page<DoingOrdersVo> selectDoingOrderByUserId(Integer userid);
 
-    Page<RecycleOrdersVo> selectOrderByDay(Integer userid, String day);
+    Page<CollectorOrdersVo> selectOrderByCollectorId(Integer collectorid);
 
-    Page<RecycleOrdersVo> selectOrderByMonth(Integer userid, String month);
+    Page<CollectorDoingOrdersVo> selectDoingOrderByCollectorId(Integer collectorid);
 }
