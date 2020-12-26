@@ -1,7 +1,8 @@
 <template>
   <div>
     <div>
-      <el-input v-model="address" placeholder="请输入地址"></el-input>
+            {{jing}} {{j1}}  {{j2}}  {{w1}}   {{w2}}
+      <el-input v-model="detail" placeholder="请输入地址"></el-input>
       <el-button @click="put">提交</el-button>
     </div>
     <div id="all-map" class="map"></div>
@@ -17,7 +18,7 @@
     methods: {
       put(){
         const _this = this
-        axios.get('https://restapi.amap.com/v3/geocode/geo?address='+this.address+'&key=8c922d0176df163a311ac3425db373c6').then(function (resp) {
+        axios.get('https://restapi.amap.com/v3/geocode/geo?address='+this.detail+'&key=8c922d0176df163a311ac3425db373c6').then(function (resp) {
           console.log(resp)
           _this.address=resp.data.geocodes[0].location
           _this.jing=_this.address.substr(0,10)
@@ -28,22 +29,59 @@
       },
       GaodeMap () {
         var map = new AMap.Map('all-map', {
-          center: [this.jing,this.wei],
+          center: [this.jing, this.wei],
           resizeEnable: true,
-          zoom: 15
+          zoom: 17
         });
         AMap.plugin(['AMap.ToolBar', 'AMap.Scale'], function () {
           map.addControl(new AMap.ToolBar())
           map.addControl(new AMap.Scale())
         })
-
+        var infoWindow = new AMap.InfoWindow({offset: new AMap.Pixel(0, -30)});
+        //遍历生成多个标记点
+          for (var i = 0, marker; i < this.lnglats.length; i++) {
+            var marker = new AMap.Marker({
+              position: [this.lnglats[i].j, this.lnglats[i].w],//不同标记点的经纬度
+              map: map
+            });
+            marker.content = this.lnglats[i].content;
+            marker.on('click', markerClick);
+            //marker.emit('click', {target: marker});//默认初始化不出现信息窗体,打开初始化就出现信息窗体
+          }
+          function markerClick(e) {
+            infoWindow.setContent(e.target.content);
+            infoWindow.open(map, e.target.getPosition());
+          }
+        },
       },
-    },
     data(){
       return{
+        j1:1,
+        j2:2,
+        w1:3,
+        w2:4,
         jing:120.047668,
         wei:30.234097,
-        address:[120.047668,30.234097],
+        address:'',//经纬度
+        detail:'',//地址信息
+        lnglats: [{
+          j:120.047668,
+          w:30.234097,
+          content:'zqy笨比'
+        },{
+          j:120.047668,
+          w:30.235197,
+          content:'zqy笨比'
+        },{
+          j:120.047668,
+          w:30.236297,
+          content:'zqy笨比'
+        },{
+          j:120.047668,
+          w:30.237397,
+          content:'zqy笨比'
+        }
+        ],
       }
     }
   }

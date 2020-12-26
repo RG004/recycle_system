@@ -1,6 +1,8 @@
 package com.example.recycle_system_springboot.service.impl;
 
 import com.example.recycle_system_springboot.dao.RecycleOrdersDao;
+import com.example.recycle_system_springboot.pojo.vo.CollectorDoingOrdersVo;
+import com.example.recycle_system_springboot.pojo.vo.CollectorOrdersVo;
 import com.example.recycle_system_springboot.pojo.vo.DoingOrdersVo;
 import com.example.recycle_system_springboot.pojo.vo.RecycleOrdersVo;
 import com.example.recycle_system_springboot.service.RecycleOrderService;
@@ -34,26 +36,18 @@ public class RecycleOrderServiceImpl implements RecycleOrderService {
     }
 
     @Override
-    public PageInfo<RecycleOrdersVo> userfindOrdersBycellector(int id,String cellectorname,int start,int limit){
+    public PageInfo<CollectorOrdersVo> collectorfindAllOrders(int id, int start, int limit) {
         PageHelper.startPage(start,limit);
-        Page<RecycleOrdersVo> list = recycleOrdersDao.selectOrderBycellector(id,cellectorname);
-        PageInfo<RecycleOrdersVo> result= new PageInfo<>(list);
+        Page<CollectorOrdersVo> list = recycleOrdersDao.selectOrderByCollectorId(id);
+        PageInfo<CollectorOrdersVo> result= new PageInfo<>(list);
         return result;
     }
 
     @Override
-    public PageInfo<RecycleOrdersVo> userfindDayOrders(int id, int start, int limit, String day) {
+    public PageInfo<CollectorDoingOrdersVo> collectorfindDoingOrders(int id, int start, int limit) {
         PageHelper.startPage(start,limit);
-        Page<RecycleOrdersVo> list = recycleOrdersDao.selectOrderByDay(id,day);
-        PageInfo<RecycleOrdersVo> result= new PageInfo<>(list);
-        return result;
-    }
-
-    @Override
-    public PageInfo<RecycleOrdersVo> userfindMonthOrders(int id, int start, int limit, String month) {
-        PageHelper.startPage(start,limit);
-        Page<RecycleOrdersVo> list = recycleOrdersDao.selectOrderByMonth(id,month);
-        PageInfo<RecycleOrdersVo> result= new PageInfo<>(list);
+        Page<CollectorDoingOrdersVo> list = recycleOrdersDao.selectDoingOrderByCollectorId(id);
+        PageInfo<CollectorDoingOrdersVo> result= new PageInfo<>(list);
         return result;
     }
 }

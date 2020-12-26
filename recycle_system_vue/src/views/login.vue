@@ -92,12 +92,22 @@
           if (valid) {
             axios.get('http://localhost:8181/checklogin/'+this.loginForm.identity+'/'+this.loginForm.username+'/'+this.loginForm.password+'').then(function (resp) {
               console.log(resp)
-              if(resp.data.login){
+              if(_this.loginForm.identity==1&&resp.data.login){
+                  sessionStorage.setItem('token',resp.data.token)
+                  sessionStorage.setItem('identity',_this.loginForm.identity)
                   _this.$store.commit('setUserId',resp.data.id)
                   _this.$store.commit('setUserName',resp.data.name)
                   _this.$router.push({
                     path:'/userlayout',
                   })
+              }else if(_this.loginForm.identity==2&&resp.data.login){
+                sessionStorage.setItem('token',resp.data.token)
+                sessionStorage.setItem('identity',_this.loginForm.identity)
+                _this.$store.commit('setCollectorId',resp.data.id)
+                _this.$store.commit('setCollectorName',resp.data.name)
+                _this.$router.push({
+                  path:'/collectorlayout',
+                })
               }else {
                 _this.$alert('用户名或密码输入错误','提示');
               }

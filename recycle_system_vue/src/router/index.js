@@ -3,13 +3,19 @@ import Router from 'vue-router'
 import Login from '../views/login'
 import Index from '../views/index'
 import UserLayout from '../views/User/userlayout'
-import AllInorder from '../views/User/allInorder'
-import DoingInorder from '../views/User/doingInorder'
+import UserAllInorder from '../views/User/userallInorder'
+import UserDoingInorder from '../views/User/userdoingInorder'
 import Recycle from '../views/User/recycle'
-import AlterInfo from '../views/User/alterinfo'
+import UserAlterInfo from '../views/User/useralterinfo'
 import Test from  '../views/User/test'
-import HomePage from '../views/User/homepage'
+import UserHomePage from '../views/User/userhomepage'
 import maptest from '../views/User/maptest'
+import CollectorLayout from '../views/Collector/collectorlayout'
+import CollectorHomePage from '../views/Collector/collectorhomepage'
+import CollectorAllInorder from '../views/Collector/collectorallInorder'
+import CollectorDoingInorder from '../views/Collector/collectordoingInorder'
+import CollectorAlterInfo from '../views/Collector/collectoralterinfo'
+import NotFound from '../views/404'
 Vue.use(Router)
 
 export default new Router({
@@ -23,40 +29,119 @@ export default new Router({
     {
       path:'/login',
       name:"登录页面",
-      component: Login
+      component: Login,
+    },
+    {
+      path:'/404error',
+      component:NotFound,
+    },
+    {
+      path:'/collectorlayout',
+      component:CollectorLayout,
+      redirect:"collectorhomepage",
+      meta: {
+        needLogin: true, //需要登录
+        needCollector:true,
+      },
+      children:[
+        {
+          path: '/collectorHomePage',
+          component: CollectorHomePage,
+          meta: {
+            needLogin: true, //需要登录
+            needCollector:true,
+          },
+        },
+        {
+          path: '/collectorallinorder',
+          component: CollectorAllInorder,
+          meta: {
+            needLogin: true, //需要登录
+            needCollector:true,
+          },
+        },
+        {
+          path: '/collectordoinginorder',
+          component: CollectorDoingInorder,
+          meta: {
+            needLogin: true, //需要登录
+            needCollector:true,
+          },
+        },
+        {
+          path: '/collectoralterinfo',
+          component: CollectorAlterInfo,
+          meta: {
+            needLogin: true, //需要登录
+            needCollector:true,
+          },
+        },
+      ]
     },
     {
       path: '/userlayout',
       component: UserLayout,
-      redirect:"/homepage",
+      redirect:"/userhomepage",
+      meta: {
+        needLogin: true, //需要登录
+        needUser:true,
+      },
       children: [
         {
-          path: '/homepage',
-          component: HomePage
+          path: '/userhomepage',
+          component: UserHomePage,
+          meta: {
+            needLogin: true, //需要登录
+            needUser:true,
+          },
         },
 
         {
-          path: '/allinorder',
-          component: AllInorder
+          path: '/userallinorder',
+          component: UserAllInorder,
+          meta: {
+            needLogin: true, //需要登录
+            needUser:true,
+          },
         },
         {
-          path: '/doinginorder',
-          component: DoingInorder
+          path: '/userdoinginorder',
+          component: UserDoingInorder,
+          meta: {
+            needLogin: true, //需要登录
+            needUser:true,
+          },
         },
         {
           path: '/recycle',
-          component: Recycle
+          component: Recycle,
+          meta: {
+            needLogin: true, //需要登录
+            needUser:true,
+          },
         },
         {
-          path: '/alterinfo',
-          component: AlterInfo
+          path: '/useralterinfo',
+          component: UserAlterInfo,
+          meta: {
+            needLogin: true, //需要登录
+            needUser:true,
+          },
         },
         {
           path:'/test',
-          component: Test
+          component: Test,
+          meta: {
+            needLogin: true, //需要登录
+            needUser:true,
+          },
         },{
           path:'/maptest',
-          component:maptest
+          component:maptest,
+          meta: {
+            needLogin: true, //需要登录
+            needUser:true,
+          },
         }
       ]
     }
