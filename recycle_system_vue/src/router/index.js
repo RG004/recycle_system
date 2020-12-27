@@ -16,6 +16,7 @@ import CollectorAllInorder from '../views/Collector/collectorallInorder'
 import CollectorDoingInorder from '../views/Collector/collectordoingInorder'
 import CollectorAlterInfo from '../views/Collector/collectoralterinfo'
 import NotFound from '../views/404'
+import register from "../views/register";
 Vue.use(Router)
 
 export default new Router({
@@ -30,6 +31,10 @@ export default new Router({
       path:'/login',
       name:"登录页面",
       component: Login,
+    },{
+      path:'/register',
+      name:"注册页面",
+      component: register
     },
     {
       path:'/404error',

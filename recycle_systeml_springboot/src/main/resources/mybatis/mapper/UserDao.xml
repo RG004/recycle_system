@@ -18,6 +18,13 @@
       <result column="Address_Details" jdbcType="VARCHAR" property="addressDetails" />
     </collection>
   </resultMap>
+  <resultMap id="AllUser" type="com.example.recycle_system_springboot.pojo.entity.User">
+    <id column="User_ID" jdbcType="INTEGER" property="userId" />
+    <result column="User_Name" jdbcType="VARCHAR" property="userName" />
+    <result column="User_RealName" jdbcType="VARCHAR" property="userRealname" />
+    <result column="Password" jdbcType="VARCHAR" property="password" />
+    <result column="Phone" jdbcType="VARCHAR" property="phone" />
+  </resultMap>
   <sql id="Base_Column_List">
     User_ID, User_Name, User_RealName, `Password`, Phone
   </sql>
@@ -33,6 +40,10 @@
     from user
     where User_Name = #{username,jdbcType=VARCHAR}
   </select>
+  <select id="selectAllUser" resultMap="AllUser">
+    select *
+    from user
+  </select>
    <select id="selectAddress" resultMap="AddressResultMap">
     select
     u.User_ID,u.User_name,u.User_RealName,u.Password,u.Phone,a.Address_Details
@@ -46,9 +57,9 @@
     where User_ID = #{userId,jdbcType=INTEGER}
   </delete>
   <insert id="insert" keyColumn="User_ID" keyProperty="userId" parameterType="com.example.recycle_system_springboot.pojo.entity.User" useGeneratedKeys="true">
-    insert into user (User_Name, User_RealName, `Password`,
+    insert into user (User_ID,User_Name, User_RealName, `Password`,
       Phone)
-    values (#{userName,jdbcType=VARCHAR}, #{userRealname,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR},
+    values (#{userId,jdbcType=INTEGER},#{userName,jdbcType=VARCHAR}, #{userRealname,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR},
       #{phone,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" keyColumn="User_ID" keyProperty="userId" parameterType="com.example.recycle_system_springboot.pojo.entity.User" useGeneratedKeys="true">
