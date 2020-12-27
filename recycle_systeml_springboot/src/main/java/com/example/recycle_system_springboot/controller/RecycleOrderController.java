@@ -1,18 +1,13 @@
 package com.example.recycle_system_springboot.controller;
 
 import com.example.recycle_system_springboot.dao.RecycleOrdersDao;
-import com.example.recycle_system_springboot.pojo.vo.CollectorDoingOrdersVo;
-import com.example.recycle_system_springboot.pojo.vo.CollectorOrdersVo;
-import com.example.recycle_system_springboot.pojo.vo.DoingOrdersVo;
-import com.example.recycle_system_springboot.pojo.vo.RecycleOrdersVo;
+import com.example.recycle_system_springboot.pojo.vo.*;
 import com.example.recycle_system_springboot.service.RecycleOrderService;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -22,6 +17,7 @@ public class RecycleOrderController {
     //用于查询所有订单、正在进行中的订单，其中用到了分页的技术
     @Resource
     RecycleOrderService recycleOrderService;
+
 
     @Resource
     RecycleOrdersDao recycleOrdersDao;
@@ -51,6 +47,23 @@ public class RecycleOrderController {
     @ResponseBody
     public PageInfo<CollectorDoingOrdersVo> collectorfindDoingOrders(@PathVariable("id") int id, @PathVariable("start") int start, @PathVariable("limit") int limit){
         PageInfo<CollectorDoingOrdersVo> result = recycleOrderService.collectorfindDoingOrders(id,start,limit);
+        return result;
+    }
+
+    //下单控制
+    @GetMapping("/getallitem")
+    @ResponseBody
+    public List<ItemVo> getAllItem(){
+        List<ItemVo> result=recycleOrderService.getAllItems();
+        return result;
+
+    }
+
+    @PostMapping("/placeanorder")
+    @ResponseBody
+    public Boolean PlaceAnOrder(@RequestBody OrderVo order){
+        System.out.println(order);
+        Boolean result=recycleOrderService.placeAnOrder(order);
         return result;
     }
 

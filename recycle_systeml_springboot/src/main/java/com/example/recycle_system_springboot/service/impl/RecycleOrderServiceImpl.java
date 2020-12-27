@@ -1,10 +1,12 @@
 package com.example.recycle_system_springboot.service.impl;
 
+import com.example.recycle_system_springboot.dao.ItemDao;
+import com.example.recycle_system_springboot.dao.RecycleOrderDetailDao;
 import com.example.recycle_system_springboot.dao.RecycleOrdersDao;
-import com.example.recycle_system_springboot.pojo.vo.CollectorDoingOrdersVo;
-import com.example.recycle_system_springboot.pojo.vo.CollectorOrdersVo;
-import com.example.recycle_system_springboot.pojo.vo.DoingOrdersVo;
-import com.example.recycle_system_springboot.pojo.vo.RecycleOrdersVo;
+import com.example.recycle_system_springboot.pojo.entity.Item;
+import com.example.recycle_system_springboot.pojo.entity.RecycleOrderDetail;
+import com.example.recycle_system_springboot.pojo.entity.RecycleOrders;
+import com.example.recycle_system_springboot.pojo.vo.*;
 import com.example.recycle_system_springboot.service.RecycleOrderService;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
@@ -13,11 +15,18 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.text.SimpleDateFormat;
+import java.util.List;
 
 @Service
 public class RecycleOrderServiceImpl implements RecycleOrderService {
     @Resource
     RecycleOrdersDao recycleOrdersDao;
+    @Resource
+    RecycleOrderDetailDao recycleOrderDetailDao;
+    @Resource
+    ItemDao itemDao;
+    @Resource
+    RecycleOrderDetail recycleOrderDetail;
 
     @Override
     public PageInfo<RecycleOrdersVo> userfindAllOrders(int id,int start,int limit) {
@@ -50,4 +59,34 @@ public class RecycleOrderServiceImpl implements RecycleOrderService {
         PageInfo<CollectorDoingOrdersVo> result= new PageInfo<>(list);
         return result;
     }
+
+    //得到所有的items
+    @Override
+    public List<ItemVo> getAllItems() {
+        List<ItemVo> result=itemDao.getAllItems();
+        return result;
+    }
+
+    @Override
+    public Boolean placeAnOrder(OrderVo orderVo) {
+        Boolean result=false;
+        int i=recycleOrdersDao.insert(orderVo);System.out.println(i);
+//        System.out.println(orderVo.getRecycleOrderId());
+
+        recycleOrderDetail.setRecycleOrderId(orderVo.getRecycleOrderId());
+        System.out.println(recycleOrderDetail);
+        for(ItemVo itemVo:orderVo.getTableData()){
+            for(Item item:itemVo.getItemsList()){
+                if(item.getWeight()>0.0){
+                    recycleOrderDetail.setQuantity(item.getWeight());
+                    recycleOrderDetail.setItemId(item.getItemId());
+                    int j=recycleOrderDetailDao.insert(recycleOrderDetail);
+                    System.out.println(j);
+                }
+            }
+        }
+
+        return result;
+    }
+
 }

@@ -106,6 +106,7 @@
 
           phone:13615787610,
           addressList: [{
+            addressId:1,
             addressDetails:'浙江省杭州市西湖区留和路288号浙江工业大学屏峰校区'
           }],
           centerDialogVisible: false,

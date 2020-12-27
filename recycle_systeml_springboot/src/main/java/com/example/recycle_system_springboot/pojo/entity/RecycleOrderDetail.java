@@ -1,6 +1,7 @@
 package com.example.recycle_system_springboot.pojo.entity;
 
 import lombok.Data;
+import org.springframework.stereotype.Component;
 
 import java.io.Serializable;
 
@@ -9,6 +10,7 @@ import java.io.Serializable;
  * @author
  */
 @Data
+@Component
 public class RecycleOrderDetail implements Serializable {
     //订单详情实体类
     private Integer recycleOrderDetailId;
@@ -17,6 +19,6 @@ public class RecycleOrderDetail implements Serializable {
 
     private Integer recycleOrderId;
 
-    private Integer quantity;
+    private Double quantity;
 
 }

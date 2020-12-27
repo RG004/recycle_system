@@ -15,6 +15,7 @@
     <result column="Password" jdbcType="VARCHAR" property="password" />
     <result column="Phone" jdbcType="VARCHAR" property="phone" />
     <collection property="addressList" ofType="com.example.recycle_system_springboot.pojo.vo.AddressVo">
+      <id column="Address_ID" jdbcType="INTEGER" property="addressId"></id>
       <result column="Address_Details" jdbcType="VARCHAR" property="addressDetails" />
     </collection>
   </resultMap>
@@ -46,7 +47,7 @@
   </select>
    <select id="selectAddress" resultMap="AddressResultMap">
     select
-    u.User_ID,u.User_name,u.User_RealName,u.Password,u.Phone,a.Address_Details
+    u.User_ID,u.User_name,u.User_RealName,u.Password,u.Phone,a.Address_ID,a.Address_Details
     from user u
     left join address a
     on u.User_ID=a.User_ID
@@ -57,9 +58,9 @@
     where User_ID = #{userId,jdbcType=INTEGER}
   </delete>
   <insert id="insert" keyColumn="User_ID" keyProperty="userId" parameterType="com.example.recycle_system_springboot.pojo.entity.User" useGeneratedKeys="true">
-    insert into user (User_ID,User_Name, User_RealName, `Password`,
+    insert into user (User_Name, User_RealName, `Password`,
       Phone)
-    values (#{userId,jdbcType=INTEGER},#{userName,jdbcType=VARCHAR}, #{userRealname,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR},
+    values (#{userName,jdbcType=VARCHAR}, #{userRealname,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR},
       #{phone,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" keyColumn="User_ID" keyProperty="userId" parameterType="com.example.recycle_system_springboot.pojo.entity.User" useGeneratedKeys="true">
