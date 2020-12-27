@@ -10,7 +10,6 @@ import java.io.Serializable;
  */
 @Data
 public class Item implements Serializable {
-    //物品实体类
     private Integer itemId;
 
     private Integer itemTypeId;
@@ -19,6 +18,6 @@ public class Item implements Serializable {
 
     private Double itemPrice;
 
-    private static final long serialVersionUID = 1L;
+    private String itemPic;
 
 }

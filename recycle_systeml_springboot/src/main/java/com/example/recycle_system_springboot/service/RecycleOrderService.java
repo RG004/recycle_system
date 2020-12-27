@@ -16,4 +16,8 @@ public interface RecycleOrderService {
     PageInfo<CollectorOrdersVo> collectorfindAllOrders(int id,int start,int limit);
 
     PageInfo<CollectorDoingOrdersVo> collectorfindDoingOrders(int id, int start, int limit);
+
+    PageInfo<RecycleOrdersVo> userfindOrdersByCollectorname(int id,String collectorname,String datebyday,String datebymonth,String datepick,int start,int limit);
+
+    PageInfo<DoingOrdersVo> userfindDoingOrdersByCollectorname(int id,String collectorname,int start,int limit);
 }

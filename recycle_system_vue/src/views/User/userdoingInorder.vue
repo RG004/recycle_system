@@ -1,7 +1,7 @@
 <template>
   <div>
-    根据快递员姓名查询订单:<el-input v-model="cellectorname" placeholder="请输入快递员姓名" style="width: 200px"></el-input>
-    <el-button  type="primary" round slot="reference" @click="findbycellectorname(cellectorname)">查询</el-button>
+    根据快递员姓名查询订单:<el-input v-model="collectorname" placeholder="请输入快递员姓名" style="width: 200px" @keyup.enter.native="findbycollectorname(collectorname)"></el-input>
+    <el-button  type="primary" round slot="reference" @click="findbycollectorname(collectorname)">查询</el-button>
 
     <el-table :data="tableData">
 
@@ -31,7 +31,7 @@
     </el-table>
     <el-pagination
       background
-      layout="prev, pager, next"
+      layout="total, prev, pager, next, jumper"
       :page-size="pageSize"
       :total="total"
       @current-change="page">
@@ -44,10 +44,14 @@
 <script>
   export default {
     methods:{
-      findbycellectorname(collectorname){
-        alert(this.$store.getters.getUserId)
-        axios.get('http://localhost:8181/userFindordersBycellectorname/'+_this.$store.getters.getUserId+'/'+cellectorname+'/1/2').then(function (resp) {
-
+      findbycollectorname(collectorname){
+        const _this = this
+        this.selectbycollectorname=true
+        this.selectbynormal=false
+        axios.get('http://localhost:8181/userFinddoingordersBycollectorname/'+_this.$store.getters.getUserId+'/'+collectorname+'/1/1').then(function (resp) {
+          _this.tableData = resp.data.list
+          _this.pageSize = resp.data.pageSize
+          _this.total = resp.data.total
         })
       },
       getDetail(recycleOrderId){
@@ -62,11 +66,18 @@
       },
       page(currentPage){
         const _this = this
-        axios.get('http://localhost:8181/userDoingorders/'+_this.$store.getters.getUserId+'/'+currentPage+'/1').then(function(resp){
-          _this.tableData = resp.data.list
-          _this.pageSize = resp.data.pageSize
-          _this.total = resp.data.total
-        })
+        if(this.selectbynormal){
+          axios.get('http://localhost:8181/userDoingorders/'+_this.$store.getters.getUserId+'/'+currentPage+'/1').then(function(resp){
+            _this.tableData = resp.data.list
+            _this.pageSize = resp.data.pageSize
+            _this.total = resp.data.total
+          })}else if(this.selectbycollectorname){
+          axios.get('http://localhost:8181/userFinddoingordersBycollectorname/'+ _this.$store.getters.getUserId+'/'+collectorname+'/'+currentPage+'/1').then(function (resp) {
+            _this.tableData = resp.data.list
+            _this.pageSize = resp.data.pageSize
+            _this.total = resp.data.total
+          })
+        }
       }
     },
     created () {
@@ -82,7 +93,9 @@
       return{
         pageSize:1,
         total:1,
-        cellectorname:'',
+        collectorname:'',
+        selectbycollectorname:false,
+        selectbynormal:true,
         recycleOrdersDetailVoList:[{
           itemName: '纸板',
           quantity: 10,

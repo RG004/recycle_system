@@ -50,4 +50,27 @@ public class RecycleOrderServiceImpl implements RecycleOrderService {
         PageInfo<CollectorDoingOrdersVo> result= new PageInfo<>(list);
         return result;
     }
+
+    @Override
+    public PageInfo<RecycleOrdersVo> userfindOrdersByCollectorname(int id, String collectorname,String datebyday,String datebymonth,String datepick,int start, int limit) {
+        PageHelper.startPage(start,limit);
+        if(datepick.equals("day")){
+            Page<RecycleOrdersVo> list = recycleOrdersDao.selectOrderByCollectorname(id,collectorname,datebyday);
+            PageInfo<RecycleOrdersVo> result= new PageInfo<>(list);
+            return result;
+        }else {
+            Page<RecycleOrdersVo> list = recycleOrdersDao.selectOrderByCollectornameBymonth(id, collectorname, datebymonth);
+            PageInfo<RecycleOrdersVo> result = new PageInfo<>(list);
+            return result;
+        }
+    }
+
+    @Override
+    public PageInfo<DoingOrdersVo> userfindDoingOrdersByCollectorname(int id, String collectorname, int start, int limit) {
+        PageHelper.startPage(start,limit);
+        Page<DoingOrdersVo> list = recycleOrdersDao.selectDoingOrderByCollectorname(id,collectorname);
+        PageInfo<DoingOrdersVo> result= new PageInfo<>(list);
+        return result;
+    }
+
 }
