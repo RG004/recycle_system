@@ -15,6 +15,7 @@
     <result column="Password" jdbcType="VARCHAR" property="password" />
     <result column="Phone" jdbcType="VARCHAR" property="phone" />
     <collection property="addressList" ofType="com.example.recycle_system_springboot.pojo.vo.AddressVo">
+      <result column="Address_ID" javaType="INTEGER" property="addressId"/>
       <result column="Address_Details" jdbcType="VARCHAR" property="addressDetails" />
     </collection>
   </resultMap>
@@ -35,7 +36,7 @@
   </select>
    <select id="selectAddress" resultMap="AddressResultMap">
     select
-    u.User_ID,u.User_name,u.User_RealName,u.Password,u.Phone,a.Address_Details
+    u.User_ID,u.User_name,u.User_RealName,u.Password,u.Phone,a.Address_Details,a.Address_ID
     from user u
     left join address a
     on u.User_ID=a.User_ID

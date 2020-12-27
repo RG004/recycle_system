@@ -1,10 +1,9 @@
 <template>
   <div>
     根据快递员姓名查询订单:<el-input v-model="collectorname" placeholder="请输入快递员姓名" style="width: 200px" @keyup.enter.native="findbycollectorname(collectorname)"></el-input>
-    <el-button  type="primary" round slot="reference" @click="findbycollectorname(collectorname)">查询</el-button>
-
+    <el-button  type="primary" round  @click="findbycollectorname">查询</el-button>
+    <el-button  type="primary" round  @click="findall">查询全部</el-button>
     <el-table :data="tableData">
-
       <el-table-column prop="recycleOrderId" label="订单号" width="140">
       </el-table-column>
       <el-table-column prop="scheduledTime" label="预约时间" width="300">
@@ -29,27 +28,39 @@
 
       </el-table-column>
     </el-table>
-    <el-pagination
-      background
-      layout="total, prev, pager, next, jumper"
-      :page-size="pageSize"
-      :total="total"
-      @current-change="page">
-    </el-pagination>
-
+    <el-pagination background layout="total, prev, pager, next, jumper" :page-size="pageSize" :total="total" @current-change="page"></el-pagination>
   </div>
-
 </template>
-
 <script>
   export default {
     methods:{
-      findbycollectorname(collectorname){
+      findbycollectorname(){
         const _this = this
         this.selectbycollectorname=true
         this.selectbynormal=false
-        axios.get('http://localhost:8181/userFinddoingordersBycollectorname/'+_this.$store.getters.getUserId+'/'+collectorname+'/1/1').then(function (resp) {
-          _this.tableData = resp.data.list
+        if(this.collectorname!=''){
+          axios.get('http://localhost:8181/userFinddoingordersBycollectorname/'+_this.$store.getters.getUserId+'/'+this.collectorname+'/1/1').then(function (resp) {
+            console.log(resp)
+            _this.tableData = resp.data.list
+            _this.pageSize = resp.data.pageSize
+            _this.total = resp.data.total
+          })
+        }else{
+          axios.get('http://localhost:8181/userDoingorders/'+_this.$store.getters.getUserId+'/1/1').then(function (resp) {
+            _this.tableData=resp.data.list
+            _this.pageSize = resp.data.pageSize
+            _this.total = resp.data.total
+          })
+        }
+      },
+      findall(){
+        const _this=this
+        this.selectbynormal=true
+        this.selectbycollectorname=false
+        this.collectorname=''
+        axios.get('http://localhost:8181/userDoingorders/'+_this.$store.getters.getUserId+'/1/1').then(function (resp) {
+          console.log(resp)
+          _this.tableData=resp.data.list
           _this.pageSize = resp.data.pageSize
           _this.total = resp.data.total
         })
@@ -83,7 +94,6 @@
     created () {
       const _this=this;
       axios.get('http://localhost:8181/userDoingorders/'+_this.$store.getters.getUserId+'/1/1').then(function (resp) {
-        console.log(resp)
         _this.tableData=resp.data.list
         _this.pageSize = resp.data.pageSize
         _this.total = resp.data.total

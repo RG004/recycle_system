@@ -26,13 +26,19 @@ public interface RecycleOrdersDao {
 
     Page<DoingOrdersVo> selectDoingOrderByUserId(Integer userid);//查找用户正在进行中的订单
 
+    Page<RecycleOrdersVo> selectOrderByCollectorname(Integer userid,String collectorname,String date);//用户根据日期(查询某一天)和派送员姓名查找
+
+    Page<RecycleOrdersVo> selectOrderByCollectornameBymonth(Integer userid,String collectorname,String date);//用户根据日期(查询某一月)和派送员姓名查找
+
+    Page<DoingOrdersVo> selectDoingOrderByCollectorname(Integer userid,String collectorname);
+
     Page<CollectorOrdersVo> selectOrderByCollectorId(Integer collectorid);//查找派送员所有的订单
 
     Page<CollectorDoingOrdersVo> selectDoingOrderByCollectorId(Integer collectorid);//查找派送员正在进行中的订单
 
-    Page<RecycleOrdersVo> selectOrderByCollectorname(Integer userid,String collectorname,String date);//用户根据日期和派送员姓名查找
+    Page<CollectorOrdersVo> CollectorselctOrderByUsername(Integer collectorid,String username,String date);
 
-    Page<RecycleOrdersVo> selectOrderByCollectornameBymonth(Integer userid,String collectorname,String date);//用户根据日期和派送员姓名查找
+    Page<CollectorOrdersVo> CollectorselctOrderByUsernameBymonth(Integer collectorid,String username,String date);
 
-    Page<DoingOrdersVo> selectDoingOrderByCollectorname(Integer userid,String collectorname);
+    Page<CollectorDoingOrdersVo> CollectorselectDoingOrderByUsername(Integer collectorid,String username);
 }

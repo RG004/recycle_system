@@ -5,10 +5,10 @@
     <id column="Recycle_Order_Detail_ID" jdbcType="INTEGER" property="recycleOrderDetailId" />
     <result column="Item_ID" jdbcType="INTEGER" property="itemId" />
     <result column="Recycle_Order_ID" jdbcType="INTEGER" property="recycleOrderId" />
-    <result column="Quantity" jdbcType="INTEGER" property="quantity" />
+    <result column="Quantity" jdbcType="DOUBLE" property="quantity" />
   </resultMap>
   <resultMap id="DetailResultMap" type="com.example.recycle_system_springboot.pojo.vo.RecycleOrdersDetailVo">
-    <result column="Quantity" jdbcType="INTEGER" property="quantity" />
+    <result column="Quantity" jdbcType="DOUBLE" property="quantity" />
     <result column="Item_Name" jdbcType="VARCHAR" property="itemName" />
     <result column="Item_Price" jdbcType="DOUBLE" property="itemPrice" />
   </resultMap>

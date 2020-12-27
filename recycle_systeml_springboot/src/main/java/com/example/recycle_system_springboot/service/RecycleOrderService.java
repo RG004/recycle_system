@@ -20,4 +20,8 @@ public interface RecycleOrderService {
     PageInfo<RecycleOrdersVo> userfindOrdersByCollectorname(int id,String collectorname,String datebyday,String datebymonth,String datepick,int start,int limit);
 
     PageInfo<DoingOrdersVo> userfindDoingOrdersByCollectorname(int id,String collectorname,int start,int limit);
+
+    PageInfo<CollectorOrdersVo> collectorfindOrdersByUsername(int id,String username,String datebyday,String datebymonth,String datepick,int start,int limit);
+
+    PageInfo<CollectorDoingOrdersVo> collectorfindDoingOrdersByUsername(int id,String username,int start,int limit);
 }

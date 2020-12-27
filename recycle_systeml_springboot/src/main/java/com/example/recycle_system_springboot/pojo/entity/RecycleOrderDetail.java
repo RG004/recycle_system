@@ -17,6 +17,6 @@ public class RecycleOrderDetail implements Serializable {
 
     private Integer recycleOrderId;
 
-    private Integer quantity;
+    private Double quantity;
 
 }

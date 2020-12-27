@@ -1,7 +1,9 @@
 <template>
   <div>
+    根据快递员姓名查询订单:<el-input v-model="username" placeholder="请输入快递员姓名" style="width: 200px"></el-input>
+    <el-button  type="primary" round  @click="findbyusername">查询</el-button>
+    <el-button  type="primary" round  @click="findall">查询全部</el-button>
     <el-table :data="tableData">
-
       <el-table-column prop="recycleOrderId" label="订单号" width="140">
       </el-table-column>
       <el-table-column prop="scheduledTime" label="预约时间" width="300">
@@ -26,82 +28,113 @@
 
       </el-table-column>
     </el-table>
-    <el-pagination
-      background
-      layout="prev, pager, next"
-      :page-size="pageSize"
-      :total="total"
-      @current-change="page">
-    </el-pagination>
-
+    <el-pagination background layout="total, prev, pager, next, jumper" :page-size="pageSize" :total="total" @current-change="page"></el-pagination>
   </div>
-
 </template>
-
 <script>
   export default {
-    methods:{
-      getDetail(recycleOrderId){
+    methods: {
+      findbyusername () {
         const _this = this
-        axios.get('http://localhost:8181/OrdersDetail/'+recycleOrderId+'').then(function (resp) {
-          _this.recycleOrdersDetailVoList=resp.data
-          for(var j=0,len=_this.recycleOrdersDetailVoList.length;j<len;j++){
-            _this.recycleOrdersDetailVoList[j].sum = _this.recycleOrdersDetailVoList[j].quantity*_this.recycleOrdersDetailVoList[j].itemPrice
-          }
-
-        })
+        this.selectbyusername = true
+        this.selectbynormal = false
+        if(this.username!=''){
+          axios.get('http://localhost:8181/collectorDoingordersByusername/' + _this.$store.getters.getCollectorId + '/' + this.username + '/1/1').then(function (resp) {
+            _this.tableData = resp.data.list
+            _this.pageSize = resp.data.pageSize
+            _this.total = resp.data.total
+          })
+        }
+        else{
+          axios.get('http://localhost:8181/collectorDoingorders/' + _this.$store.getters.getCollectorId + '/1/1').then(function (resp) {
+            _this.tableData = resp.data.list
+            _this.pageSize = resp.data.pageSize
+            _this.total = resp.data.total
+          })
+        }
       },
-      page(currentPage){
+      findall () {
         const _this = this
-        axios.get('http://localhost:8181/collectorDoingorders/'+_this.$store.getters.getCollectorId+'/'+currentPage+'/1').then(function(resp){
+        this.selectbynormal = true
+        this.selectbyusername = false
+        this.username = ''
+        axios.get('http://localhost:8181/collectorDoingorders/' + _this.$store.getters.getCollectorId + '/1/1').then(function (resp) {
           _this.tableData = resp.data.list
           _this.pageSize = resp.data.pageSize
           _this.total = resp.data.total
         })
-      }
+      },
+      getDetail (recycleOrderId) {
+        const _this = this
+        axios.get('http://localhost:8181/OrdersDetail/' + recycleOrderId + '').then(function (resp) {
+          _this.recycleOrdersDetailVoList = resp.data
+          for (var j = 0, len = _this.recycleOrdersDetailVoList.length; j < len; j++) {
+            _this.recycleOrdersDetailVoList[j].sum = _this.recycleOrdersDetailVoList[j].quantity * _this.recycleOrdersDetailVoList[j].itemPrice
+          }
+
+        })
+      },
+      page (currentPage) {
+        const _this = this
+        if (this.selectbynormal) {
+          axios.get('http://localhost:8181/collectorDoingorders/' + _this.$store.getters.getCollectorId + '/' + currentPage + '/1').then(function (resp) {
+            _this.tableData = resp.data.list
+            _this.pageSize = resp.data.pageSize
+            _this.total = resp.data.total
+          })
+        } else if (this.selectbyusername) {
+          axios.get('http://localhost:8181/collectorDoingordersByusername/' + _this.$store.getters.getCollectorId + '/' + username + '/' + currentPage + '/1').then(function (resp) {
+            _this.tableData = resp.data.list
+            _this.pageSize = resp.data.pageSize
+            _this.total = resp.data.total
+          })
+        }
+      },
     },
-    created () {
-      const _this=this;
-      axios.get('http://localhost:8181/collectorDoingorders/'+_this.$store.getters.getCollectorId+'/1/1').then(function (resp) {
-        console.log(resp)
-        _this.tableData=resp.data.list
-        _this.pageSize = resp.data.pageSize
-        _this.total = resp.data.total
-      })
-    },
-    data(){
-      return{
-        pageSize:1,
-        total:1,
-        recycleOrdersDetailVoList:[{
-          itemName: '纸板',
-          quantity: 10,
-          itemPrice: 1,
-          sum:'',
-        }, {
-          itemName: '易拉罐',
-          quantity: 20,
-          itemPrice: 0.1,
-          sum:'',
-        }, {
-          itemName: '啤酒瓶',
-          quantity: 5,
-          itemPrice: 1,
-          sum:'',
-        }, {
-          itemName: '旧衣服',
-          quantity: 20,
-          itemPrice: 0.5,
-          sum:'',
-        }],
-        tableData: [{
-          recycleOrderId: 1,
-          scheduledTime: '12月15日 下午17：00',
-          userName: '陈南',
-          phone:13615787610,
-        }],
+      created () {
+        const _this = this;
+        axios.get('http://localhost:8181/collectorDoingorders/' + _this.$store.getters.getCollectorId + '/1/1').then(function (resp) {
+          _this.tableData = resp.data.list
+          _this.pageSize = resp.data.pageSize
+          _this.total = resp.data.total
+        })
+      },
+      data () {
+        return {
+          pageSize: 1,
+          total: 1,
+          username: '',
+          selectbyusername: false,
+          selectbynormal: true,
+          recycleOrdersDetailVoList: [{
+            itemName: '纸板',
+            quantity: 10,
+            itemPrice: 1,
+            sum: '',
+          }, {
+            itemName: '易拉罐',
+            quantity: 20,
+            itemPrice: 0.1,
+            sum: '',
+          }, {
+            itemName: '啤酒瓶',
+            quantity: 5,
+            itemPrice: 1,
+            sum: '',
+          }, {
+            itemName: '旧衣服',
+            quantity: 20,
+            itemPrice: 0.5,
+            sum: '',
+          }],
+          tableData: [{
+            recycleOrderId: 1,
+            scheduledTime: '12月15日 下午17：00',
+            userName: '陈南',
+            phone: 13615787610,
+          }],
+        }
       }
-    }
   }
 </script>
 

@@ -20,7 +20,9 @@
         <span>{{scope.$index + 1}}</span>
       </template>
     </el-table-column>
-    <el-table-column prop="addressDetails" label="地址" width="600">
+    <el-table-column prop="addressId" label="id" width="300">
+    </el-table-column>
+    <el-table-column prop="addressDetails" label="地址" width="300">
     </el-table-column>
     <el-table-column  fixed="right" label="操作">
       <template slot-scope="scope">
@@ -51,7 +53,7 @@
     <el-dialog :visible.sync="centerDialogVisible">
       <el-form  :model="editForm" @submit.native.prevent>
         <el-form-item label="修改地址">
-          <el-input v-model="editForm.addressDetails"  @keyup.enter.native="sumbitEditRow()"></el-input>
+          <el-input v-model="editForm.addressDetails2"  @keyup.enter.native="sumbitEditRow()"></el-input>
         </el-form-item>
       </el-form>
       <div>
@@ -97,15 +99,13 @@
           callback();
         }
       };
-
       return {
-
           userId:1,
           userName:'yxy',
           userRealname:'杨昕语',
-
           phone:13615787610,
           addressList: [{
+            addressId:1,
             addressDetails:'浙江省杭州市西湖区留和路288号浙江工业大学屏峰校区'
           }],
           centerDialogVisible: false,
@@ -118,7 +118,8 @@
           currentIndex: "",
           editDialogVisible: false,
           editForm: {
-            phone2:''
+            phone2:'',
+            addressDetails2:'',
           },
           editPhoneVisible:false,
           rules:{
@@ -146,7 +147,6 @@
             axios.post('http://localhost:8181/userupdatePhone/'+this.userId+'/'+this.phone+'').then(function (resp) {
               console.log(resp)
             })
-
             this.editPhoneVisible = false;
           }else {
             _this.$alert('手机输入格式错误','提示')
@@ -157,7 +157,6 @@
       closePhoneDialog(){
         this.editPhoneVisible = false;
       },
-
       handleDelete (index, row) {
         // 设置类似于console类型的功能
         this.$confirm("确定删除该地址?", "提示", {
@@ -182,17 +181,20 @@
       },
       modifyData(index, row) {
         this.centerDialogVisible = true
-        this.editForm = row;//重置对象
+        this.editForm.addressDetails2 = row.addressDetails;//重置对象
         _index = index;
       },
       sumbitEditRow() {
         let editData = _index;
-        this.addressList[editData].addressDetails = this.editForm.addressDetails;
+        alert(this.addressList[editData].addressId)
+        this.addressList[editData].addressDetails = this.editForm.addressDetails2;
+        axios.post('http://localhost:8181/updateAddress/'+this.addressList[editData].addressId+'/'+this.addressList[editData].addressDetails+'').then(function (resp) {
+          console.log(resp)
+        })
         this.centerDialogVisible = false;
       },
       closeDialog(){
         this.centerDialogVisible=false
-        console.log("editfrom",this.editForm)
       },
 
       add() {

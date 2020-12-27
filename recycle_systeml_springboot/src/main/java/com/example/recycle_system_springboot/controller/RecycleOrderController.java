@@ -1,6 +1,7 @@
 package com.example.recycle_system_springboot.controller;
 
 import com.example.recycle_system_springboot.dao.RecycleOrdersDao;
+import com.example.recycle_system_springboot.pojo.query.CollectorRequireQuery;
 import com.example.recycle_system_springboot.pojo.query.UserRequireQuery;
 import com.example.recycle_system_springboot.pojo.vo.CollectorDoingOrdersVo;
 import com.example.recycle_system_springboot.pojo.vo.CollectorOrdersVo;
@@ -64,6 +65,19 @@ public class RecycleOrderController {
     @ResponseBody
     public PageInfo<DoingOrdersVo> selectDoingOrderByCollectorname(@PathVariable("id") int id,@PathVariable("collectorname") String collectorname,@PathVariable("start") int start, @PathVariable("limit") int limit){
         PageInfo<DoingOrdersVo> result = recycleOrderService.userfindDoingOrdersByCollectorname(id,collectorname,start,limit);
+        return result;
+    }
+    @PostMapping("/collectorFindordersByrequire/{start}/{limit}")
+    @ResponseBody
+    public PageInfo<CollectorOrdersVo> selectOrderByUsername(@RequestBody CollectorRequireQuery c, @PathVariable("start") int start, @PathVariable("limit") int limit){
+        PageInfo<CollectorOrdersVo> result = recycleOrderService.collectorfindOrdersByUsername(c.getId(),c.getUsername(),c.getDatebyday(),c.getDatebymonth(),c.getDatepick(),start,limit);
+        return result;
+    }
+
+    @GetMapping("/collectorDoingordersByusername/{id}/{username}/{start}/{limit}")
+    @ResponseBody
+    public PageInfo<CollectorDoingOrdersVo> collectorfindDoingOrdersByusername(@PathVariable("id") int id,  @PathVariable("username") String username,@PathVariable("start") int start, @PathVariable("limit") int limit){
+        PageInfo<CollectorDoingOrdersVo> result = recycleOrderService.collectorfindDoingOrdersByUsername(id,username,start,limit);
         return result;
     }
 }

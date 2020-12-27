@@ -1,14 +1,15 @@
 <template>
   <div>
-    根据快递员姓名查询订单:<el-input v-model="userrequire.collectorname" placeholder="请输入快递员姓名" style="width: 200px" @keyup.enter.native="findbycellectorname()"></el-input>
+    根据快递员姓名查询订单:<el-input v-model="userrequire.collectorname" placeholder="请输入快递员姓名" style="width: 200px"></el-input>
     根据日期查询订单：
     <el-select v-model="userrequire.datepick" placeholder="请选择">
       <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value"></el-option>
     </el-select>
-    {{userrequire.datebymonth}}
     <el-date-picker v-if="this.userrequire.datepick=='day'" v-model="userrequire.datebyday" type="date" placeholder="选择日期" format="yyyy 年 MM 月 dd 日" value-format="yyyy-MM-dd"></el-date-picker>
     <el-date-picker v-if="this.userrequire.datepick=='month'" v-model="userrequire.datebymonth" type="month" placeholder="选择月" format="yyyy年MM月" value-format="yyyy-MM"></el-date-picker>
-    <el-button  type="primary" round slot="reference" @click="findbycellectorname">查询</el-button>
+    <el-button  type="primary" round  @click="findbycellectorname">查询</el-button>
+    <el-button  type="primary" round  @click="findall">查询全部</el-button>
+
     <el-table :data="tableData">
       <el-table-column prop="recycleOrderId" label="订单号" width="140">
       </el-table-column>
@@ -52,6 +53,20 @@
         axios.post('http://localhost:8181/userFindordersByrequire/1/2',this.userrequire).then(function (resp) {
           console.log(resp)
           _this.tableData = resp.data.list
+          _this.pageSize = resp.data.pageSize
+          _this.total = resp.data.total
+        })
+      },
+      findall(){
+        const _this=this
+        this.selectbyrequire=false
+        this.selectbynormal=true
+        this.userrequire.collectorname=''
+        this.userrequire.datebymonth=''
+        this.userrequire.datebyday=''
+        this.userrequire.datepick='day'
+        axios.get('http://localhost:8181/userAllorders/'+_this.$store.getters.getUserId+'/1/2').then(function (resp) {
+          _this.tableData=resp.data.list
           _this.pageSize = resp.data.pageSize
           _this.total = resp.data.total
         })

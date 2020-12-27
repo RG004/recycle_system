@@ -73,4 +73,26 @@ public class RecycleOrderServiceImpl implements RecycleOrderService {
         return result;
     }
 
+    @Override
+    public PageInfo<CollectorOrdersVo> collectorfindOrdersByUsername(int id, String username, String datebyday, String datebymonth, String datepick, int start, int limit) {
+        PageHelper.startPage(start,limit);
+        if(datepick.equals("day")){
+            Page<CollectorOrdersVo> list = recycleOrdersDao.CollectorselctOrderByUsername(id,username,datebyday);
+            PageInfo<CollectorOrdersVo> result= new PageInfo<>(list);
+            return result;
+        }else {
+            Page<CollectorOrdersVo> list = recycleOrdersDao.CollectorselctOrderByUsernameBymonth(id, username, datebymonth);
+            PageInfo<CollectorOrdersVo> result = new PageInfo<>(list);
+            return result;
+        }
+    }
+
+    @Override
+    public PageInfo<CollectorDoingOrdersVo> collectorfindDoingOrdersByUsername(int id, String username, int start, int limit) {
+        PageHelper.startPage(start,limit);
+        Page<CollectorDoingOrdersVo> list = recycleOrdersDao.CollectorselectDoingOrderByUsername(id,username);
+        PageInfo<CollectorDoingOrdersVo> result= new PageInfo<>(list);
+        return result;
+    }
+
 }

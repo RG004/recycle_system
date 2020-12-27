@@ -2,6 +2,7 @@ package com.example.recycle_system_springboot.dao;
 
 import com.example.recycle_system_springboot.pojo.entity.Address;
 import com.example.recycle_system_springboot.pojo.vo.AddressVo;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -18,5 +19,5 @@ public interface AddressDao {
 
     int updateByPrimaryKey(Address record);
 
-    List<AddressVo> selectByUserID(int userid);
+    int updateAddressDetail(@Param("addressId") Integer addressId, @Param("addressDetails") String addressDetails);
 }

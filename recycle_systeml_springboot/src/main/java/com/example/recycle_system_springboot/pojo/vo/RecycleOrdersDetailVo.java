@@ -9,5 +9,5 @@ public class RecycleOrdersDetailVo {
 
     private Double itemPrice;
 
-    private Integer quantity;
+    private Double quantity;
 }
