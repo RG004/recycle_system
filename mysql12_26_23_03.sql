@@ -178,7 +178,7 @@ create table Recycle_Site
 create table User
 (
    User_ID              int not null auto_increment,
-   User_name            varchar(20) not null,
+   User_Name            varchar(20) not null,
    User_RealName        varchar(20),
    Password             varchar(20),
    Phone                varchar(11),
