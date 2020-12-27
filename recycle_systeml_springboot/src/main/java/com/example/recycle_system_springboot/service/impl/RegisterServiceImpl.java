@@ -27,16 +27,6 @@ public class RegisterServiceImpl implements RegisterService {
         System.out.println(user);
         User u2=userDao.selectByUserName(user.getUserName());
         if(u2!=null)return false;
-
-        List<User> allUser=userDao.selectAllUser();
-        int id=1;
-        for( User u:allUser){
-            if(id==u.getUserId()){
-                id++;
-            }
-            else break;
-        }
-        user.setUserId(id);
         Integer n=userDao.insert(user);
         if(n==0)return false;
         else return true;
