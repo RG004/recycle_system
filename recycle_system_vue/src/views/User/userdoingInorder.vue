@@ -24,7 +24,7 @@
             </el-table>
             <el-button  type="primary" round slot="reference" @click="getDetail(scope.row.recycleOrderId)" >查询订单详情</el-button>
           </el-popover>
-          <el-button  type="primary" round>修改订单</el-button>
+          <el-button  type="primary" round @click="jumpUpdate(scope.row.recycleOrderId)" >修改订单</el-button>
         </template>
 
       </el-table-column>
@@ -67,7 +67,13 @@
           _this.pageSize = resp.data.pageSize
           _this.total = resp.data.total
         })
-      }
+      },
+      jumpUpdate(recycleOrderId){
+        this.$router.push({
+          path: "/userupdateorder",
+          query: {recycleOrderId: recycleOrderId }
+        });
+      },
     },
     created () {
       const _this=this;
@@ -78,6 +84,7 @@
         _this.total = resp.data.total
       })
     },
+
     data(){
       return{
         pageSize:1,

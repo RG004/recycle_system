@@ -17,6 +17,7 @@ import CollectorDoingInorder from '../views/Collector/collectordoingInorder'
 import CollectorAlterInfo from '../views/Collector/collectoralterinfo'
 import NotFound from '../views/404'
 import register from "../views/register";
+import userupdateorder from "../views/User/userupdateorder";
 Vue.use(Router)
 
 export default new Router({
@@ -120,6 +121,14 @@ export default new Router({
         {
           path: '/recycle',
           component: Recycle,
+          meta: {
+            needLogin: true, //需要登录
+            needUser:true,
+          },
+        },
+        {
+          path: '/userupdateorder',
+          component: userupdateorder,
           meta: {
             needLogin: true, //需要登录
             needUser:true,

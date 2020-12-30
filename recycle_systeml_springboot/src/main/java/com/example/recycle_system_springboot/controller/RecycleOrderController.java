@@ -1,10 +1,10 @@
 package com.example.recycle_system_springboot.controller;
 
 import com.example.recycle_system_springboot.dao.RecycleOrdersDao;
+import com.example.recycle_system_springboot.pojo.dto.OrderDto;
+import com.example.recycle_system_springboot.pojo.entity.RecycleOrders;
 import com.example.recycle_system_springboot.pojo.vo.*;
 import com.example.recycle_system_springboot.service.RecycleOrderService;
-import com.github.pagehelper.Page;
-import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -61,10 +61,25 @@ public class RecycleOrderController {
 
     @PostMapping("/placeanorder")
     @ResponseBody
-    public Boolean PlaceAnOrder(@RequestBody OrderVo order){
+    public Boolean PlaceAnOrder(@RequestBody OrderDto order){
         System.out.println(order);
         Boolean result=recycleOrderService.placeAnOrder(order);
         return result;
+    }
+    //修改订单
+    @PostMapping("/updateanorder")
+    @ResponseBody
+    public Boolean updateAnOrder(@RequestBody OrderDto order){
+        System.out.println(order);
+        Boolean result=recycleOrderService.updateAnOrder(order);
+        return result;
+    }
+    //查询某个订单
+    @GetMapping("/getAnOrder/{id}")
+    @ResponseBody
+    public RecycleOrders findAnOrder(@PathVariable("id") int id){
+        RecycleOrders recycleOrders=recycleOrderService.findAnOrder(id);
+        return recycleOrders;
     }
 
 }

@@ -89,7 +89,7 @@
       <el-button style="margin-top: 12px;"  @click="next1" v-if="active==1"> 下一步</el-button>
       <el-button style="margin-top: 12px;"  @click="next2" v-if="active==2"> 下一步</el-button>
 
-      <el-button style="margin-top: 12px;"  @click="finish"  v-if="active==3"> 完成</el-button>
+      <el-button style="margin-top: 12px;"  @click="finish"  v-if="active==3"> 确认修改</el-button>
 
     </div>
 
@@ -103,7 +103,7 @@
 <script>
   import BScroll from 'better-scroll'
   export default {
-    name: 'recycle',
+    name: 'userupdateorder',
     data() {
       return {
         maxWeight:0,
@@ -115,6 +115,7 @@
           addressDetails:'浙江省杭州市西湖区留和路288号浙江工业大学屏峰校区'
         }],
         orderform:{
+          recycleOrderId:1,
           userId:1,
           addressId:1,
           scheduledTime:'',
@@ -179,77 +180,46 @@
 
       }
     },
-    computed:{
-      // currentIndex () {
-      //   //第一种写法 有点繁琐 不推荐
-      //   //   for (let i = 0; i < this.listHeight.length; i++) {
-      //   //     let height1 = this.listHeight[i]
-      //   //     let height2 = this.listHeight[i + 1]
-      //   //     if (!height2 || (this.scrollY >= height1 && this.scrollY < height2)) {
-      //   //       return i
-      //   //     }
-      //   //   }
-      //   //   return 0
-      //   //  解构赋值
-      //
-      //   // 第二种写法已改进   根据条件计算 产生一个结果 findIndex查找满足条件的下标 没找到返回-1
-      //   const index = this.listHeight.findIndex((item, index) => {
-      //     //   如果滚动的距离>=左侧列表当前的高度并且 小于下一项的高度
-      //     return this.scrollY >= item && this.scrollY < this.listHeight[index + 1]
-      //   })
-      //
-      //   return index
-      // }
-    },
     created(){
       const _this=this;
       axios.get('http://localhost:8181/getallitem').then(function (resp) {
-          console.log(resp);
-          // for(var i=0,len=resp.data.length;i<=len;i++){
-          //
-          //   _this.orderform.tableData[i].itemTypeId=resp.data[i].itemTypeId;
-          //   _this.orderform.tableData[i].itemName=resp.data[i].itemName;
-          //   alert(_this.orderform.tableData[i].itemTypeId)
-          //   // for(var j=0,l=resp.data[i].itemsList.length;j<l;j++){
-          //   //   _this.orderform.tableData[i].itemsList[j].itemId=resp.data[i].itemsList[j].itemId;
-          //   //   _this.orderform.tableData[i].itemsList[j].itemName=resp.data[i].itemsList[j].itemName;
-          //   //   _this.orderform.tableData[i].itemsList[j].itemPrice=resp.data[i].itemsList[j].itemPrice;
-          //   //   _this.orderform.tableData[i].itemsList[j].quantity=0
-          //   // }
-          //
-          // }
+        // console.log(resp);
+        _this.orderform.tableData=resp.data;
+        console.log(_this.orderform.tableData.length)
+        console.log(resp.data.length)
 
-
-           _this.orderform.tableData=resp.data;
-
-           // _this.tableData.items;List.quantity=0;
-          // _this.tableData.goods.goodid=resp.data.list.itemsList.itemId;
-          // _this.tableData.goods.name=resp.data.list.itemsList.itemName;
-          // _this.tableData.goods.price=resp.data.list.itemsList.itemPrice;
       })
-      // for(var j=0,len=this.tableData.length;j<len;j++){
-      //   for(var t=0,h=this.tableData[j].itemsList.length;t<h;t++){
-      //     this.tableData[j].itemsList[t].quantity=0
-      //   }
-      // }
       axios.get('http://localhost:8181/userAlladdress/'+this.$store.getters.getUserId+'').then(function (resp) {
-        console.log(resp)
+        // console.log(resp)
         _this.addressList=resp.data.addressList
       })
+      _this.orderform.recycleOrderId=_this.$route.query.recycleOrderId
+      axios.get('http://localhost:8181/OrdersDetail/'+_this.orderform.recycleOrderId+'').then(function (resp2) {
+        console.log(resp2)
+        for(var i=0,len=resp2.data.length;i<len;i++){
+          var itemName=resp2.data[i].itemName
+          for(var j=0,len2=_this.orderform.tableData.length;j<len2;j++){
+            for(var k=0,len3=_this.orderform.tableData[j].itemsList.length;k<len3;k++){
+              if(_this.orderform.tableData[j].itemsList[k].itemName==itemName){
+                _this.orderform.tableData[j].itemsList[k].quantity=resp2.data[i].quantity
+              }
+            }
+          }
+        }
+      })
+      axios.get('http://localhost:8181/getAnOrder/'+_this.orderform.recycleOrderId+'').then(function (resp) {
+        console.log(resp)
+        _this.orderform.scheduledTime=resp.data.scheduledTime
+      })
 
-      // alert(this.tableData[0].itemsList[0].quantity)
     },
     mounted(){
       //   这里用到一个定时器 等待数据渲染完毕 执行该方法 不然不能滑动 如果是真实数据 这两个方法放在this.$nextTick()里面
       //因为没有真实数据 只能用本地数据模拟下
-      this.$nextTick(() => {
+      setTimeout(() => {
         this._initScroll()
         this._calculateHeight()
-      });
-      // setTimeout(() => {
-      //   this._initScroll()
-      //   this._calculateHeight()
-      // }, 2)
+      }, 2)
     },
     methods: {
       //     设置两边列表可以滚动  内容区要比外层容器要高  列表先渲染 才可以滑动
@@ -353,7 +323,7 @@
         this.orderform.addressId=addressID;
       },
       finish(){
-        axios.post('http://localhost:8181/placeanorder',this.orderform).then(function (resp) {
+        axios.post('http://localhost:8181/updateanorder',this.orderform).then(function (resp) {
           console.log(resp)
         })
         this.active=1;

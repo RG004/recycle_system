@@ -3,6 +3,7 @@ package com.example.recycle_system_springboot.service.impl;
 import com.example.recycle_system_springboot.dao.ItemDao;
 import com.example.recycle_system_springboot.dao.RecycleOrderDetailDao;
 import com.example.recycle_system_springboot.dao.RecycleOrdersDao;
+import com.example.recycle_system_springboot.pojo.dto.OrderDto;
 import com.example.recycle_system_springboot.pojo.entity.Item;
 import com.example.recycle_system_springboot.pojo.entity.RecycleOrderDetail;
 import com.example.recycle_system_springboot.pojo.entity.RecycleOrders;
@@ -14,7 +15,6 @@ import com.github.pagehelper.PageInfo;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.text.SimpleDateFormat;
 import java.util.List;
 
 @Service
@@ -68,7 +68,7 @@ public class RecycleOrderServiceImpl implements RecycleOrderService {
     }
 
     @Override
-    public Boolean placeAnOrder(OrderVo orderVo) {
+    public Boolean placeAnOrder(OrderDto orderVo) {
         Boolean result=false;
         int i=recycleOrdersDao.insert(orderVo);System.out.println(i);
 //        System.out.println(orderVo.getRecycleOrderId());
@@ -77,8 +77,8 @@ public class RecycleOrderServiceImpl implements RecycleOrderService {
         System.out.println(recycleOrderDetail);
         for(ItemVo itemVo:orderVo.getTableData()){
             for(Item item:itemVo.getItemsList()){
-                if(item.getWeight()>0.0){
-                    recycleOrderDetail.setQuantity(item.getWeight());
+                if(item.getQuantity()>0.0){
+                    recycleOrderDetail.setQuantity(item.getQuantity());
                     recycleOrderDetail.setItemId(item.getItemId());
                     int j=recycleOrderDetailDao.insert(recycleOrderDetail);
                     System.out.println(j);
@@ -87,6 +87,35 @@ public class RecycleOrderServiceImpl implements RecycleOrderService {
         }
 
         return result;
+    }
+
+    @Override
+    public Boolean updateAnOrder(OrderDto orderVo) {
+        Boolean result=false;
+        int i=recycleOrdersDao.updateByPrimaryKey(orderVo);
+//        System.out.println(orderVo.getRecycleOrderId());
+        recycleOrderDetailDao.deleteByRecycleOrderId(orderVo.getRecycleOrderId());
+        recycleOrderDetail.setRecycleOrderId(orderVo.getRecycleOrderId());
+        System.out.println(recycleOrderDetail);
+        for(ItemVo itemVo:orderVo.getTableData()){
+            for(Item item:itemVo.getItemsList()){
+                if(item.getQuantity()>0.0){
+                    recycleOrderDetail.setQuantity(item.getQuantity());
+                    recycleOrderDetail.setItemId(item.getItemId());
+                    int j=recycleOrderDetailDao.insert(recycleOrderDetail);
+                    System.out.println(j);
+                }
+            }
+        }
+
+        return result;
+    }
+
+    //查找一个订单
+    @Override
+    public RecycleOrders findAnOrder(int id) {
+        RecycleOrders recycleOrders=recycleOrdersDao.selectByPrimaryKey(id);
+        return recycleOrders;
     }
 
 }

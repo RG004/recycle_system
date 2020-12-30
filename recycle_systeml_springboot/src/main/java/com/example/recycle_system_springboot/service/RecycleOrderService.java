@@ -1,7 +1,8 @@
 package com.example.recycle_system_springboot.service;
 
+import com.example.recycle_system_springboot.pojo.dto.OrderDto;
+import com.example.recycle_system_springboot.pojo.entity.RecycleOrders;
 import com.example.recycle_system_springboot.pojo.vo.*;
-import com.github.pagehelper.Page;
 import com.github.pagehelper.PageInfo;
 
 import java.util.List;
@@ -20,5 +21,9 @@ public interface RecycleOrderService {
     List<ItemVo> getAllItems();
 
     //下单
-    Boolean placeAnOrder(OrderVo orderVo);
+    Boolean placeAnOrder(OrderDto orderVo);
+    //修改订单
+    Boolean updateAnOrder(OrderDto orderVo);
+
+    RecycleOrders findAnOrder(int id);
 }

@@ -19,7 +19,7 @@ public class Item implements Serializable {
 
     private Double itemPrice;
 
-    private Double weight;
+    private Double quantity;
 
     private static final long serialVersionUID = 1L;
 
