@@ -24,6 +24,11 @@
     delete from address
     where Address_ID = #{addressId,jdbcType=INTEGER}
   </delete>
+  <delete id="deleteAddressByUser">
+    update address
+    set User_ID=null
+    where Address_ID=#{addressId,jdbcType=INTEGER}
+  </delete>
   <insert id="insert" keyColumn="Address_ID" keyProperty="addressId" parameterType="com.example.recycle_system_springboot.pojo.entity.Address" useGeneratedKeys="true">
     insert into address (User_ID, Address_Details, Latitude,
       Longitude)
@@ -85,11 +90,6 @@
       Address_Details = #{addressDetails,jdbcType=VARCHAR},
       Latitude = #{latitude,jdbcType=DOUBLE},
       Longitude = #{longitude,jdbcType=DOUBLE}
-    where Address_ID = #{addressId,jdbcType=INTEGER}
-  </update>
-  <update id="updateAddressDetail">
-    update address
-    set Address_Details=#{addressDetails,jdbcType=VARCHAR}
     where Address_ID = #{addressId,jdbcType=INTEGER}
   </update>
 </mapper>

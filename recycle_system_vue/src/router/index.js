@@ -7,6 +7,7 @@ import UserAllInorder from '../views/User/userallInorder'
 import UserDoingInorder from '../views/User/userdoingInorder'
 import Recycle from '../views/User/recycle'
 import UserAlterInfo from '../views/User/useralterinfo'
+import userupdateorder from '../views/User/userupdateorder'
 import Test from  '../views/User/test'
 import UserHomePage from '../views/User/userhomepage'
 import maptest from '../views/User/maptest'
@@ -16,6 +17,13 @@ import CollectorAllInorder from '../views/Collector/collectorallInorder'
 import CollectorDoingInorder from '../views/Collector/collectordoingInorder'
 import CollectorAlterInfo from '../views/Collector/collectoralterinfo'
 import NotFound from '../views/404'
+import AdminLayout from '../views/Admin/adminlayout'
+import ItemTypeManager from '../views/Admin/ItemTypeManager'
+import ItemManager from '../views/Admin/ItemManager'
+import adminallInorder from '../views/Admin/adminallInorder'
+import admindoingInorder from '../views/Admin/admindoingInorder'
+import userregister from '../views/userregister'
+import collectorregister from '../views/collectorregister'
 Vue.use(Router)
 
 export default new Router({
@@ -32,8 +40,58 @@ export default new Router({
       component: Login,
     },
     {
+      path:'/userregister',
+      component:userregister,
+    },
+    {
+      path:'/collectorregister',
+      component:collectorregister,
+    },
+    {
       path:'/404error',
       component:NotFound,
+    },
+    {
+      path:'/adminlayout',
+      component:AdminLayout,
+      meta: {
+        needLogin: true, //需要登录
+        needAdmin:true,
+      },
+      children:[
+        {
+          path:'/ItemTypeManage',
+          component:ItemTypeManager,
+          meta: {
+            needLogin: true, //需要登录
+            needAdmin:true,
+          },
+        },
+        {
+          path:'/ItemManage',
+          component:ItemManager,
+          meta: {
+            needLogin: true, //需要登录
+            needAdmin:true,
+          },
+        },
+        {
+          path:'/adminallinorder',
+          component:adminallInorder,
+          meta: {
+            needLogin: true, //需要登录
+            needAdmin:true,
+          },
+        },
+        {
+          path:'/admindoinginorder',
+          component:admindoingInorder,
+          meta: {
+            needLogin: true, //需要登录
+            needAdmin:true,
+          },
+        }
+      ]
     },
     {
       path:'/collectorlayout',
@@ -115,6 +173,14 @@ export default new Router({
         {
           path: '/recycle',
           component: Recycle,
+          meta: {
+            needLogin: true, //需要登录
+            needUser:true,
+          },
+        },
+        {
+          path: '/userupdateorder',
+          component: userupdateorder,
           meta: {
             needLogin: true, //需要登录
             needUser:true,

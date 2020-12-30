@@ -1,6 +1,6 @@
 <template>
   <div>
-    根据快递员姓名查询订单:<el-input v-model="username" placeholder="请输入快递员姓名" style="width: 200px"></el-input>
+    根据快递员姓名查询订单:<el-input v-model="username" placeholder="请输入用户名" style="width: 200px"></el-input>
     <el-button  type="primary" round  @click="findbyusername">查询</el-button>
     <el-button  type="primary" round  @click="findall">查询全部</el-button>
     <el-table :data="tableData">
@@ -23,7 +23,7 @@
             </el-table>
             <el-button  type="primary" round slot="reference" @click="getDetail(scope.row.recycleOrderId)" >查询订单详情</el-button>
           </el-popover>
-          <el-button  type="primary" round>修改订单</el-button>
+          <el-button  type="primary" round>确认订单</el-button>
         </template>
 
       </el-table-column>

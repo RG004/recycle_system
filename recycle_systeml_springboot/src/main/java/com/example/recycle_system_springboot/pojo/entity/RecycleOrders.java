@@ -22,7 +22,7 @@ public class RecycleOrders implements Serializable {
 
     private Integer userId;
 
-    private Date scheduledTime;
+    private String scheduledTime;
 
     private Date finishedTime;
 

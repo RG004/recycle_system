@@ -1,15 +1,13 @@
 package com.example.recycle_system_springboot.controller;
 
 import com.example.recycle_system_springboot.dao.RecycleOrdersDao;
+import com.example.recycle_system_springboot.pojo.dto.OrderDto;
+import com.example.recycle_system_springboot.pojo.entity.RecycleOrders;
+import com.example.recycle_system_springboot.pojo.query.AdminReqirueQuery;
 import com.example.recycle_system_springboot.pojo.query.CollectorRequireQuery;
 import com.example.recycle_system_springboot.pojo.query.UserRequireQuery;
-import com.example.recycle_system_springboot.pojo.vo.CollectorDoingOrdersVo;
-import com.example.recycle_system_springboot.pojo.vo.CollectorOrdersVo;
-import com.example.recycle_system_springboot.pojo.vo.DoingOrdersVo;
-import com.example.recycle_system_springboot.pojo.vo.RecycleOrdersVo;
+import com.example.recycle_system_springboot.pojo.vo.*;
 import com.example.recycle_system_springboot.service.RecycleOrderService;
-import com.github.pagehelper.Page;
-import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -23,8 +21,6 @@ public class RecycleOrderController {
     @Resource
     RecycleOrderService recycleOrderService;
 
-    @Resource
-    RecycleOrdersDao recycleOrdersDao;
 
     @GetMapping("/userAllorders/{id}/{start}/{limit}")
     @ResponseBody
@@ -79,5 +75,47 @@ public class RecycleOrderController {
     public PageInfo<CollectorDoingOrdersVo> collectorfindDoingOrdersByusername(@PathVariable("id") int id,  @PathVariable("username") String username,@PathVariable("start") int start, @PathVariable("limit") int limit){
         PageInfo<CollectorDoingOrdersVo> result = recycleOrderService.collectorfindDoingOrdersByUsername(id,username,start,limit);
         return result;
+    }
+
+    @PostMapping("/adminfindAllOrders/{start}/{limit}")
+    @ResponseBody
+    public PageInfo<AllOrdersVo> adminfindAllOrders(@RequestBody AdminReqirueQuery a,@PathVariable("start") int start, @PathVariable("limit") int limit){
+        PageInfo<AllOrdersVo> result = recycleOrderService.adminfindAllOrders(a.getUsername(),a.getCollectorname(),a.getDatebyday(),a.getDatebymonth(),a.getDatepick(),start,limit);
+        return result;
+    }
+
+    @PostMapping("/adminfindAllDoingOrders/{start}/{limit}")
+    @ResponseBody
+    public PageInfo<AllDoingOrdersVo> adminfindAllDoingOrders(@RequestBody AdminReqirueQuery a,@PathVariable("start") int start, @PathVariable("limit") int limit){
+        PageInfo<AllDoingOrdersVo> result = recycleOrderService.adminfindAllDoingOrders(a.getUsername(),a.getCollectorname(),a.getDatebyday(),a.getDatebymonth(),a.getDatepick(),start,limit);
+        return result;
+    }
+    @GetMapping("/getallitem")
+    @ResponseBody
+    public List<ItemVo> getAllItem(){
+        List<ItemVo> result=recycleOrderService.getAllItems();
+        return result;
+
+    }
+
+    @PostMapping("/placeanorder")
+    @ResponseBody
+    public Boolean PlaceAnOrder(@RequestBody OrderDto order){
+        Boolean result=recycleOrderService.placeAnOrder(order);
+        return result;
+    }
+
+    @PostMapping("/updateanorder")
+    @ResponseBody
+    public Boolean updateAnOrder(@RequestBody OrderDto order){
+        Boolean result=recycleOrderService.updateAnOrder(order);
+        return result;
+    }
+    //查询某个订单
+    @GetMapping("/getAnOrder/{id}")
+    @ResponseBody
+    public RecycleOrders findAnOrder(@PathVariable("id") int id){
+        RecycleOrders recycleOrders=recycleOrderService.findAnOrder(id);
+        return recycleOrders;
     }
 }

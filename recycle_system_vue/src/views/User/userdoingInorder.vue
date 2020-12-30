@@ -23,7 +23,7 @@
             </el-table>
             <el-button  type="primary" round slot="reference" @click="getDetail(scope.row.recycleOrderId)" >查询订单详情</el-button>
           </el-popover>
-          <el-button  type="primary" round>修改订单</el-button>
+          <el-button  type="primary" round @click="jumpUpdate(scope.row.recycleOrderId)">修改订单</el-button>
         </template>
 
       </el-table-column>
@@ -34,19 +34,25 @@
 <script>
   export default {
     methods:{
+      jumpUpdate(recycleOrderId){
+        this.$router.push({
+          path: "/userupdateorder",
+          query: {recycleOrderId: recycleOrderId }
+        });
+      },
       findbycollectorname(){
         const _this = this
         this.selectbycollectorname=true
         this.selectbynormal=false
         if(this.collectorname!=''){
-          axios.get('http://localhost:8181/userFinddoingordersBycollectorname/'+_this.$store.getters.getUserId+'/'+this.collectorname+'/1/1').then(function (resp) {
+          axios.get('http://localhost:8181/userFinddoingordersBycollectorname/'+_this.$store.getters.getUserId+'/'+this.collectorname+'/1/3').then(function (resp) {
             console.log(resp)
             _this.tableData = resp.data.list
             _this.pageSize = resp.data.pageSize
             _this.total = resp.data.total
           })
         }else{
-          axios.get('http://localhost:8181/userDoingorders/'+_this.$store.getters.getUserId+'/1/1').then(function (resp) {
+          axios.get('http://localhost:8181/userDoingorders/'+_this.$store.getters.getUserId+'/1/3').then(function (resp) {
             _this.tableData=resp.data.list
             _this.pageSize = resp.data.pageSize
             _this.total = resp.data.total
@@ -58,7 +64,7 @@
         this.selectbynormal=true
         this.selectbycollectorname=false
         this.collectorname=''
-        axios.get('http://localhost:8181/userDoingorders/'+_this.$store.getters.getUserId+'/1/1').then(function (resp) {
+        axios.get('http://localhost:8181/userDoingorders/'+_this.$store.getters.getUserId+'/1/3').then(function (resp) {
           console.log(resp)
           _this.tableData=resp.data.list
           _this.pageSize = resp.data.pageSize
@@ -78,12 +84,12 @@
       page(currentPage){
         const _this = this
         if(this.selectbynormal){
-          axios.get('http://localhost:8181/userDoingorders/'+_this.$store.getters.getUserId+'/'+currentPage+'/1').then(function(resp){
+          axios.get('http://localhost:8181/userDoingorders/'+_this.$store.getters.getUserId+'/'+currentPage+'/3').then(function(resp){
             _this.tableData = resp.data.list
             _this.pageSize = resp.data.pageSize
             _this.total = resp.data.total
           })}else if(this.selectbycollectorname){
-          axios.get('http://localhost:8181/userFinddoingordersBycollectorname/'+ _this.$store.getters.getUserId+'/'+collectorname+'/'+currentPage+'/1').then(function (resp) {
+          axios.get('http://localhost:8181/userFinddoingordersBycollectorname/'+ _this.$store.getters.getUserId+'/'+collectorname+'/'+currentPage+'/3').then(function (resp) {
             _this.tableData = resp.data.list
             _this.pageSize = resp.data.pageSize
             _this.total = resp.data.total
@@ -93,7 +99,7 @@
     },
     created () {
       const _this=this;
-      axios.get('http://localhost:8181/userDoingorders/'+_this.$store.getters.getUserId+'/1/1').then(function (resp) {
+      axios.get('http://localhost:8181/userDoingorders/'+_this.$store.getters.getUserId+'/1/3').then(function (resp) {
         _this.tableData=resp.data.list
         _this.pageSize = resp.data.pageSize
         _this.total = resp.data.total

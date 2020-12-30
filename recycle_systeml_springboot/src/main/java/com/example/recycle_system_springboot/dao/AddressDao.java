@@ -19,5 +19,5 @@ public interface AddressDao {
 
     int updateByPrimaryKey(Address record);
 
-    int updateAddressDetail(@Param("addressId") Integer addressId, @Param("addressDetails") String addressDetails);
+    int deleteAddressByUser(Integer addressId);
 }

@@ -41,6 +41,14 @@
     <result column="User_Name" jdbcType="VARCHAR" property="userName" />
     <result column="Phone" jdbcType="VARCHAR" property="phone" />
   </resultMap>
+  <resultMap id="AllOrderMap" type="com.example.recycle_system_springboot.pojo.vo.AllOrdersVo">
+    <id column="Recycle_Order_ID" jdbcType="INTEGER" property="recycleOrderId" />
+    <result column="Scheduled_Time" jdbcType="VARCHAR" property="scheduledTime" />
+    <result column="Finished_Time" jdbcType="VARCHAR" property="finishedTime" />
+    <result column="Address_Details" jdbcType="VARCHAR" property="addressDetails" />
+    <result column="User_Name" jdbcType="VARCHAR" property="userName" />
+    <result column="Collector_Name" jdbcType="VARCHAR" property="collectorName" />
+  </resultMap>
   <sql id="Base_Column_List">
     Recycle_Order_ID, Address_ID, Collector_Person_ID, Evaluation_ID, User_ID, Scheduled_Time,
     Finished_Time, Total_Amount
@@ -188,6 +196,57 @@
     where r.Collector_Person_ID=#{collectorid,jdbcType=INTEGER} and r.Finished_Time is null
     <if test="username!=null and username!=''">
       and u.User_Name like "%"#{username,jdbcType=VARCHAR}"%"
+    </if>
+    order by r.Scheduled_Time asc
+  </select>
+  <select id="selectAllByadmin" resultType="com.example.recycle_system_springboot.pojo.vo.AllOrdersVo">
+    select
+      r.Recycle_Order_ID,r.Scheduled_Time,r.Finished_Time,a.Address_Details,c.Collector_Name,u.User_Name
+      from recycle_orders r
+      left join address a
+      on r.Address_ID=a.Address_ID
+      left join user u
+      on r.User_ID=u.User_ID
+      left join collector c
+      on r.Collector_Person_ID=c.Collector_Person_ID
+      where r.Recycle_Order_ID is not null
+      <if test="username!=null and username!=''">
+        and u.User_Name like "%"#{username,jdbcType=VARCHAR}"%"
+      </if>
+      <if test="collectorname != ''and collectorname!=null">
+        and c.Collector_Name like "%"#{collectorname,jdbcType=VARCHAR}"%"
+      </if>
+      <if test="datepick=='day' and date!=''and date!=null ">
+        and DATE_FORMAT(r.Scheduled_Time, '%Y-%m-%d')=#{date}
+      </if>
+      <if test="datepick=='month' and date!=''and date!=null">
+        and DATE_FORMAT(r.Scheduled_Time, '%Y-%m')=#{date}
+      </if>
+      order by r.Scheduled_Time asc
+  </select>
+  <select id="selectDoingByadmin"
+            resultType="com.example.recycle_system_springboot.pojo.vo.AllDoingOrdersVo">
+    select
+    r.Recycle_Order_ID,r.Scheduled_Time,a.Address_Details,c.Collector_Name,u.User_Name
+    from recycle_orders r
+    left join address a
+    on r.Address_ID=a.Address_ID
+    left join user u
+    on r.User_ID=u.User_ID
+    left join collector c
+    on r.Collector_Person_ID=c.Collector_Person_ID
+    where r.Finished_Time is null
+    <if test="username!=null and username!=''">
+      and u.User_Name like "%"#{username,jdbcType=VARCHAR}"%"
+    </if>
+    <if test="collectorname != ''and collectorname!=null">
+      and c.Collector_Name like "%"#{collectorname,jdbcType=VARCHAR}"%"
+    </if>
+    <if test="datepick=='day' and date!=''and date!=null ">
+      and DATE_FORMAT(r.Scheduled_Time, '%Y-%m-%d')=#{date}
+    </if>
+    <if test="datepick=='month' and date!=''and date!=null">
+      and DATE_FORMAT(r.Scheduled_Time, '%Y-%m')=#{date}
     </if>
     order by r.Scheduled_Time asc
   </select>

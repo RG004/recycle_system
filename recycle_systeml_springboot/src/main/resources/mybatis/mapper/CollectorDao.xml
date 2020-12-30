@@ -4,13 +4,21 @@
   <resultMap id="BaseResultMap" type="com.example.recycle_system_springboot.pojo.entity.Collector">
     <id column="Collector_Person_ID" jdbcType="INTEGER" property="collectorPersonId" />
     <result column="Site_ID" jdbcType="INTEGER" property="siteId" />
-    <result column="Collector_Name" jdbcType="VARCHAR" property="collectorName" />
+    <result column="Collect or_Name" jdbcType="VARCHAR" property="collectorName" />
     <result column="User_Name" jdbcType="VARCHAR" property="userName" />
     <result column="Password" jdbcType="VARCHAR" property="password" />
     <result column="Phone" jdbcType="VARCHAR" property="phone" />
     <result column="IDcard_Number" jdbcType="VARCHAR" property="idcardNumber" />
     <result column="Photo" jdbcType="VARCHAR" property="photo" />
     <result column="User_Status" jdbcType="VARCHAR" property="userStatus" />
+  </resultMap>
+  <resultMap id="RecyclesiteMap" type="com.example.recycle_system_springboot.pojo.vo.CollectorVo">
+    <id column="Collector_Person_ID" jdbcType="INTEGER" property="collectorPersonId" />
+    <result column="Collector_Name" jdbcType="VARCHAR" property="collectorName" />
+    <result column="User_Name" jdbcType="VARCHAR" property="userName" />
+    <result column="Phone" jdbcType="VARCHAR" property="phone" />
+    <result column="Site_ID" javaType="INTEGER" property="siteId"/>
+    <result column="Site_Name" jdbcType="VARCHAR" property="siteName"/>
   </resultMap>
   <sql id="Base_Column_List">
     Collector_Person_ID, Site_ID, Collector_Name, User_Name, `Password`, Phone, IDcard_Number,
@@ -27,6 +35,14 @@
     <include refid="Base_Column_List" />
     from collector
     where User_Name = #{username,jdbcType=INTEGER}
+  </select>
+  <select id="selectRecyclesite" resultType="com.example.recycle_system_springboot.pojo.vo.CollectorVo">
+    select
+    c.Collector_Person_ID,c.Site_ID,c.Collector_Name,c.User_Name,c.Phone,r.Site_Name
+    from collector c
+    left join recycle_site r
+    on c.Site_ID=r.Site_ID
+    where Collector_Person_ID = #{collectorPersonId,jdbcType=INTEGER}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from collector
@@ -135,6 +151,11 @@
       IDcard_Number = #{idcardNumber,jdbcType=VARCHAR},
       Photo = #{photo,jdbcType=VARCHAR},
       User_Status = #{userStatus,jdbcType=VARCHAR}
+    where Collector_Person_ID = #{collectorPersonId,jdbcType=INTEGER}
+  </update>
+  <update id="updatePhoneByPrimaykey">
+    update collector
+    set Phone = #{phone,jdbcType=VARCHAR}
     where Collector_Person_ID = #{collectorPersonId,jdbcType=INTEGER}
   </update>
 </mapper>

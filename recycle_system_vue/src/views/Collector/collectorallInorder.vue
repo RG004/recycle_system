@@ -1,6 +1,6 @@
 <template>
   <div>
-    根据快递员姓名查询订单:<el-input v-model="collectorrequire.username" placeholder="请输入快递员姓名" style="width: 200px"></el-input>
+    根据快递员姓名查询订单:<el-input v-model="collectorrequire.username" placeholder="请输入用户名" style="width: 200px"></el-input>
     根据日期查询订单：
     <el-select v-model="collectorrequire.datepick" placeholder="请选择">
       <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value"></el-option>
@@ -48,7 +48,6 @@
     methods:{
       findbyusername () {
         const _this = this
-        alert(this.collectorrequire.datebyday)
         this.selectbyrequire=true
         this.selectbynormal=false
         axios.post('http://localhost:8181/collectorFindordersByrequire/1/2',this.collectorrequire).then(function (resp) {

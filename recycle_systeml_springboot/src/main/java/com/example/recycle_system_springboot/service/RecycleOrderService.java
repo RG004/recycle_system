@@ -1,11 +1,10 @@
 package com.example.recycle_system_springboot.service;
 
-import com.example.recycle_system_springboot.pojo.vo.CollectorDoingOrdersVo;
-import com.example.recycle_system_springboot.pojo.vo.CollectorOrdersVo;
-import com.example.recycle_system_springboot.pojo.vo.DoingOrdersVo;
-import com.example.recycle_system_springboot.pojo.vo.RecycleOrdersVo;
-import com.github.pagehelper.Page;
+import com.example.recycle_system_springboot.pojo.dto.OrderDto;
+import com.example.recycle_system_springboot.pojo.entity.RecycleOrders;
+import com.example.recycle_system_springboot.pojo.vo.*;
 import com.github.pagehelper.PageInfo;
+import java.util.List;
 
 
 public interface RecycleOrderService {
@@ -24,4 +23,17 @@ public interface RecycleOrderService {
     PageInfo<CollectorOrdersVo> collectorfindOrdersByUsername(int id,String username,String datebyday,String datebymonth,String datepick,int start,int limit);
 
     PageInfo<CollectorDoingOrdersVo> collectorfindDoingOrdersByUsername(int id,String username,int start,int limit);
+
+    PageInfo<AllOrdersVo> adminfindAllOrders(String username,String collectorname,String datebyday,String datebymonth,String datepick,int start,int limit);
+
+    PageInfo<AllDoingOrdersVo> adminfindAllDoingOrders(String username,String collectorname,String datebyday,String datebymonth,String datepick,int start,int limit);
+
+    //得到所有的items
+    List<ItemVo> getAllItems();
+    //下单
+    Boolean placeAnOrder(OrderDto orderVo);
+
+    Boolean updateAnOrder(OrderDto orderVo);
+
+    RecycleOrders findAnOrder(int id);
 }
