@@ -118,4 +118,25 @@ public class RecycleOrderController {
         RecycleOrders recycleOrders=recycleOrderService.findAnOrder(id);
         return recycleOrders;
     }
+
+    //给订单安排派送员
+    @GetMapping("/placecollector/{recycleorderId}/{collectorName}")
+    @ResponseBody
+    public int placeCollector(@PathVariable("recycleorderId") int recycleorderId,@PathVariable("collectorName") String collectorName){
+        boolean result=recycleOrderService.placecollector(recycleorderId,collectorName);
+        if(result){
+            return recycleorderId;
+        }
+        else{
+            return 0;
+        }
+    }
+
+    //派送员确认订单
+    @PostMapping("/confirmorder")
+    @ResponseBody
+    public Boolean confirmOrder(@RequestBody OrderDto order){
+        Boolean result=recycleOrderService.confirmOrder(order);
+        return result;
+    }
 }

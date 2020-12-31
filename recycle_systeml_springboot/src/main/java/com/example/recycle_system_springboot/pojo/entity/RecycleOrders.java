@@ -24,7 +24,7 @@ public class RecycleOrders implements Serializable {
 
     private String scheduledTime;
 
-    private Date finishedTime;
+    private String finishedTime;
 
     private Double totalAmount;
 

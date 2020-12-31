@@ -23,7 +23,7 @@
       <el-table-column label="派送员" width="200px">
         <template slot-scope="scope" >
           <span v-if="scope.row.collectorName!=null">{{scope.row.collectorName}}</span>
-          <span v-else><el-button  type="primary" round>选择派送员</el-button></span>
+          <span v-else><el-button  type="primary" round @click="edit(scope.row)">选择派送员</el-button></span>
         </template>
       </el-table-column>
       <el-table-column fixed="right" label="操作">
@@ -42,12 +42,41 @@
       </el-table-column>
     </el-table>
     <el-pagination background layout="total, prev, pager, next, jumper" :page-size="pageSize" :total="total" @current-change="page"></el-pagination>
-
+    <el-dialog :visible.sync="editVisible">
+      <el-form  :model="editForm" ref="editForm" @submit.prevent.native >
+        <el-select v-model="editForm.collectorName" placeholder="请选择" style="width: 500px">
+          <el-option v-for="item in collector" :key="item.collectorId" :label="item.collectorName" :value="item.collectorName"></el-option>
+        </el-select>
+        <div>
+          <el-button @click="closeDialog()">取消</el-button>
+          <el-button type="primary" @click="submit()">确定</el-button>
+        </div>
+      </el-form>
+    </el-dialog>
   </div>
 </template>
 <script>
   export default {
     methods: {
+      edit(row){
+        this.editForm.recycleOrderId=row.recycleOrderId
+        this.editForm.collectorName=''
+        this.editVisible=true
+      },
+      closeDialog(){
+        this.editVisible=false
+      },
+      submit(){
+        const _this=this
+        axios.get('http://localhost:8181/placecollector/'+this.editForm.recycleOrderId+'/'+this.editForm.collectorName+'').then(function (resp) {
+          for(var j=0,len=_this.tableData.length;j<len;j++){
+            if(_this.tableData[j].recycleOrderId==resp.data){
+              _this.tableData[j].collectorName=_this.editForm.collectorName
+            }
+          }
+          _this.editVisible=false
+        })
+      },
       findbyrequire(){
         const _this = this
         axios.post('http://localhost:8181/adminfindAllDoingOrders/1/3',this.adminrequire).then(function (resp) {
@@ -95,9 +124,18 @@
           _this.pageSize = resp.data.pageSize
           _this.total = resp.data.total
         })
+        axios.get('http://localhost:8181/allCollector').then(function (r) {
+          console.log(r)
+          _this.collector=r.data
+        })
       },
       data () {
         return {
+          editVisible:false,
+          editForm:{
+            recycleOrderId:1,
+            collectorName:'',
+          },
           pageSize: 1,
           total: 1,
           adminrequire:{
@@ -107,6 +145,20 @@
             datebymonth:'',
             datepick:'day',
           },
+          collector:[
+            {
+              collectorId:1,
+              collectorName:'杨昕语',
+            },
+            {
+              collectorId:2,
+              collectorName:'陈南',
+            },
+            {
+              collectorId:3,
+              collectorName:'陈小南',
+            },
+          ],
           options:[
             {
               value:'day',

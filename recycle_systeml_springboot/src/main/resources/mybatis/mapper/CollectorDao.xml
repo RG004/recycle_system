@@ -44,6 +44,17 @@
     on c.Site_ID=r.Site_ID
     where Collector_Person_ID = #{collectorPersonId,jdbcType=INTEGER}
   </select>
+  <select id="selectAll" resultType="com.example.recycle_system_springboot.pojo.entity.Collector">
+    select
+    <include refid="Base_Column_List" />
+    from collector
+  </select>
+  <select id="selectBycollectorname" resultType="java.lang.Integer">
+    select
+    Collector_Person_ID
+    from collector
+    where Collector_Name=#{collectorname,jdbcType=VARCHAR}
+  </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from collector
     where Collector_Person_ID = #{collectorPersonId,jdbcType=INTEGER}

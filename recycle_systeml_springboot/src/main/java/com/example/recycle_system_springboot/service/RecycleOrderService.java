@@ -36,4 +36,8 @@ public interface RecycleOrderService {
     Boolean updateAnOrder(OrderDto orderVo);
 
     RecycleOrders findAnOrder(int id);
+
+    Boolean placecollector(int recycleorderId,String collectorname);
+
+    Boolean confirmOrder(OrderDto orderVo);
 }

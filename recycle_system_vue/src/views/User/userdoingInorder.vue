@@ -45,14 +45,14 @@
         this.selectbycollectorname=true
         this.selectbynormal=false
         if(this.collectorname!=''){
-          axios.get('http://localhost:8181/userFinddoingordersBycollectorname/'+_this.$store.getters.getUserId+'/'+this.collectorname+'/1/3').then(function (resp) {
+          axios.get('http://localhost:8181/userFinddoingordersBycollectorname/'+_this.$store.getters.getUserId+'/'+this.collectorname+'/1/8').then(function (resp) {
             console.log(resp)
             _this.tableData = resp.data.list
             _this.pageSize = resp.data.pageSize
             _this.total = resp.data.total
           })
         }else{
-          axios.get('http://localhost:8181/userDoingorders/'+_this.$store.getters.getUserId+'/1/3').then(function (resp) {
+          axios.get('http://localhost:8181/userDoingorders/'+_this.$store.getters.getUserId+'/1/8').then(function (resp) {
             _this.tableData=resp.data.list
             _this.pageSize = resp.data.pageSize
             _this.total = resp.data.total
@@ -64,7 +64,7 @@
         this.selectbynormal=true
         this.selectbycollectorname=false
         this.collectorname=''
-        axios.get('http://localhost:8181/userDoingorders/'+_this.$store.getters.getUserId+'/1/3').then(function (resp) {
+        axios.get('http://localhost:8181/userDoingorders/'+_this.$store.getters.getUserId+'/1/8').then(function (resp) {
           console.log(resp)
           _this.tableData=resp.data.list
           _this.pageSize = resp.data.pageSize
@@ -84,12 +84,12 @@
       page(currentPage){
         const _this = this
         if(this.selectbynormal){
-          axios.get('http://localhost:8181/userDoingorders/'+_this.$store.getters.getUserId+'/'+currentPage+'/3').then(function(resp){
+          axios.get('http://localhost:8181/userDoingorders/'+_this.$store.getters.getUserId+'/'+currentPage+'/8').then(function(resp){
             _this.tableData = resp.data.list
             _this.pageSize = resp.data.pageSize
             _this.total = resp.data.total
           })}else if(this.selectbycollectorname){
-          axios.get('http://localhost:8181/userFinddoingordersBycollectorname/'+ _this.$store.getters.getUserId+'/'+collectorname+'/'+currentPage+'/3').then(function (resp) {
+          axios.get('http://localhost:8181/userFinddoingordersBycollectorname/'+ _this.$store.getters.getUserId+'/'+collectorname+'/'+currentPage+'/8').then(function (resp) {
             _this.tableData = resp.data.list
             _this.pageSize = resp.data.pageSize
             _this.total = resp.data.total
@@ -97,9 +97,14 @@
         }
       }
     },
+    watch:{
+      $route(){
+        window.location.reload()
+      }
+    },
     created () {
       const _this=this;
-      axios.get('http://localhost:8181/userDoingorders/'+_this.$store.getters.getUserId+'/1/3').then(function (resp) {
+      axios.get('http://localhost:8181/userDoingorders/'+_this.$store.getters.getUserId+'/1/8').then(function (resp) {
         _this.tableData=resp.data.list
         _this.pageSize = resp.data.pageSize
         _this.total = resp.data.total

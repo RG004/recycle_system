@@ -79,7 +79,6 @@
         const _this=this
         this.adddialogFormVisible=false
         axios.post('http://localhost:8181/insertItemType',this.addform).then(function (resp) {
-          console.log(resp)
           _this.ItemType.push(resp.data);
         })
       },

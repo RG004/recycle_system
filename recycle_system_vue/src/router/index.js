@@ -16,6 +16,7 @@ import CollectorHomePage from '../views/Collector/collectorhomepage'
 import CollectorAllInorder from '../views/Collector/collectorallInorder'
 import CollectorDoingInorder from '../views/Collector/collectordoingInorder'
 import CollectorAlterInfo from '../views/Collector/collectoralterinfo'
+import confirmorder from '../views/Collector/confirmorder'
 import NotFound from '../views/404'
 import AdminLayout from '../views/Admin/adminlayout'
 import ItemTypeManager from '../views/Admin/ItemTypeManager'
@@ -113,6 +114,14 @@ export default new Router({
         {
           path: '/collectorallinorder',
           component: CollectorAllInorder,
+          meta: {
+            needLogin: true, //需要登录
+            needCollector:true,
+          },
+        },
+        {
+          path: '/confirmorder',
+          component: confirmorder,
           meta: {
             needLogin: true, //需要登录
             needCollector:true,

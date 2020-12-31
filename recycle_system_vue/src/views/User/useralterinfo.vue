@@ -56,7 +56,7 @@
       </el-form>
       <div>
         <el-button @click="closeDialog()">取消</el-button>
-        <el-button type="primary"  @click="sumbitEditRow()">确定</el-button>
+        <el-button type="primary"  @click="submitEditRow()">确定</el-button>
       </div>
     </el-dialog>
 
@@ -192,7 +192,7 @@
         this.editForm.addressDetails2 = row.addressDetails;//重置对象
         _index = index;
       },
-      sumbitEditRow() {
+      submitEditRow() {
         const _this=this
         let editData = _index;
         this.addressList[editData].addressDetails = this.editForm.addressDetails2;

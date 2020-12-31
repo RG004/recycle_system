@@ -1,8 +1,19 @@
 <template>
   <el-container direction="vertical">
-    <div v-if="active==1">
+    <!--      <el-header style="height: 1px"></el-header>-->
+    <div>
+
       <div class="menu-wrapper" ref="menuWrapper">
-        <el-menu class="el-menu-demo" mode="horizontal" @select="handleSelect" background-color="#545c64" text-color="#fff" active-text-color="#ffd04b" style="width: 100%;">
+        <el-menu
+
+          class="el-menu-demo"
+          mode="horizontal"
+          @select="handleSelect"
+          background-color="#545c64"
+          text-color="#fff"
+          active-text-color="#ffd04b"
+          style="width: 100%;"
+        >
           <el-menu-item style="width: 14%" v-for="(item,index) in orderform.tableData"  @click="selectMenu(index)" :key="index">{{item.itemTypeName}}</el-menu-item>
         </el-menu>
       </div>
@@ -15,63 +26,28 @@
                 <div class="name" >{{good.itemName}}</div>
                 <div class="price" >单价：{{good.itemPrice}}（元/斤）</div>
                 <div class="weight" ><el-input-number  v-model="good.quantity"  :min="0" :precision="1" :step="0.5" ></el-input-number></div>
+                <div>{{good.weight}}</div>
               </div>
             </ul>
           </li>
         </ul>
       </div>
     </div>
-
-    <div class="block" v-if="active==2" style="margin: 0 auto ;height: 280px;padding-top: 100px;">
-      <span class="demonstration">请选择上门时间</span>
-      <div>{{this.orderform.scheduledTime}}</div>
-      <el-date-picker
-        v-model="orderform.scheduledTime"
-        type="datetime"
-        value-format="yyyy-MM-dd hh:mm:ss"
-        placeholder="选择日期时间">
-      </el-date-picker>
-    </div>
-    <div class="block2" v-if="active==3" style="width:900px; margin:  0 auto ;height: 280px;padding-top: 100px;">
-      <span class="demonstration">请选择上门地址</span>
-      <div>{{this.orderform.addressId}}</div>
-      <el-table :data="addressList" >
-        <el-table-column label="序号" width="200">
-          <template slot-scope="scope">
-            <span>{{scope.$index + 1}}</span>
-          </template>
-        </el-table-column>
-        <el-table-column prop="addressDetails" label="地址" width="500">
-        </el-table-column>
-        <el-table-column  fixed="right" label="操作">
-          <template slot-scope="scope">
-            <el-button  type="primary" round slot="reference" icon="el-icon-check" style="background-color: #B3C0D1;border-color: #B3C0D1"  @click="choose(scope.row.addressId)">选择</el-button>
-          </template>
-        </el-table-column>
-      </el-table>
-    </div>
-    <el-steps :active="active" finish-status="success" style="float: left ;padding-top: 40px" >
-      <el-step title="挑选物品"></el-step>
-      <el-step title="预约时间"></el-step>
-      <el-step title="选择地址"></el-step>
-    </el-steps>
-    <div style="float: left;">
-      <el-button style="margin-top: 12px;"  @click="back" v-if="active!=1"> 上一步</el-button>
-      <el-button style="margin-top: 12px;"  @click="next1" v-if="active==1"> 下一步</el-button>
-      <el-button style="margin-top: 12px;"  @click="next2" v-if="active==2"> 下一步</el-button>
-      <el-button style="margin-top: 12px;"  @click="finish"  v-if="active==3"> 完成</el-button>
+    <div style="float: left;margin-top: 50px;">
+      <div>确认货物数量都正确后请确认订单，系统将直接支付相应的费用给用户</div>
+      <div>{{currentTime}}</div>
+      <el-button style="margin-top: 12px;"  @click="finish" > 确认订单</el-button>
     </div>
   </el-container>
 </template>
-
 <script>
   import BScroll from 'better-scroll'
   export default {
-    name: 'recycle',
     data() {
       return {
+        timer: "",//定义一个定时器的变量
+        currentTime: new Date(), // 获取当前时间
         maxWeight:0,
-        active:1 ,
         listHeight: [],
         scrollY: 0,
         addressList: [{
@@ -79,9 +55,12 @@
           addressDetails:'浙江省杭州市西湖区留和路288号浙江工业大学屏峰校区'
         }],
         orderform:{
+          collectorPersonId:1,
+          recycleOrderId:1,
           userId:1,
           addressId:1,
           scheduledTime:'',
+          finishedTime:'',
           tableData:[
             {
               itemTypeId:1,
@@ -93,31 +72,31 @@
                   itemPrice:'5',
                   quantity:0
                 },
-                {
-                  itemId:1,
-                  itemName:'塑料瓶',
-                  itemPrice:'5',
-                  quantity:0.5
-                },
-                {
-                  itemId:1,
-                  itemName:'塑料瓶',
-                  itemPrice:'5',
-                  quantity:0.5
-                },
-                {
-                  itemId:1,
-                  itemName:'塑料瓶',
-                  itemPrice:'5',
-                  quantity:0.5
-                },
-                {
-                  itemId:1,
-                  itemName:'塑料瓶',
-                  itemPrice:'5',
-                  quantity:0.5
-                },
 
+                {
+                  itemId:1,
+                  itemName:'塑料瓶',
+                  itemPrice:'5',
+                  quantity:0.5
+                },
+                {
+                  itemId:1,
+                  itemName:'塑料瓶',
+                  itemPrice:'5',
+                  quantity:0.5
+                },
+                {
+                  itemId:1,
+                  itemName:'1451651651',
+                  itemPrice:'5',
+                  quantity:0.5
+                },
+                {
+                  itemId:1,
+                  itemName:'1451651651',
+                  itemPrice:'5',
+                  quantity:0.5
+                },
               ],
             }
           ]
@@ -127,17 +106,52 @@
     },
     created(){
       const _this=this;
+      this.timer = setInterval(function() {
+        _this.currentTime = //修改数据date
+          new Date().getFullYear() +
+          "-" +
+          (new Date().getMonth() + 1) +
+          "-" +
+          new Date().getDate() +
+          " " +
+          new Date().getHours() +
+          ":" +
+          new Date().getMinutes() +
+          ":" +
+          new Date().getSeconds();
+      }, 1000);
       axios.get('http://localhost:8181/getallitem').then(function (resp) {
-          console.log(resp);
-          _this.orderform.tableData=resp.data;
+        // console.log(resp);
+        _this.orderform.tableData=resp.data;
         _this.$nextTick(() => {
           _this._initScroll()
           _this._calculateHeight()
         });
+        console.log(_this.orderform.tableData.length)
+        console.log(resp.data.length)
+
       })
       axios.get('http://localhost:8181/userAlladdress/'+this.$store.getters.getUserId+'').then(function (resp) {
-        console.log(resp)
+        // console.log(resp)
         _this.addressList=resp.data.addressList
+      })
+      _this.orderform.recycleOrderId=_this.$route.query.recycleOrderId
+      axios.get('http://localhost:8181/OrdersDetail/'+_this.orderform.recycleOrderId+'').then(function (resp2) {
+        console.log(resp2)
+        for(var i=0,len=resp2.data.length;i<len;i++){
+          var itemName=resp2.data[i].itemName
+          for(var j=0,len2=_this.orderform.tableData.length;j<len2;j++){
+            for(var k=0,len3=_this.orderform.tableData[j].itemsList.length;k<len3;k++){
+              if(_this.orderform.tableData[j].itemsList[k].itemName==itemName){
+                _this.orderform.tableData[j].itemsList[k].quantity=resp2.data[i].quantity
+              }
+            }
+          }
+        }
+      })
+      axios.get('http://localhost:8181/getAnOrder/'+_this.orderform.recycleOrderId+'').then(function (resp) {
+        console.log(resp)
+        _this.orderform.scheduledTime=resp.data.scheduledTime
       })
 
     },
@@ -153,6 +167,9 @@
       //     设置两边列表可以滚动  内容区要比外层容器要高  列表先渲染 才可以滑动
       _initScroll () {
 
+        // this.menuScroll = new BScroll(this.$refs.menuWrapper, {
+        //   click: true
+        // })
         this.foodsScroll = new BScroll(this.$refs.foodsWrapper, {
           click: true,
           probeType: 3,
@@ -180,7 +197,6 @@
           height += item.clientHeight;
           this.listHeight.push(height);
         }
-
       },
       //  点击左侧列表 右侧列表滑动到指定位置
       selectMenu (index) {
@@ -229,12 +245,13 @@
         this.orderform.addressId=addressID;
       },
       finish(){
-        axios.post('http://localhost:8181/placeanorder',this.orderform).then(function (resp) {
+        this.orderform.finishedTime=this.currentTime
+        this.orderform.collectorPersonId=this.$store.getters.getCollectorId
+        axios.post('http://localhost:8181/confirmorder',this.orderform).then(function (resp) {
           console.log(resp)
         })
-        this.active=1;
         this.$router.push({
-          path:'/userdoinginorder'
+          path:'/collectorallinorder'
         })
 
       }

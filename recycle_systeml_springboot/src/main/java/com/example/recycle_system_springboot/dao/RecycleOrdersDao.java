@@ -3,6 +3,7 @@ package com.example.recycle_system_springboot.dao;
 import com.example.recycle_system_springboot.pojo.entity.RecycleOrders;
 import com.example.recycle_system_springboot.pojo.vo.*;
 import com.github.pagehelper.Page;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -42,4 +43,6 @@ public interface RecycleOrdersDao {
     Page<AllOrdersVo> selectAllByadmin(String username,String collectorname,String date,String datepick);
 
     Page<AllDoingOrdersVo> selectDoingByadmin(String username,String collectorname,String date,String datepick);
+
+    int updateCollector(@Param("recycleOrderId") int recycleOrderId, @Param("collectorId") int collectorId);
 }

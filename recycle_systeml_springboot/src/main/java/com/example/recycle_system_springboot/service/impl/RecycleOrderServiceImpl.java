@@ -1,5 +1,6 @@
 package com.example.recycle_system_springboot.service.impl;
 
+import com.example.recycle_system_springboot.dao.CollectorDao;
 import com.example.recycle_system_springboot.dao.ItemDao;
 import com.example.recycle_system_springboot.dao.RecycleOrderDetailDao;
 import com.example.recycle_system_springboot.dao.RecycleOrdersDao;
@@ -23,6 +24,8 @@ public class RecycleOrderServiceImpl implements RecycleOrderService {
     RecycleOrdersDao recycleOrdersDao;
     @Resource
     RecycleOrderDetailDao recycleOrderDetailDao;
+    @Resource
+    CollectorDao collectorDao;
     @Resource
     ItemDao itemDao;
     @Resource
@@ -180,4 +183,28 @@ public class RecycleOrderServiceImpl implements RecycleOrderService {
         return recycleOrders;
     }
 
+    @Override
+    public Boolean placecollector(int recycleorderId, String collectorname) {
+        int collectorId=collectorDao.selectBycollectorname(collectorname);
+        recycleOrdersDao.updateCollector(recycleorderId,collectorId);
+        return true;
+    }
+
+    @Override
+    public Boolean confirmOrder(OrderDto orderVo) {
+        Boolean result=false;
+        int i=recycleOrdersDao.updateByPrimaryKey(orderVo);
+        recycleOrderDetailDao.deleteByRecycleOrderId(orderVo.getRecycleOrderId());
+        recycleOrderDetail.setRecycleOrderId(orderVo.getRecycleOrderId());
+        for(ItemVo itemVo:orderVo.getTableData()){
+            for(ItemRecycleVo item:itemVo.getItemsList()){
+                if(item.getQuantity()>0.0){
+                    recycleOrderDetail.setQuantity(item.getQuantity());
+                    recycleOrderDetail.setItemId(item.getItemId());
+                    int j=recycleOrderDetailDao.insert(recycleOrderDetail);
+                }
+            }
+        }
+        return result;
+    }
 }

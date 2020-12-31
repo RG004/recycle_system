@@ -349,4 +349,9 @@
       Total_Amount = #{totalAmount,jdbcType=DOUBLE}
     where Recycle_Order_ID = #{recycleOrderId,jdbcType=INTEGER}
   </update>
+  <update id="updateCollector">
+    update recycle_orders
+    set Collector_Person_ID=#{collectorId,jdbcType=INTEGER}
+    where Recycle_Order_ID=#{recycleOrderId,jdbcType=INTEGER}
+  </update>
 </mapper>

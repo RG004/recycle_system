@@ -50,7 +50,7 @@
         const _this = this
         this.selectbyrequire=true
         this.selectbynormal=false
-        axios.post('http://localhost:8181/userFindordersByrequire/1/2',this.userrequire).then(function (resp) {
+        axios.post('http://localhost:8181/userFindordersByrequire/1/8',this.userrequire).then(function (resp) {
           console.log(resp)
           _this.tableData = resp.data.list
           _this.pageSize = resp.data.pageSize
@@ -65,7 +65,7 @@
         this.userrequire.datebymonth=''
         this.userrequire.datebyday=''
         this.userrequire.datepick='day'
-        axios.get('http://localhost:8181/userAllorders/'+_this.$store.getters.getUserId+'/1/2').then(function (resp) {
+        axios.get('http://localhost:8181/userAllorders/'+_this.$store.getters.getUserId+'/1/8').then(function (resp) {
           _this.tableData=resp.data.list
           _this.pageSize = resp.data.pageSize
           _this.total = resp.data.total
@@ -83,12 +83,12 @@
       page(currentPage){
         const _this = this
         if(this.selectbynormal){
-          axios.get('http://localhost:8181/userAllorders/'+_this.$store.getters.getUserId+'/'+currentPage+'/2').then(function(resp){
+          axios.get('http://localhost:8181/userAllorders/'+_this.$store.getters.getUserId+'/'+currentPage+'/8').then(function(resp){
             _this.tableData = resp.data.list
             _this.pageSize = resp.data.pageSize
             _this.total = resp.data.total
           })}else if(this.selectbyrequire){
-          axios.post('http://localhost:8181/userFindordersByrequire/'+currentPage+'/2',_this.userrequire).then(function (resp) {
+          axios.post('http://localhost:8181/userFindordersByrequire/'+currentPage+'/8',_this.userrequire).then(function (resp) {
             _this.tableData = resp.data.list
             _this.pageSize = resp.data.pageSize
             _this.total = resp.data.total
@@ -98,7 +98,7 @@
     },
     created () {
       const _this=this;
-      axios.get('http://localhost:8181/userAllorders/'+_this.$store.getters.getUserId+'/1/2').then(function (resp) {
+      axios.get('http://localhost:8181/userAllorders/'+_this.$store.getters.getUserId+'/1/8').then(function (resp) {
         _this.tableData=resp.data.list
         _this.pageSize = resp.data.pageSize
         _this.total = resp.data.total
