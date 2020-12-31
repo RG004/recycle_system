@@ -1,5 +1,6 @@
 package com.example.recycle_system_springboot.controller;
 
+import com.example.recycle_system_springboot.pojo.vo.EchartsItemVo;
 import com.example.recycle_system_springboot.pojo.vo.RecycleOrdersDetailVo;
 import com.example.recycle_system_springboot.pojo.vo.RecycleOrdersVo;
 import com.example.recycle_system_springboot.service.RecycleOrderDetailService;
@@ -24,4 +25,12 @@ public class RecycleOrderDetailController {
         List<RecycleOrdersDetailVo> result = recycleOrderDetailService.findOrdersDetail(id);
         return result;
     }
+
+    @GetMapping("/EchartsByitemid")
+    @ResponseBody
+    public List<EchartsItemVo> selectCountByitemid(){
+        List<EchartsItemVo> result = recycleOrderDetailService.selectCountByitemid();
+        return result;
+    }
+
 }

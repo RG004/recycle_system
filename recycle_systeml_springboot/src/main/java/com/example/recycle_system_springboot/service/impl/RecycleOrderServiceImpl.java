@@ -1,10 +1,7 @@
 package com.example.recycle_system_springboot.service.impl;
 
 import com.example.recycle_system_springboot.dao.RecycleOrdersDao;
-import com.example.recycle_system_springboot.pojo.vo.CollectorDoingOrdersVo;
-import com.example.recycle_system_springboot.pojo.vo.CollectorOrdersVo;
-import com.example.recycle_system_springboot.pojo.vo.DoingOrdersVo;
-import com.example.recycle_system_springboot.pojo.vo.RecycleOrdersVo;
+import com.example.recycle_system_springboot.pojo.vo.*;
 import com.example.recycle_system_springboot.service.RecycleOrderService;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
@@ -12,7 +9,7 @@ import com.github.pagehelper.PageInfo;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.text.SimpleDateFormat;
+import java.util.List;
 
 @Service
 public class RecycleOrderServiceImpl implements RecycleOrderService {
@@ -94,5 +91,9 @@ public class RecycleOrderServiceImpl implements RecycleOrderService {
         PageInfo<CollectorDoingOrdersVo> result= new PageInfo<>(list);
         return result;
     }
-
+    @Override
+    public List<EchartsTimeVo> echartsBytime(int id){
+        List<EchartsTimeVo> list=recycleOrdersDao.EchartsBytime(id);
+        return list;
+    }
 }

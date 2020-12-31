@@ -12,6 +12,10 @@
     <result column="Item_Name" jdbcType="VARCHAR" property="itemName" />
     <result column="Item_Price" jdbcType="DOUBLE" property="itemPrice" />
   </resultMap>
+  <resultMap id="EchartsItem" type="com.example.recycle_system_springboot.pojo.vo.EchartsItemVo">
+    <result column="Item_Name" jdbcType="VARCHAR" property="name" />
+    <result column="Countquantity" jdbcType="DOUBLE" property="value" />
+  </resultMap>
   <sql id="Base_Column_List">
     Recycle_Order_Detail_ID, Item_ID, Recycle_Order_ID, Quantity
   </sql>
@@ -28,6 +32,13 @@
     left join item i
     on r.Item_ID = i.Item_ID
     where Recycle_Order_ID= #{rerecycleOrderId,jdbcType=INTEGER}
+  </select>
+  <select id="selectCountByitemid" resultMap="EchartsItem">
+    select distinct i.Item_Name,SUM(r.Quantity) AS Countquantity
+    from recycle_order_detail r
+    left join item i
+    on r.Item_ID = i.Item_ID
+    group by (r.Item_ID)
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from recycle_order_detail

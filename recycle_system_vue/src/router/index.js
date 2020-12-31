@@ -16,6 +16,7 @@ import CollectorAllInorder from '../views/Collector/collectorallInorder'
 import CollectorDoingInorder from '../views/Collector/collectordoingInorder'
 import CollectorAlterInfo from '../views/Collector/collectoralterinfo'
 import NotFound from '../views/404'
+import Echartstest from '../views/User/echartstest'
 Vue.use(Router)
 
 export default new Router({
@@ -142,6 +143,14 @@ export default new Router({
             needLogin: true, //需要登录
             needUser:true,
           },
+        },
+        {
+          path:'/echartstest',
+          component:Echartstest,
+          meta: {
+            needLogin: true, //需要登录
+            needUser:true,
+          }
         }
       ]
     }

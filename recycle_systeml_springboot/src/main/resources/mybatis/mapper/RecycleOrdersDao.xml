@@ -11,6 +11,10 @@
     <result column="Finished_Time" jdbcType="TIMESTAMP" property="finishedTime" />
     <result column="Total_Amount" jdbcType="DOUBLE" property="totalAmount" />
   </resultMap>
+  <resultMap id="EchartsTime" type="com.example.recycle_system_springboot.pojo.vo.EchartsTimeVo">
+      <result column="Scheduled_Time" jdbcType="VARCHAR" property="scheduledTime" />
+      <result column="Count" jdbcType="INTEGER" property="count"/>
+  </resultMap>
   <resultMap id="AllOrderResultMap" type="com.example.recycle_system_springboot.pojo.vo.RecycleOrdersVo">
     <id column="Recycle_Order_ID" jdbcType="INTEGER" property="recycleOrderId" />
     <result column="Scheduled_Time" jdbcType="VARCHAR" property="scheduledTime" />
@@ -175,6 +179,15 @@
     <if test="date!=''and date!=null">
       and DATE_FORMAT(r.Scheduled_Time, '%Y-%m')=#{date}
     </if>
+    order by r.Scheduled_Time asc
+  </select>
+  <select id="EchartsBytime" resultMap="EchartsTime">
+    select distinct r.Scheduled_Time,COUNT(*) AS Count
+    from recycle_orders r
+    left join user u
+    on r.User_ID=u.User_ID
+    where r.User_ID=#{id,jdbcType=INTEGER}
+    GROUP BY DATE_FORMAT(r.Scheduled_Time,'%Y-%m-%d')
     order by r.Scheduled_Time asc
   </select>
   <select id="CollectorselectDoingOrderByUsername" resultMap="DoingOrderResultByCollectorMap">

@@ -3,13 +3,8 @@ package com.example.recycle_system_springboot.controller;
 import com.example.recycle_system_springboot.dao.RecycleOrdersDao;
 import com.example.recycle_system_springboot.pojo.query.CollectorRequireQuery;
 import com.example.recycle_system_springboot.pojo.query.UserRequireQuery;
-import com.example.recycle_system_springboot.pojo.vo.CollectorDoingOrdersVo;
-import com.example.recycle_system_springboot.pojo.vo.CollectorOrdersVo;
-import com.example.recycle_system_springboot.pojo.vo.DoingOrdersVo;
-import com.example.recycle_system_springboot.pojo.vo.RecycleOrdersVo;
+import com.example.recycle_system_springboot.pojo.vo.*;
 import com.example.recycle_system_springboot.service.RecycleOrderService;
-import com.github.pagehelper.Page;
-import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -78,6 +73,13 @@ public class RecycleOrderController {
     @ResponseBody
     public PageInfo<CollectorDoingOrdersVo> collectorfindDoingOrdersByusername(@PathVariable("id") int id,  @PathVariable("username") String username,@PathVariable("start") int start, @PathVariable("limit") int limit){
         PageInfo<CollectorDoingOrdersVo> result = recycleOrderService.collectorfindDoingOrdersByUsername(id,username,start,limit);
+        return result;
+    }
+
+    @GetMapping("/echartsBytime/{id}")
+    @ResponseBody
+    public List<EchartsTimeVo> echartsBytime(@PathVariable("id") int id){
+        List<EchartsTimeVo> result=recycleOrderService.echartsBytime(id);
         return result;
     }
 }

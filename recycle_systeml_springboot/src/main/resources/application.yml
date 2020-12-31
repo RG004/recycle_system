@@ -2,10 +2,11 @@ server:
   port: 8181
 spring:
   datasource:
+    type: com.alibaba.druid.pool.DruidDataSource #连接池的类型
     username: root
-    password: cjk33014423
+    password: 123456sd
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/recycle_system?userSSL=false&serverTimezone=Asia/Shanghai
+    url: jdbc:mysql://localhost:3306/recycle?serverTimezone=GMT
 mybatis:
   configuration:
     map-underscore-to-camel-case: true

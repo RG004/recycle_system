@@ -2,6 +2,7 @@ package com.example.recycle_system_springboot.dao;
 
 import com.example.recycle_system_springboot.pojo.entity.RecycleOrderDetail;
 import com.example.recycle_system_springboot.pojo.vo.DoingOrdersVo;
+import com.example.recycle_system_springboot.pojo.vo.EchartsItemVo;
 import com.example.recycle_system_springboot.pojo.vo.RecycleOrdersDetailVo;
 
 import java.util.List;
@@ -20,4 +21,6 @@ public interface RecycleOrderDetailDao {
     int updateByPrimaryKey(RecycleOrderDetail record);
 
     List<RecycleOrdersDetailVo> selectDetailByRecycleOrderId(Integer recycleOrderId);
+
+    List<EchartsItemVo> selectCountByitemid();
 }
