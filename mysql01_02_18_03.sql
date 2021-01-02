@@ -108,6 +108,7 @@ create table Help_The_Poor
    Longitude            double,
    Latitude             double,
    Help_Detail          varchar(255),
+   Help_Status          varchar(10),
    primary key (Help_ID)
 );
 
