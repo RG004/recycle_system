@@ -1,6 +1,6 @@
 /*==============================================================*/
 /* DBMS name:      MySQL 5.0                                    */
-/* Created on:     2020/12/26 23:04:28                          */
+/* Created on:     2021/1/2 18:03:16                            */
 /*==============================================================*/
 
 
@@ -12,9 +12,9 @@ drop table if exists Collector;
 
 drop table if exists Donation;
 
-drop table if exists Donation_Detail;
-
 drop table if exists Evaluation;
+
+drop table if exists Help_The_Poor;
 
 drop table if exists Item;
 
@@ -77,25 +77,14 @@ create table Collector
 create table Donation
 (
    Donate_ID            int not null auto_increment,
+   Help_ID              int,
    User_ID              int,
-   Address_ID           int,
    Collector_Person_ID  int,
    Evaluation_ID        int,
    Scheduled_Time       datetime,
    Finished_Time        datetime,
+   Donate_Detail        varchar(255),
    primary key (Donate_ID)
-);
-
-/*==============================================================*/
-/* Table: Donation_Detail                                       */
-/*==============================================================*/
-create table Donation_Detail
-(
-   Donate_Detail_ID     int not null auto_increment,
-   Item_ID              int not null,
-   Donate_ID            int,
-   Item_Quantity        int,
-   primary key (Donate_Detail_ID)
 );
 
 /*==============================================================*/
@@ -107,6 +96,20 @@ create table Evaluation
    Evaluation_Details   varchar(255),
    Evaluation_Score     int,
    primary key (Evaluation_ID)
+);
+
+/*==============================================================*/
+/* Table: Help_The_Poor                                         */
+/*==============================================================*/
+create table Help_The_Poor
+(
+   Help_ID              int not null,
+   Help_Name            varchar(20),
+   Longitude            double,
+   Latitude             double,
+   Help_Detail          varchar(255),
+   Help_Status          varchar(10),
+   primary key (Help_ID)
 );
 
 /*==============================================================*/
@@ -140,7 +143,7 @@ create table Recycle_Order_Detail
    Recycle_Order_Detail_ID int not null auto_increment,
    Item_ID              int not null,
    Recycle_Order_ID     int not null,
-   Quantity             int,
+   Quantity             double,
    primary key (Recycle_Order_Detail_ID)
 );
 
@@ -191,23 +194,17 @@ alter table Address add constraint FK_Reference_15 foreign key (User_ID)
 alter table Collector add constraint FK_Reference_4 foreign key (Site_ID)
       references Recycle_Site (Site_ID) on delete restrict on update restrict;
 
-alter table Donation add constraint FK_Reference_10 foreign key (Address_ID)
-      references Address (Address_ID) on delete restrict on update restrict;
-
 alter table Donation add constraint FK_Reference_11 foreign key (Collector_Person_ID)
       references Collector (Collector_Person_ID) on delete restrict on update restrict;
 
 alter table Donation add constraint FK_Reference_12 foreign key (Evaluation_ID)
       references Evaluation (Evaluation_ID) on delete restrict on update restrict;
 
+alter table Donation add constraint FK_Reference_16 foreign key (Help_ID)
+      references Help_The_Poor (Help_ID) on delete restrict on update restrict;
+
 alter table Donation add constraint FK_Reference_9 foreign key (User_ID)
       references User (User_ID) on delete restrict on update restrict;
-
-alter table Donation_Detail add constraint FK_Reference_13 foreign key (Donate_ID)
-      references Donation (Donate_ID) on delete restrict on update restrict;
-
-alter table Donation_Detail add constraint FK_Reference_14 foreign key (Item_ID)
-      references Item (Item_ID) on delete restrict on update restrict;
 
 alter table Item add constraint FK_Reference_8 foreign key (Item_Type_ID)
       references Item_Type (Item_Type_ID) on delete restrict on update restrict;

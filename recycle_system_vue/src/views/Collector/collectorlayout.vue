@@ -6,11 +6,16 @@
           <i class="el-icon-s-home"></i>
           <span  slot="title">主页</span>
         </el-menu-item>
+        <el-submenu index="2">
+          <template slot="title">确认订单</template>
+          <el-menu-item-group>
+            <el-menu-item index="/collectordoinginorder" >进行中订单</el-menu-item>
+          </el-menu-item-group>
+        </el-submenu>
         <el-submenu index="3">
           <template slot="title">查看订单</template>
           <el-menu-item-group>
             <el-menu-item index="/collectorallinorder" >查看历史订单</el-menu-item>
-            <el-menu-item index="/collectordoinginorder" >进行中订单</el-menu-item>
           </el-menu-item-group>
         </el-submenu>
         <el-submenu index="4">

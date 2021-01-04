@@ -20,9 +20,7 @@
         <span>{{scope.$index + 1}}</span>
       </template>
     </el-table-column>
-    <el-table-column prop="addressId" label="id" width="300">
-    </el-table-column>
-    <el-table-column prop="addressDetails" label="地址" width="300">
+    <el-table-column prop="addressDetails" label="地址" width="600">
     </el-table-column>
     <el-table-column  fixed="right" label="操作">
       <template slot-scope="scope">
@@ -58,7 +56,7 @@
       </el-form>
       <div>
         <el-button @click="closeDialog()">取消</el-button>
-        <el-button type="primary"  @click="sumbitEditRow()">确定</el-button>
+        <el-button type="primary"  @click="submitEditRow()">确定</el-button>
       </div>
     </el-dialog>
 
@@ -112,7 +110,13 @@
           dialogFormVisible: false,
           formLabelWidth: "80px",
           // 设置form用于进行添加的时候绑定值
-          form: {},
+          form: {
+            addressDetails:'',
+            latitude:'123',
+            longitude:'123',
+            userId:this.$store.getters.getUserId
+          },
+          jingwei:'',
           value6: "",
           currentPage3: 1,
           currentIndex: "",
@@ -121,6 +125,7 @@
             phone2:'',
             addressDetails2:'',
           },
+          updateaddress:{},
           editPhoneVisible:false,
           rules:{
             phone2:[
@@ -159,6 +164,7 @@
       },
       handleDelete (index, row) {
         // 设置类似于console类型的功能
+
         this.$confirm("确定删除该地址?", "提示", {
           confirmButtonText: "确定",
           cancelButtonText: "取消",
@@ -167,6 +173,8 @@
           .then(() => {
             // 移除对应索引位置的数据，可以对row进行设置向后台请求删除数据
             this.addressList.splice(index, 1);
+            axios.delete('http://localhost:8181/userDeleteAddress/'+row.addressId+'').then(function (resp) {
+            })
             this.$message({
               type: "success",
               message: "删除成功!"
@@ -184,12 +192,19 @@
         this.editForm.addressDetails2 = row.addressDetails;//重置对象
         _index = index;
       },
-      sumbitEditRow() {
+      submitEditRow() {
+        const _this=this
         let editData = _index;
-        alert(this.addressList[editData].addressId)
         this.addressList[editData].addressDetails = this.editForm.addressDetails2;
-        axios.post('http://localhost:8181/updateAddress/'+this.addressList[editData].addressId+'/'+this.addressList[editData].addressDetails+'').then(function (resp) {
-          console.log(resp)
+        this.updateaddress.addressDetails=this.addressList[editData].addressDetails
+        this.updateaddress.addressId=this.addressList[editData].addressId
+        this.updateaddress.userId=this.$store.getters.getUserId
+        axios.get('https://restapi.amap.com/v3/geocode/geo?address='+this.updateaddress.addressDetails+'&key=8c922d0176df163a311ac3425db373c6').then(function (resp) {
+          _this.jingwei=resp.data.geocodes[0].location
+          _this.updateaddress.latitude=parseFloat(_this.jingwei.substr(0,10))
+          _this.updateaddress.longitude=parseFloat(_this.jingwei.substr(11,10))
+          axios.post('http://localhost:8181/updateAddress',_this.updateaddress).then(function (r) {
+          })
         })
         this.centerDialogVisible = false;
       },
@@ -199,19 +214,24 @@
 
       add() {
         this.form = {
-          date: "",
-          name: "",
-          region: "",
-          address: ""
+          addressDetails:'',
+          latitude:1,
+          longitude:1,
+          userId:this.$store.getters.getUserId,
         };
         //   设置点击按钮之后进行显示对话框
         this.dialogFormVisible = true;
       },
       update() {
-        //   this.form.date = reformat(this.form.date);
-        //    可以在html上面进行设置日期的格式化
-        //   将我们添加的信息提交到总数据里面
+        const _this=this
         this.addressList.push(this.form);
+        axios.get('https://restapi.amap.com/v3/geocode/geo?address='+this.form.addressDetails+'&key=8c922d0176df163a311ac3425db373c6').then(function (resp) {
+          _this.jingwei=resp.data.geocodes[0].location
+          _this.form.latitude=parseFloat(_this.jingwei.substr(0,10))
+          _this.form.longitude=parseFloat(_this.jingwei.substr(11,10))
+          axios.post('http://localhost:8181/insertAddress',_this.form).then(function (r) {
+          })
+        })
         this.dialogFormVisible = false;
       },
       cancel() {

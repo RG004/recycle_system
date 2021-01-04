@@ -22,5 +22,9 @@ public interface RecycleOrderDetailDao {
 
     List<RecycleOrdersDetailVo> selectDetailByRecycleOrderId(Integer recycleOrderId);
 
+
     List<EchartsItemVo> selectCountByitemid();
+
+    void deleteByRecycleOrderId(Integer recycleOrderId);
+
 }

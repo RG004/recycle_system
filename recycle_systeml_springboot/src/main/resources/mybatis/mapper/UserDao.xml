@@ -15,9 +15,18 @@
     <result column="Password" jdbcType="VARCHAR" property="password" />
     <result column="Phone" jdbcType="VARCHAR" property="phone" />
     <collection property="addressList" ofType="com.example.recycle_system_springboot.pojo.vo.AddressVo">
+
       <result column="Address_ID" javaType="INTEGER" property="addressId"/>
+
       <result column="Address_Details" jdbcType="VARCHAR" property="addressDetails" />
     </collection>
+  </resultMap>
+  <resultMap id="AllUser" type="com.example.recycle_system_springboot.pojo.entity.User">
+    <id column="User_ID" jdbcType="INTEGER" property="userId" />
+    <result column="User_Name" jdbcType="VARCHAR" property="userName" />
+    <result column="User_RealName" jdbcType="VARCHAR" property="userRealname" />
+    <result column="Password" jdbcType="VARCHAR" property="password" />
+    <result column="Phone" jdbcType="VARCHAR" property="phone" />
   </resultMap>
   <sql id="Base_Column_List">
     User_ID, User_Name, User_RealName, `Password`, Phone
@@ -34,9 +43,15 @@
     from user
     where User_Name = #{username,jdbcType=VARCHAR}
   </select>
+  <select id="selectAllUser" resultMap="AllUser">
+    select *
+    from user
+  </select>
    <select id="selectAddress" resultMap="AddressResultMap">
     select
+
     u.User_ID,u.User_name,u.User_RealName,u.Password,u.Phone,a.Address_Details,a.Address_ID
+
     from user u
     left join address a
     on u.User_ID=a.User_ID
