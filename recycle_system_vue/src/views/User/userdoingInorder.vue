@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-cloak>
     根据快递员姓名查询订单:<el-input v-model="collectorname" placeholder="请输入快递员姓名" style="width: 200px" @keyup.enter.native="findbycollectorname(collectorname)"></el-input>
     <el-button  type="primary" round  @click="findbycollectorname">查询</el-button>
     <el-button  type="primary" round  @click="findall">查询全部</el-button>
@@ -145,5 +145,7 @@
 </script>
 
 <style scoped>
-
+  [v-cloak] {
+    display: none;
+  }
 </style>

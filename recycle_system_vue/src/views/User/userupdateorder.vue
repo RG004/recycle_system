@@ -99,31 +99,7 @@
               itemTypeId:1,
               itemTypeName:'塑料',
               itemsList:[
-                {
-                  itemId:1,
-                  itemName:'塑料瓶',
-                  itemPrice:'5',
-                  quantity:0
-                },
 
-                {
-                  itemId:1,
-                  itemName:'塑料瓶',
-                  itemPrice:'5',
-                  quantity:0.5
-                },
-                {
-                  itemId:1,
-                  itemName:'塑料瓶',
-                  itemPrice:'5',
-                  quantity:0.5
-                },
-                {
-                  itemId:1,
-                  itemName:'塑料瓶',
-                  itemPrice:'5',
-                  quantity:0.5
-                },
                 {
                   itemId:1,
                   itemName:'塑料瓶',
@@ -166,6 +142,10 @@
       axios.get('http://localhost:8181/getallitem').then(function (resp) {
         // console.log(resp);
         _this.orderform.tableData=resp.data;
+        _this.$nextTick(() => {
+          _this._initScroll()
+          _this._calculateHeight()
+        });
         console.log(_this.orderform.tableData.length)
         console.log(resp.data.length)
 
@@ -297,6 +277,10 @@
   }
 </script>
 <style   scoped>
+  .menu-wrapper{
+    height: 58px;
+    overflow: hidden;
+  }
   .foods-wrapper .title{
     border-left: 2px solid #d9dde1;
     font-size: 12px;

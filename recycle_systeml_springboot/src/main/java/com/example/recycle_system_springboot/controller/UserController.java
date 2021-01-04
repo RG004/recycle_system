@@ -1,6 +1,7 @@
 package com.example.recycle_system_springboot.controller;
 
 import com.example.recycle_system_springboot.dao.UserDao;
+import com.example.recycle_system_springboot.pojo.entity.HelpThePoor;
 import com.example.recycle_system_springboot.pojo.vo.AddressVo;
 import com.example.recycle_system_springboot.pojo.vo.UserVo;
 import com.example.recycle_system_springboot.service.UserService;
@@ -21,6 +22,13 @@ public class UserController {
     public UserVo userfindAlladdress(@PathVariable("id") int id){//查找
         UserVo userVo = userService.userfindAlladdress(id);
         return userVo;
+    }
+
+    @GetMapping("/userAllHelp")
+    @ResponseBody
+    public List<HelpThePoor> userfindAllHelp(){//查找
+        List<HelpThePoor> list = userService.userfindAllHelp();
+        return list;
     }
 
     @PostMapping("/userupdatePhone/{id}/{phone}")

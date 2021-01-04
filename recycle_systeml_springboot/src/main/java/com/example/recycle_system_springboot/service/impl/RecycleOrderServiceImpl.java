@@ -156,6 +156,24 @@ public class RecycleOrderServiceImpl implements RecycleOrderService {
     }
 
     @Override
+    public Boolean confirmOrder(OrderDto orderVo) {
+        Boolean result=false;
+        int i=recycleOrdersDao.updateByPrimaryKey(orderVo);
+        recycleOrderDetailDao.deleteByRecycleOrderId(orderVo.getRecycleOrderId());
+        recycleOrderDetail.setRecycleOrderId(orderVo.getRecycleOrderId());
+        for(ItemVo itemVo:orderVo.getTableData()){
+            for(ItemRecycleVo item:itemVo.getItemsList()){
+                if(item.getQuantity()>0.0){
+                    recycleOrderDetail.setQuantity(item.getQuantity());
+                    recycleOrderDetail.setItemId(item.getItemId());
+                    int j=recycleOrderDetailDao.insert(recycleOrderDetail);
+                }
+            }
+        }
+        return result;
+    }
+
+    @Override
     public Boolean updateAnOrder(OrderDto orderVo) {
         Boolean result=false;
         int i=recycleOrdersDao.updateByPrimaryKey(orderVo);

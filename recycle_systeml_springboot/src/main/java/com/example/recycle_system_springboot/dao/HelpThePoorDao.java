@@ -1,0 +1,21 @@
+package com.example.recycle_system_springboot.dao;
+
+import com.example.recycle_system_springboot.pojo.entity.HelpThePoor;
+
+import java.util.List;
+
+public interface HelpThePoorDao {
+    int deleteByPrimaryKey(Integer helpId);
+
+    int insert(HelpThePoor record);
+
+    int insertSelective(HelpThePoor record);
+
+    HelpThePoor selectByPrimaryKey(Integer helpId);
+
+    int updateByPrimaryKeySelective(HelpThePoor record);
+
+    int updateByPrimaryKey(HelpThePoor record);
+
+    List<HelpThePoor> selectAllHelp();
+}

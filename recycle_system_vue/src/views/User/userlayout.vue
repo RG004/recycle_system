@@ -10,7 +10,7 @@
           <template slot="title">操作</template>
           <el-menu-item-group>
             <el-menu-item index="/recycle" >资源回收</el-menu-item>
-            <el-menu-item index="/recycle" >资源捐赠</el-menu-item>
+            <el-menu-item index="/donate" >资源捐赠</el-menu-item>
           </el-menu-item-group>
         </el-submenu>
         <el-submenu index="3">

@@ -6,28 +6,30 @@ import java.io.Serializable;
 import java.util.Date;
 
 /**
- * recycle_orders
+ * donation
  * @author
  */
 @Data
-public class RecycleOrders implements Serializable {
-    //订单实体类
-    private Integer recycleOrderId;
+public class Donation implements Serializable {
+    private Integer donateId;
 
-    private Integer addressId;
+    private Integer helpId;
+
+    private Integer userId;
 
     private Integer collectorPersonId;
 
     private Integer evaluationId;
 
-    private Integer userId;
+    private Integer addressId;
 
     private String scheduledTime;
 
     private String finishedTime;
 
-    private Double totalAmount;
+    private String donateDetail;
 
     private static final long serialVersionUID = 1L;
+
 
 }

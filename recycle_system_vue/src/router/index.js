@@ -24,6 +24,8 @@ import adminallInorder from '../views/Admin/adminallInorder'
 import admindoingInorder from '../views/Admin/admindoingInorder'
 import userregister from '../views/userregister'
 import collectorregister from '../views/collectorregister'
+import confirmorder from "../views/Collector/confirmorder";
+import donate from "../views/User/donate";
 Vue.use(Router)
 
 export default new Router({
@@ -111,6 +113,14 @@ export default new Router({
           },
         },
         {
+          path: '/confirmorder',
+          component: confirmorder,
+          meta: {
+            needLogin: true, //需要登录
+            needCollector:true,
+          },
+        },
+        {
           path: '/collectorallinorder',
           component: CollectorAllInorder,
           meta: {
@@ -153,7 +163,14 @@ export default new Router({
             needUser:true,
           },
         },
-
+        {
+          path: '/donate',
+          component: donate,
+          meta: {
+            needLogin: true, //需要登录
+            needUser:true,
+          },
+        },
         {
           path: '/userallinorder',
           component: UserAllInorder,

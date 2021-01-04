@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.recycle_system_springboot.dao.DonationDao">
+  <resultMap id="BaseResultMap" type="com.example.recycle_system_springboot.pojo.entity.Donation">
+    <id column="Donate_ID" jdbcType="INTEGER" property="donateId" />
+    <result column="Help_ID" jdbcType="INTEGER" property="helpId" />
+    <result column="User_ID" jdbcType="INTEGER" property="userId" />
+    <result column="Collector_Person_ID" jdbcType="INTEGER" property="collectorPersonId" />
+    <result column="Evaluation_ID" jdbcType="INTEGER" property="evaluationId" />
+    <result column="Address_ID" jdbcType="INTEGER" property="addressId" />
+    <result column="Scheduled_Time" jdbcType="TIMESTAMP" property="scheduledTime" />
+    <result column="Finished_Time" jdbcType="TIMESTAMP" property="finishedTime" />
+    <result column="Donate_Detail" jdbcType="VARCHAR" property="donateDetail" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    Donate_ID, Help_ID, User_ID, Collector_Person_ID, Evaluation_ID, Address_ID, Scheduled_Time, 
+    Finished_Time, Donate_Detail
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from donation
+    where Donate_ID = #{donateId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from donation
+    where Donate_ID = #{donateId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" keyColumn="Donate_ID" keyProperty="donateId" parameterType="com.example.recycle_system_springboot.pojo.entity.Donation" useGeneratedKeys="true">
+    insert into donation (Help_ID, User_ID, Collector_Person_ID, 
+      Evaluation_ID, Address_ID, Scheduled_Time, 
+      Finished_Time, Donate_Detail)
+    values (#{helpId,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, #{collectorPersonId,jdbcType=INTEGER}, 
+      #{evaluationId,jdbcType=INTEGER}, #{addressId,jdbcType=INTEGER}, #{scheduledTime,jdbcType=TIMESTAMP}, 
+      #{finishedTime,jdbcType=TIMESTAMP}, #{donateDetail,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" keyColumn="Donate_ID" keyProperty="donateId" parameterType="com.example.recycle_system_springboot.pojo.entity.Donation" useGeneratedKeys="true">
+    insert into donation
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="helpId != null">
+        Help_ID,
+      </if>
+      <if test="userId != null">
+        User_ID,
+      </if>
+      <if test="collectorPersonId != null">
+        Collector_Person_ID,
+      </if>
+      <if test="evaluationId != null">
+        Evaluation_ID,
+      </if>
+      <if test="addressId != null">
+        Address_ID,
+      </if>
+      <if test="scheduledTime != null">
+        Scheduled_Time,
+      </if>
+      <if test="finishedTime != null">
+        Finished_Time,
+      </if>
+      <if test="donateDetail != null">
+        Donate_Detail,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="helpId != null">
+        #{helpId,jdbcType=INTEGER},
+      </if>
+      <if test="userId != null">
+        #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="collectorPersonId != null">
+        #{collectorPersonId,jdbcType=INTEGER},
+      </if>
+      <if test="evaluationId != null">
+        #{evaluationId,jdbcType=INTEGER},
+      </if>
+      <if test="addressId != null">
+        #{addressId,jdbcType=INTEGER},
+      </if>
+      <if test="scheduledTime != null">
+        #{scheduledTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="finishedTime != null">
+        #{finishedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="donateDetail != null">
+        #{donateDetail,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.example.recycle_system_springboot.pojo.entity.Donation">
+    update donation
+    <set>
+      <if test="helpId != null">
+        Help_ID = #{helpId,jdbcType=INTEGER},
+      </if>
+      <if test="userId != null">
+        User_ID = #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="collectorPersonId != null">
+        Collector_Person_ID = #{collectorPersonId,jdbcType=INTEGER},
+      </if>
+      <if test="evaluationId != null">
+        Evaluation_ID = #{evaluationId,jdbcType=INTEGER},
+      </if>
+      <if test="addressId != null">
+        Address_ID = #{addressId,jdbcType=INTEGER},
+      </if>
+      <if test="scheduledTime != null">
+        Scheduled_Time = #{scheduledTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="finishedTime != null">
+        Finished_Time = #{finishedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="donateDetail != null">
+        Donate_Detail = #{donateDetail,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where Donate_ID = #{donateId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.example.recycle_system_springboot.pojo.entity.Donation">
+    update donation
+    set Help_ID = #{helpId,jdbcType=INTEGER},
+      User_ID = #{userId,jdbcType=INTEGER},
+      Collector_Person_ID = #{collectorPersonId,jdbcType=INTEGER},
+      Evaluation_ID = #{evaluationId,jdbcType=INTEGER},
+      Address_ID = #{addressId,jdbcType=INTEGER},
+      Scheduled_Time = #{scheduledTime,jdbcType=TIMESTAMP},
+      Finished_Time = #{finishedTime,jdbcType=TIMESTAMP},
+      Donate_Detail = #{donateDetail,jdbcType=VARCHAR}
+    where Donate_ID = #{donateId,jdbcType=INTEGER}
+  </update>
+</mapper>

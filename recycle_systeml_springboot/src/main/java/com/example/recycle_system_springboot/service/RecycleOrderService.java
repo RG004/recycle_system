@@ -33,6 +33,9 @@ public interface RecycleOrderService {
     //下单
     Boolean placeAnOrder(OrderDto orderVo);
 
+    //确认订单
+    Boolean confirmOrder(OrderDto orderVo);
+
     Boolean updateAnOrder(OrderDto orderVo);
 
     RecycleOrders findAnOrder(int id);

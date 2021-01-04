@@ -23,7 +23,7 @@
             </el-table>
             <el-button  type="primary" round slot="reference" @click="getDetail(scope.row.recycleOrderId)" >查询订单详情</el-button>
           </el-popover>
-          <el-button  type="primary" round>确认订单</el-button>
+          <el-button  type="primary" round @click="jumpConfirm(scope.row.recycleOrderId)">确认订单</el-button>
         </template>
 
       </el-table-column>
@@ -34,6 +34,12 @@
 <script>
   export default {
     methods: {
+      jumpConfirm(recycleOrderId){
+        this.$router.push({
+          path: "/confirmorder",
+          query: {recycleOrderId: recycleOrderId }
+        });
+      },
       findbyusername () {
         const _this = this
         this.selectbyusername = true

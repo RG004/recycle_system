@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-cloak>
     根据快递员姓名查询订单:<el-input v-model="userrequire.collectorname" placeholder="请输入快递员姓名" style="width: 200px"></el-input>
     根据日期查询订单：
     <el-select v-model="userrequire.datepick" placeholder="请选择">
@@ -168,5 +168,7 @@
 </script>
 
 <style scoped>
-
+  [v-cloak] {
+    display: none;
+  }
 </style>
