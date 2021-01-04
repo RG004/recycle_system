@@ -25,4 +25,5 @@ public interface RecycleOrderService {
     PageInfo<CollectorDoingOrdersVo> collectorfindDoingOrdersByUsername(int id,String username,int start,int limit);
 
     List<EchartsTimeVo> echartsBytime(int id);
+    List<EchartsTimeVo> echartsBydate(int id);
 }

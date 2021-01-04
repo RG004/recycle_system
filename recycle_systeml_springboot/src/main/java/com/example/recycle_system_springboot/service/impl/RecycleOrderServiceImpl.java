@@ -96,4 +96,9 @@ public class RecycleOrderServiceImpl implements RecycleOrderService {
         List<EchartsTimeVo> list=recycleOrdersDao.EchartsBytime(id);
         return list;
     }
+    @Override
+    public List<EchartsTimeVo> echartsBydate(int id){
+        List<EchartsTimeVo> list=recycleOrdersDao.EchartsBydate(id);
+        return list;
+    }
 }

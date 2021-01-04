@@ -39,4 +39,5 @@ public interface RecycleOrdersDao {
 
     Page<CollectorDoingOrdersVo> CollectorselectDoingOrderByUsername(Integer collectorid,String username);
     List<EchartsTimeVo> EchartsBytime(Integer id);
+    List<EchartsTimeVo> EchartsBydate(Integer id);
 }

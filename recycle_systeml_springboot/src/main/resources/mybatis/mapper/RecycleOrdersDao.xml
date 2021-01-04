@@ -181,15 +181,24 @@
     </if>
     order by r.Scheduled_Time asc
   </select>
-  <select id="EchartsBytime" resultMap="EchartsTime">
+  <select id="EchartsBydate" resultMap="EchartsTime">
     select distinct r.Scheduled_Time,COUNT(*) AS Count
     from recycle_orders r
     left join user u
     on r.User_ID=u.User_ID
     where r.User_ID=#{id,jdbcType=INTEGER}
     GROUP BY DATE_FORMAT(r.Scheduled_Time,'%Y-%m-%d')
-    order by r.Scheduled_Time asc
+    order by DATE_FORMAT(r.Scheduled_Time,'%Y-%m-%d') asc
   </select>
+  <select id="EchartsBytime" resultMap="EchartsTime">
+  select distinct r.Scheduled_Time,COUNT(*) AS Count
+  from recycle_orders r
+    left join user u
+  on r.User_ID=u.User_ID
+  where r.User_ID=#{id,jdbcType=INTEGER}
+  GROUP BY DATE_FORMAT(r.Scheduled_Time,'%H-%M-%S')
+  order by DATE_FORMAT(r.Scheduled_Time,'%H-%M-%S') asc
+</select>
   <select id="CollectorselectDoingOrderByUsername" resultMap="DoingOrderResultByCollectorMap">
     select
     r.Recycle_Order_ID,r.Scheduled_Time,a.Address_Details,u.User_Name,u.Phone

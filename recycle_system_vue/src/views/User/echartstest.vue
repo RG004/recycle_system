@@ -13,6 +13,8 @@ import * as echarts from 'echarts'
 // eslint-disable-next-line no-unused-vars
 var xData = ['2013-9-19', '2018-9-19', '2019-2-22', '2020-4-12']
 var yData = [1, 2, 1, 2]
+var xData1= ['8:00', '9:00', '12:00', '13:00']
+var yData1 = [1, 2, 1, 2]
 var Data=[{value: 335, name: '铝'},
           {value: 310, name: '铁'},
          {value: 234, name: '电池'},
@@ -29,7 +31,7 @@ export default {
     // 基于准备好的dom，初始化echarts实例
     let option = {
       title: {
-        text: '根据时间统计订单数'
+        text: '根据日期统计订单数'
       },
       tooltip: {}, // 悬浮提示，不写就没有提示
       xAxis: { // 横坐标
@@ -49,16 +51,19 @@ export default {
     // 绘制图表
     this.initChart(this.$refs.chart, option)
        let option1 = {
+         title: {
+           text: '根据下单时间统计订单数'
+         },
       tooltip: {},
       xAxis: {
         type: 'category',
-        data: xData
+        data: xData1
       },
       yAxis: {
         type: 'value'
       },
       series: [{
-        data: yData,
+        data: yData1,
         type: 'line'
       }]
     }
@@ -208,12 +213,21 @@ export default {
   created () {
     const _this = this
     // eslint-disable-next-line no-undef
-    axios.get('http://localhost:8181/echartsBytime/' + _this.$store.getters.getUserId ).then(function (resp) {
+    axios.get('http://localhost:8181/echartsBydate/' + _this.$store.getters.getUserId ).then(function (resp) {
         console.log(resp)
         for (var j = 0, len = resp.data.length; j < len; j++) {
           // alert(_this.x[j].recycleOrderId)
           yData.splice(j, 1, resp.data[j].count)
           xData.splice(j, 1, resp.data[j].scheduledTime.substr(0, 10))
+        }
+      }
+    )
+    axios.get('http://localhost:8181/echartsBytime/' + _this.$store.getters.getUserId ).then(function (resp) {
+        console.log(resp)
+        for (var j = 0, len = resp.data.length; j < len; j++) {
+          // alert(_this.x[j].recycleOrderId)
+          yData1.splice(j, 1, resp.data[j].count)
+          xData1.splice(j, 1, resp.data[j].scheduledTime.substr(11, 15))
         }
       }
     )

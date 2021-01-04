@@ -82,4 +82,10 @@ public class RecycleOrderController {
         List<EchartsTimeVo> result=recycleOrderService.echartsBytime(id);
         return result;
     }
+    @GetMapping("/echartsBydate/{id}")
+    @ResponseBody
+    public List<EchartsTimeVo> echartsBydate(@PathVariable("id") int id){
+        List<EchartsTimeVo> result=recycleOrderService.echartsBydate(id);
+        return result;
+    }
 }
