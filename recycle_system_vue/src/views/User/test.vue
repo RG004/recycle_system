@@ -1,58 +1,46 @@
 <template>
-  <div class="address">
-    <el-cascader :props="props" style="width: 400px;margin-right: 20px" :key="modalKey" v-model="address.value" filterable></el-cascader>
-    <el-input v-model="address.detail"></el-input>
-    <br>
-    <el-button @click="changeValue">提交</el-button>
-    <el-button @click="changeValue2">提交2</el-button>
-    {{address.value}}
+  <div>
+    <el-table :data="table">
+        <el-table-column  :key="Math.random()" v-if="this.schduledTime=='123'" prop="scheduledTime" label="time" width="300">
+        </el-table-column>
+    </el-table>
   </div>
 </template>
 
 <script>
   export default {
-    data() {
+    data () {
       return {
-        props: {
-          lazy: true,
-          lazyLoad(node, resolve) {
-            const { level } = node;
-            let url =
-              'https://restapi.amap.com/v3/config/district?parameters&key=8c922d0176df163a311ac3425db373c6';
-              if (level > 0) {
-              url = 'https://restapi.amap.com/v3/config/district?parameters&key=8c922d0176df163a311ac3425db373c6&keywords='+node.value+'&subdistrict=1';
-            }
-            level + 1;
-            axios.get(url).then(res => {
-              let nodes = res.data.districts[0].districts.map(item => {
-                return {
-                  label: item.name,
-                  value: item.name,
-                  leaf: level >= 3
-                };
-              });
-              resolve(nodes);
-            });
+        table: [{
+          scheduledTime: '123',
+        },
+          {
+            scheduledTime: '1234',
+          },
+          {
+            scheduledTime: '1234',
+          },
+          {
+            scheduledTime: '1234',
+          },
+          {
+            scheduledTime: '123',
           }
-        },
-        address:{
-          value: [],
-          detail:'',
-        },
-        modalKey: 0
-      };
-    },
-
-    methods: {
-      changeValue() {
-        axios.post('http://localhost:8181/insertAddress',this.address).then(function (resp){
-        })
-      },
-      changeValue2() {
-        console.log(this.address)
+        ],
       }
-    }
-  };
+    },
+    // created () {
+    //   const  _this=this
+    //   axios.get('http://localhost:8181/userAllorders/'+_this.$store.getters.getUserId+'/1/2').then(function (resp) {
+    //     console.log(resp)
+    //     _this.table=resp.data.list
+    //     for(var j=0,len=_this.table.length;j<len;j++){
+    //       _this.table[j].scheduledTime=_this.table[j].scheduledTime.substr(0,10)
+    //     }
+    //   })
+
+    // }
+  }
 </script>
 
 <style scoped>

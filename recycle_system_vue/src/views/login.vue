@@ -22,7 +22,9 @@
     <!-- 登录面板 -->
     <div class="login-box">
       <div class="login-box-title">
-        资源回收平台登录
+
+        资源回收平台
+
       </div>
       <div class="login-box-from">
         <el-form :model="loginForm" :rules="rules" ref="loginForm"  class="demo-ruleForm">
@@ -46,6 +48,11 @@
           </el-form-item>
           <el-form-item>
             <el-button type="primary" size="medium"  style="width:100%" @click="submitForm('loginForm')">立即登陆</el-button>
+
+          </el-form-item>
+          <el-form-item>
+            <el-button type="primary" size="medium"  style="width:100%" @click="jump" v-if="loginForm.identity==1">用户注册</el-button>
+            <el-button type="primary" size="medium"  style="width:100%" @click="jump" v-if="loginForm.identity==2">派送员注册</el-button>
           </el-form-item>
           <el-form-item>
             <el-button type="primary" size="medium"  style="width:100%" @click="jump" >注册</el-button>
@@ -89,6 +96,14 @@
       }
     },
     methods:{
+      jump(){
+        if(this.loginForm.identity==1){
+          this.$router.push({path: '/userregister'})
+        }
+        if(this.loginForm.identity==2){
+          this.$router.push({path: '/collectorregister'})
+        }
+      },
       submitForm(formName){
         const _this=this
         this.$refs[formName].validate((valid) => {
@@ -111,7 +126,15 @@
                 _this.$router.push({
                   path:'/collectorlayout',
                 })
-              }else {
+              }else if(_this.loginForm.identity==3&&resp.data.login){
+                sessionStorage.setItem('token',resp.data.token)
+                sessionStorage.setItem('identity',_this.loginForm.identity)
+                _this.$store.commit('setAdminId',resp.data.id)
+                _this.$store.commit('setAdminName',resp.data.name)
+                _this.$router.push({
+                  path:'/adminlayout',
+                })
+              } else{
                 _this.$alert('用户名或密码输入错误','提示');
               }
             })

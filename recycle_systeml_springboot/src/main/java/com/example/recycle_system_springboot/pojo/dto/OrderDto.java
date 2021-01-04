@@ -9,6 +9,9 @@ import java.util.List;
 @Data
 public class OrderDto extends RecycleOrders {
     private Integer userId;
+
+
     private Integer recycleOrderId;
+
     private List<ItemVo> tableData;
 }

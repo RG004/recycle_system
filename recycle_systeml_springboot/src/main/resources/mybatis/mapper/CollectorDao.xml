@@ -4,16 +4,25 @@
   <resultMap id="BaseResultMap" type="com.example.recycle_system_springboot.pojo.entity.Collector">
     <id column="Collector_Person_ID" jdbcType="INTEGER" property="collectorPersonId" />
     <result column="Site_ID" jdbcType="INTEGER" property="siteId" />
-    <result column="Collector_Name" jdbcType="VARCHAR" property="collectorName" />
+    <result column="Collect or_Name" jdbcType="VARCHAR" property="collectorName" />
     <result column="User_Name" jdbcType="VARCHAR" property="userName" />
     <result column="Password" jdbcType="VARCHAR" property="password" />
     <result column="Phone" jdbcType="VARCHAR" property="phone" />
     <result column="IDcard_Number" jdbcType="VARCHAR" property="idcardNumber" />
     <result column="Photo" jdbcType="VARCHAR" property="photo" />
+    <result column="User_Status" jdbcType="VARCHAR" property="userStatus" />
+  </resultMap>
+  <resultMap id="RecyclesiteMap" type="com.example.recycle_system_springboot.pojo.vo.CollectorVo">
+    <id column="Collector_Person_ID" jdbcType="INTEGER" property="collectorPersonId" />
+    <result column="Collector_Name" jdbcType="VARCHAR" property="collectorName" />
+    <result column="User_Name" jdbcType="VARCHAR" property="userName" />
+    <result column="Phone" jdbcType="VARCHAR" property="phone" />
+    <result column="Site_ID" javaType="INTEGER" property="siteId"/>
+    <result column="Site_Name" jdbcType="VARCHAR" property="siteName"/>
   </resultMap>
   <sql id="Base_Column_List">
     Collector_Person_ID, Site_ID, Collector_Name, User_Name, `Password`, Phone, IDcard_Number,
-    Photo
+    Photo, User_Status
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select
@@ -25,7 +34,26 @@
     select
     <include refid="Base_Column_List" />
     from collector
-    where User_Name = #{username,jdbcType=VARCHAR}
+    where User_Name = #{username,jdbcType=INTEGER}
+  </select>
+  <select id="selectRecyclesite" resultType="com.example.recycle_system_springboot.pojo.vo.CollectorVo">
+    select
+    c.Collector_Person_ID,c.Site_ID,c.Collector_Name,c.User_Name,c.Phone,r.Site_Name
+    from collector c
+    left join recycle_site r
+    on c.Site_ID=r.Site_ID
+    where Collector_Person_ID = #{collectorPersonId,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultType="com.example.recycle_system_springboot.pojo.entity.Collector">
+    select
+    <include refid="Base_Column_List" />
+    from collector
+  </select>
+  <select id="selectBycollectorname" resultType="java.lang.Integer">
+    select
+    Collector_Person_ID
+    from collector
+    where Collector_Name=#{collectorname,jdbcType=VARCHAR}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from collector
@@ -34,10 +62,10 @@
   <insert id="insert" keyColumn="Collector_Person_ID" keyProperty="collectorPersonId" parameterType="com.example.recycle_system_springboot.pojo.entity.Collector" useGeneratedKeys="true">
     insert into collector (Site_ID, Collector_Name, User_Name,
       `Password`, Phone, IDcard_Number,
-      Photo)
+      Photo, User_Status)
     values (#{siteId,jdbcType=INTEGER}, #{collectorName,jdbcType=VARCHAR}, #{userName,jdbcType=VARCHAR},
       #{password,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR}, #{idcardNumber,jdbcType=VARCHAR},
-      #{photo,jdbcType=VARCHAR})
+      #{photo,jdbcType=VARCHAR}, #{userStatus,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" keyColumn="Collector_Person_ID" keyProperty="collectorPersonId" parameterType="com.example.recycle_system_springboot.pojo.entity.Collector" useGeneratedKeys="true">
     insert into collector
@@ -63,6 +91,9 @@
       <if test="photo != null">
         Photo,
       </if>
+      <if test="userStatus != null">
+        User_Status,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="siteId != null">
@@ -85,6 +116,9 @@
       </if>
       <if test="photo != null">
         #{photo,jdbcType=VARCHAR},
+      </if>
+      <if test="userStatus != null">
+        #{userStatus,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -112,6 +146,9 @@
       <if test="photo != null">
         Photo = #{photo,jdbcType=VARCHAR},
       </if>
+      <if test="userStatus != null">
+        User_Status = #{userStatus,jdbcType=VARCHAR},
+      </if>
     </set>
     where Collector_Person_ID = #{collectorPersonId,jdbcType=INTEGER}
   </update>
@@ -123,7 +160,13 @@
       `Password` = #{password,jdbcType=VARCHAR},
       Phone = #{phone,jdbcType=VARCHAR},
       IDcard_Number = #{idcardNumber,jdbcType=VARCHAR},
-      Photo = #{photo,jdbcType=VARCHAR}
+      Photo = #{photo,jdbcType=VARCHAR},
+      User_Status = #{userStatus,jdbcType=VARCHAR}
+    where Collector_Person_ID = #{collectorPersonId,jdbcType=INTEGER}
+  </update>
+  <update id="updatePhoneByPrimaykey">
+    update collector
+    set Phone = #{phone,jdbcType=VARCHAR}
     where Collector_Person_ID = #{collectorPersonId,jdbcType=INTEGER}
   </update>
 </mapper>

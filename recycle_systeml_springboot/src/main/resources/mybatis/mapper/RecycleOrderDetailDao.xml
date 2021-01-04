@@ -33,12 +33,13 @@
     delete from recycle_order_detail
     where Recycle_Order_Detail_ID = #{recycleOrderDetailId,jdbcType=INTEGER}
   </delete>
-  <delete id="deleteByRecycleOrderId" parameterType="java.lang.Integer">
+
+  <delete id="deleteByRecycleOrderId">
     delete from recycle_order_detail
     where Recycle_Order_ID = #{recycleOrderId,jdbcType=INTEGER}
   </delete>
+    <insert id="insert" keyColumn="Recycle_Order_Detail_ID" keyProperty="recycleOrderDetailId" parameterType="com.example.recycle_system_springboot.pojo.entity.RecycleOrderDetail" useGeneratedKeys="true">
 
-  <insert id="insert" keyColumn="Recycle_Order_Detail_ID" keyProperty="recycleOrderDetailId" parameterType="com.example.recycle_system_springboot.pojo.entity.RecycleOrderDetail" useGeneratedKeys="true">
     insert into recycle_order_detail (Item_ID, Recycle_Order_ID, Quantity
       )
     values (#{itemId,jdbcType=INTEGER}, #{recycleOrderId,jdbcType=INTEGER}, #{quantity,jdbcType=INTEGER}

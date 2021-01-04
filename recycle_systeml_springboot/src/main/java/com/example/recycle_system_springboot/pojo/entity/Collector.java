@@ -10,7 +10,6 @@ import java.io.Serializable;
  */
 @Data
 public class Collector implements Serializable {
-    //派送员实体类
     private Integer collectorPersonId;
 
     private Integer siteId;
@@ -27,6 +26,5 @@ public class Collector implements Serializable {
 
     private String photo;
 
-    private static final long serialVersionUID = 1L;
-
+    private String userStatus;
 }

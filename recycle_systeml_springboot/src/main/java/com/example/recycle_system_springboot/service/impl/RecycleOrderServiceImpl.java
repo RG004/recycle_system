@@ -1,5 +1,8 @@
 package com.example.recycle_system_springboot.service.impl;
 
+
+import com.example.recycle_system_springboot.dao.CollectorDao;
+
 import com.example.recycle_system_springboot.dao.ItemDao;
 import com.example.recycle_system_springboot.dao.RecycleOrderDetailDao;
 import com.example.recycle_system_springboot.dao.RecycleOrdersDao;
@@ -24,6 +27,10 @@ public class RecycleOrderServiceImpl implements RecycleOrderService {
     @Resource
     RecycleOrderDetailDao recycleOrderDetailDao;
     @Resource
+
+    CollectorDao collectorDao;
+    @Resource
+
     ItemDao itemDao;
     @Resource
     RecycleOrderDetail recycleOrderDetail;
@@ -60,7 +67,80 @@ public class RecycleOrderServiceImpl implements RecycleOrderService {
         return result;
     }
 
-    //得到所有的items
+
+    @Override
+    public PageInfo<RecycleOrdersVo> userfindOrdersByCollectorname(int id, String collectorname,String datebyday,String datebymonth,String datepick,int start, int limit) {
+        PageHelper.startPage(start,limit);
+        if(datepick.equals("day")){
+            Page<RecycleOrdersVo> list = recycleOrdersDao.selectOrderByCollectorname(id,collectorname,datebyday);
+            PageInfo<RecycleOrdersVo> result= new PageInfo<>(list);
+            return result;
+        }else {
+            Page<RecycleOrdersVo> list = recycleOrdersDao.selectOrderByCollectornameBymonth(id, collectorname, datebymonth);
+            PageInfo<RecycleOrdersVo> result = new PageInfo<>(list);
+            return result;
+        }
+    }
+
+    @Override
+    public PageInfo<DoingOrdersVo> userfindDoingOrdersByCollectorname(int id, String collectorname, int start, int limit) {
+        PageHelper.startPage(start,limit);
+        Page<DoingOrdersVo> list = recycleOrdersDao.selectDoingOrderByCollectorname(id,collectorname);
+        PageInfo<DoingOrdersVo> result= new PageInfo<>(list);
+        return result;
+    }
+
+    @Override
+    public PageInfo<CollectorOrdersVo> collectorfindOrdersByUsername(int id, String username, String datebyday, String datebymonth, String datepick, int start, int limit) {
+        PageHelper.startPage(start,limit);
+        if(datepick.equals("day")){
+            Page<CollectorOrdersVo> list = recycleOrdersDao.CollectorselctOrderByUsername(id,username,datebyday);
+            PageInfo<CollectorOrdersVo> result= new PageInfo<>(list);
+            return result;
+        }else {
+            Page<CollectorOrdersVo> list = recycleOrdersDao.CollectorselctOrderByUsernameBymonth(id, username, datebymonth);
+            PageInfo<CollectorOrdersVo> result = new PageInfo<>(list);
+            return result;
+        }
+    }
+
+    @Override
+    public PageInfo<CollectorDoingOrdersVo> collectorfindDoingOrdersByUsername(int id, String username, int start, int limit) {
+        PageHelper.startPage(start,limit);
+        Page<CollectorDoingOrdersVo> list = recycleOrdersDao.CollectorselectDoingOrderByUsername(id,username);
+        PageInfo<CollectorDoingOrdersVo> result= new PageInfo<>(list);
+        return result;
+    }
+
+    @Override
+    public PageInfo<AllOrdersVo> adminfindAllOrders(String username, String collectorname, String datebyday, String datebymonth, String datepick, int start, int limit) {
+        PageHelper.startPage(start,limit);
+        if(datepick.equals("day")){
+            Page<AllOrdersVo> list =recycleOrdersDao.selectAllByadmin(username,collectorname,datebyday,datepick);
+            PageInfo<AllOrdersVo> result= new PageInfo<>(list);
+            return result;
+        }else{
+            Page<AllOrdersVo> list =recycleOrdersDao.selectAllByadmin(username,collectorname,datebymonth,datepick);
+            PageInfo<AllOrdersVo> result= new PageInfo<>(list);
+            return result;
+        }
+    }
+
+    @Override
+    public PageInfo<AllDoingOrdersVo> adminfindAllDoingOrders(String username, String collectorname, String datebyday, String datebymonth, String datepick, int start, int limit) {
+        PageHelper.startPage(start,limit);
+        if(datepick.equals("day")){
+            Page<AllDoingOrdersVo> list =recycleOrdersDao.selectDoingByadmin(username,collectorname,datebyday,datepick);
+            PageInfo<AllDoingOrdersVo> result= new PageInfo<>(list);
+            return result;
+        }else{
+            Page<AllDoingOrdersVo> list =recycleOrdersDao.selectDoingByadmin(username,collectorname,datebymonth,datepick);
+            PageInfo<AllDoingOrdersVo> result= new PageInfo<>(list);
+            return result;
+        }
+    }
+
+
     @Override
     public List<ItemVo> getAllItems() {
         List<ItemVo> result=itemDao.getAllItems();
@@ -70,18 +150,17 @@ public class RecycleOrderServiceImpl implements RecycleOrderService {
     @Override
     public Boolean placeAnOrder(OrderDto orderVo) {
         Boolean result=false;
-        int i=recycleOrdersDao.insert(orderVo);System.out.println(i);
-//        System.out.println(orderVo.getRecycleOrderId());
 
+        int i=recycleOrdersDao.insert(orderVo);
         recycleOrderDetail.setRecycleOrderId(orderVo.getRecycleOrderId());
-        System.out.println(recycleOrderDetail);
         for(ItemVo itemVo:orderVo.getTableData()){
-            for(Item item:itemVo.getItemsList()){
+            for(ItemRecycleVo item:itemVo.getItemsList()){
+
                 if(item.getQuantity()>0.0){
                     recycleOrderDetail.setQuantity(item.getQuantity());
                     recycleOrderDetail.setItemId(item.getItemId());
                     int j=recycleOrderDetailDao.insert(recycleOrderDetail);
-                    System.out.println(j);
+
                 }
             }
         }
@@ -93,17 +172,18 @@ public class RecycleOrderServiceImpl implements RecycleOrderService {
     public Boolean updateAnOrder(OrderDto orderVo) {
         Boolean result=false;
         int i=recycleOrdersDao.updateByPrimaryKey(orderVo);
-//        System.out.println(orderVo.getRecycleOrderId());
+
         recycleOrderDetailDao.deleteByRecycleOrderId(orderVo.getRecycleOrderId());
         recycleOrderDetail.setRecycleOrderId(orderVo.getRecycleOrderId());
-        System.out.println(recycleOrderDetail);
         for(ItemVo itemVo:orderVo.getTableData()){
-            for(Item item:itemVo.getItemsList()){
+            for(ItemRecycleVo item:itemVo.getItemsList()){
+
                 if(item.getQuantity()>0.0){
                     recycleOrderDetail.setQuantity(item.getQuantity());
                     recycleOrderDetail.setItemId(item.getItemId());
                     int j=recycleOrderDetailDao.insert(recycleOrderDetail);
-                    System.out.println(j);
+
+
                 }
             }
         }
@@ -111,11 +191,36 @@ public class RecycleOrderServiceImpl implements RecycleOrderService {
         return result;
     }
 
-    //查找一个订单
+
     @Override
     public RecycleOrders findAnOrder(int id) {
         RecycleOrders recycleOrders=recycleOrdersDao.selectByPrimaryKey(id);
         return recycleOrders;
+    }
+
+    @Override
+    public Boolean placecollector(int recycleorderId, String collectorname) {
+        int collectorId=collectorDao.selectBycollectorname(collectorname);
+        recycleOrdersDao.updateCollector(recycleorderId,collectorId);
+        return true;
+    }
+
+    @Override
+    public Boolean confirmOrder(OrderDto orderVo) {
+        Boolean result=false;
+        int i=recycleOrdersDao.updateByPrimaryKey(orderVo);
+        recycleOrderDetailDao.deleteByRecycleOrderId(orderVo.getRecycleOrderId());
+        recycleOrderDetail.setRecycleOrderId(orderVo.getRecycleOrderId());
+        for(ItemVo itemVo:orderVo.getTableData()){
+            for(ItemRecycleVo item:itemVo.getItemsList()){
+                if(item.getQuantity()>0.0){
+                    recycleOrderDetail.setQuantity(item.getQuantity());
+                    recycleOrderDetail.setItemId(item.getItemId());
+                    int j=recycleOrderDetailDao.insert(recycleOrderDetail);
+                }
+            }
+        }
+        return result;
     }
 
 }
