@@ -25,6 +25,7 @@ import adminallInorder from '../views/Admin/adminallInorder'
 import admindoingInorder from '../views/Admin/admindoingInorder'
 import userregister from '../views/userregister'
 import collectorregister from '../views/collectorregister'
+
 Vue.use(Router)
 
 export default new Router({
@@ -39,6 +40,10 @@ export default new Router({
       path:'/login',
       name:"登录页面",
       component: Login,
+    },{
+      path:'/register',
+      name:"注册页面",
+      component: register
     },
     {
       path:'/userregister',

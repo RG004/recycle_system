@@ -1,11 +1,13 @@
 <template>
   <el-container direction="vertical">
+
     <div v-if="active==1">
       <div class="menu-wrapper" ref="menuWrapper">
         <el-menu class="el-menu-demo" mode="horizontal" @select="handleSelect" background-color="#545c64" text-color="#fff" active-text-color="#ffd04b" style="width: 100%;">
           <el-menu-item style="width: 14%" v-for="(item,index) in orderform.tableData"  @click="selectMenu(index)" :key="index">{{item.itemTypeName}}</el-menu-item>
         </el-menu>
       </div>
+
       <div style="height: 380px;overflow: hidden;padding-left: 0px;"  class="foods-wrapper" ref="foodsWrapper">
         <ul style="list-style:none;">
           <li v-for="item in orderform.tableData" class="food-list food-list-hook" :key="item.itemTypeId">
@@ -15,12 +17,15 @@
                 <div class="name" >{{good.itemName}}</div>
                 <div class="price" >单价：{{good.itemPrice}}（元/斤）</div>
                 <div class="weight" ><el-input-number  v-model="good.quantity"  :min="0" :precision="1" :step="0.5" ></el-input-number></div>
+
+
               </div>
             </ul>
           </li>
         </ul>
       </div>
     </div>
+
 
     <div class="block" v-if="active==2" style="margin: 0 auto ;height: 280px;padding-top: 100px;">
       <span class="demonstration">请选择上门时间</span>
@@ -117,7 +122,6 @@
                   itemPrice:'5',
                   quantity:0.5
                 },
-
               ],
             }
           ]
@@ -125,29 +129,36 @@
 
       }
     },
+
+
     created(){
       const _this=this;
       axios.get('http://localhost:8181/getallitem').then(function (resp) {
           console.log(resp);
+
           _this.orderform.tableData=resp.data;
         _this.$nextTick(() => {
           _this._initScroll()
           _this._calculateHeight()
         });
       })
+
       axios.get('http://localhost:8181/userAlladdress/'+this.$store.getters.getUserId+'').then(function (resp) {
         console.log(resp)
         _this.addressList=resp.data.addressList
       })
 
+
     },
     mounted(){
       //   这里用到一个定时器 等待数据渲染完毕 执行该方法 不然不能滑动 如果是真实数据 这两个方法放在this.$nextTick()里面
       //因为没有真实数据 只能用本地数据模拟下
+
       setTimeout(() => {
         this._initScroll()
         this._calculateHeight()
       }, 2)
+
     },
     methods: {
       //     设置两边列表可以滚动  内容区要比外层容器要高  列表先渲染 才可以滑动
@@ -180,7 +191,6 @@
           height += item.clientHeight;
           this.listHeight.push(height);
         }
-
       },
       //  点击左侧列表 右侧列表滑动到指定位置
       selectMenu (index) {
@@ -242,10 +252,6 @@
   }
 </script>
 <style   scoped>
-  .menu-wrapper{
-    height: 58px;
-    overflow: hidden;
-  }
   .foods-wrapper .title{
     border-left: 2px solid #d9dde1;
     font-size: 12px;

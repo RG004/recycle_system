@@ -18,6 +18,8 @@ public class Item implements Serializable {
 
     private Double itemPrice;
 
+
     private String itemPic;
+
 
 }

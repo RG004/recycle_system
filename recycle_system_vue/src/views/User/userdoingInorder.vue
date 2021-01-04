@@ -23,7 +23,9 @@
             </el-table>
             <el-button  type="primary" round slot="reference" @click="getDetail(scope.row.recycleOrderId)" >查询订单详情</el-button>
           </el-popover>
+
           <el-button  type="primary" round @click="jumpUpdate(scope.row.recycleOrderId)">修改订单</el-button>
+
         </template>
 
       </el-table-column>
@@ -83,6 +85,8 @@
       },
       page(currentPage){
         const _this = this
+
+
         if(this.selectbynormal){
           axios.get('http://localhost:8181/userDoingorders/'+_this.$store.getters.getUserId+'/'+currentPage+'/8').then(function(resp){
             _this.tableData = resp.data.list
@@ -110,6 +114,7 @@
         _this.total = resp.data.total
       })
     },
+
     data(){
       return{
         pageSize:1,

@@ -51,7 +51,7 @@
         </el-menu>
 
       </el-header>
-      <el-main>
+      <el-main style="height: 600px">
         <router-view/>
       </el-main>
 

@@ -3,9 +3,11 @@ package com.example.recycle_system_springboot.controller;
 import com.example.recycle_system_springboot.dao.RecycleOrdersDao;
 import com.example.recycle_system_springboot.pojo.dto.OrderDto;
 import com.example.recycle_system_springboot.pojo.entity.RecycleOrders;
+
 import com.example.recycle_system_springboot.pojo.query.AdminReqirueQuery;
 import com.example.recycle_system_springboot.pojo.query.CollectorRequireQuery;
 import com.example.recycle_system_springboot.pojo.query.UserRequireQuery;
+
 import com.example.recycle_system_springboot.pojo.vo.*;
 import com.example.recycle_system_springboot.service.RecycleOrderService;
 import com.github.pagehelper.PageInfo;
@@ -20,6 +22,8 @@ public class RecycleOrderController {
     //用于查询所有订单、正在进行中的订单，其中用到了分页的技术
     @Resource
     RecycleOrderService recycleOrderService;
+
+
 
 
     @GetMapping("/userAllorders/{id}/{start}/{limit}")
@@ -49,6 +53,8 @@ public class RecycleOrderController {
         PageInfo<CollectorDoingOrdersVo> result = recycleOrderService.collectorfindDoingOrders(id,start,limit);
         return result;
     }
+
+
 
     @PostMapping("/userFindordersByrequire/{start}/{limit}")
     @ResponseBody
@@ -90,6 +96,7 @@ public class RecycleOrderController {
         PageInfo<AllDoingOrdersVo> result = recycleOrderService.adminfindAllDoingOrders(a.getUsername(),a.getCollectorname(),a.getDatebyday(),a.getDatebymonth(),a.getDatepick(),start,limit);
         return result;
     }
+
     @GetMapping("/getallitem")
     @ResponseBody
     public List<ItemVo> getAllItem(){
@@ -101,6 +108,7 @@ public class RecycleOrderController {
     @PostMapping("/placeanorder")
     @ResponseBody
     public Boolean PlaceAnOrder(@RequestBody OrderDto order){
+
         Boolean result=recycleOrderService.placeAnOrder(order);
         return result;
     }
@@ -108,6 +116,7 @@ public class RecycleOrderController {
     @PostMapping("/updateanorder")
     @ResponseBody
     public Boolean updateAnOrder(@RequestBody OrderDto order){
+
         Boolean result=recycleOrderService.updateAnOrder(order);
         return result;
     }
@@ -118,6 +127,7 @@ public class RecycleOrderController {
         RecycleOrders recycleOrders=recycleOrderService.findAnOrder(id);
         return recycleOrders;
     }
+
 
     //给订单安排派送员
     @GetMapping("/placecollector/{recycleorderId}/{collectorName}")
@@ -139,4 +149,5 @@ public class RecycleOrderController {
         Boolean result=recycleOrderService.confirmOrder(order);
         return result;
     }
+
 }

@@ -6,6 +6,8 @@ import com.example.recycle_system_springboot.pojo.vo.*;
 import com.github.pagehelper.PageInfo;
 import java.util.List;
 
+import java.util.List;
+
 
 public interface RecycleOrderService {
     PageInfo<RecycleOrdersVo> userfindAllOrders(int id,int start,int limit);
@@ -15,6 +17,7 @@ public interface RecycleOrderService {
     PageInfo<CollectorOrdersVo> collectorfindAllOrders(int id,int start,int limit);
 
     PageInfo<CollectorDoingOrdersVo> collectorfindDoingOrders(int id, int start, int limit);
+
 
     PageInfo<RecycleOrdersVo> userfindOrdersByCollectorname(int id,String collectorname,String datebyday,String datebymonth,String datepick,int start,int limit);
 
@@ -40,4 +43,5 @@ public interface RecycleOrderService {
     Boolean placecollector(int recycleorderId,String collectorname);
 
     Boolean confirmOrder(OrderDto orderVo);
+
 }
