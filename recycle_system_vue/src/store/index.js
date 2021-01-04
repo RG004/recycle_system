@@ -9,6 +9,9 @@ export default new Vuex.Store({
     userName:'',
     collectorId:'',
     collectorName:'',
+
+    adminId:'',
+    adminName:'',
   },
   mutations: {
     setUserId(state,userId){
@@ -23,12 +26,23 @@ export default new Vuex.Store({
     setCollectorName(state,collectorName){
       state.collectorName = collectorName
     },
+
+    setAdminId(state,adminId){
+      state.adminId = adminId
+    },
+    setAdminName(state,adminName){
+      state.adminName = adminName
+    }
+
   },
   getters:{
     getUserId:state => state.userId,
     getUserName:state => state.userName,
     getCollectorId:state => state.collectorId,
     getCollectorName:state => state.collectorName,
+
+    getAdminId:state => state.adminId,
+    getAdminName:state => state.adminName,
   },
   actions: {
   },

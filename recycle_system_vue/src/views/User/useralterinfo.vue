@@ -49,9 +49,9 @@
       </div>
     </el-dialog>
     <el-dialog :visible.sync="centerDialogVisible">
-      <el-form  :model="editForm" @submit.native.prevent>
-        <el-form-item label="修改地址">
-          <el-input v-model="editForm.addressDetails"  @keyup.enter.native="sumbitEditRow()"></el-input>
+      <el-form  :model="altForm" @submit.native.prevent>
+        <el-form-item label="修改地址" prop="altaddress">
+          <el-input v-model="altForm.altaddress"  @keyup.enter.native="sumbitEditRow()"></el-input>
         </el-form-item>
       </el-form>
       <div>
@@ -109,6 +109,9 @@
             addressDetails:'浙江省杭州市西湖区留和路288号浙江工业大学屏峰校区'
           }],
           centerDialogVisible: false,
+          altForm:{
+            altaddress:''
+          },
           dialogFormVisible: false,
           formLabelWidth: "80px",
           // 设置form用于进行添加的时候绑定值
@@ -182,17 +185,17 @@
       },
       modifyData(index, row) {
         this.centerDialogVisible = true
-        this.editForm = row;//重置对象
+        this.altForm.altaddress = row.addressDetails;//重置对象
         _index = index;
       },
       sumbitEditRow() {
         let editData = _index;
-        this.addressList[editData].addressDetails = this.editForm.addressDetails;
+        this.addressList[editData].addressDetails = this.altForm.altaddress;
         this.centerDialogVisible = false;
       },
       closeDialog(){
         this.centerDialogVisible=false
-        console.log("editfrom",this.editForm)
+        console.log("altfrom",this.altForm)
       },
 
       add() {

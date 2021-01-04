@@ -36,6 +36,12 @@ router.beforeEach((to, from, next) => {
           }
           else next({path:'/404error'})
         }
+        else if(to.meta.needAdmin){
+          if(identity==3){
+            next()
+          }
+          else next({path:'/404error'})
+        }
     }
     else next({path:'login'})
   } else {

@@ -108,7 +108,15 @@
                 _this.$router.push({
                   path:'/collectorlayout',
                 })
-              }else {
+              }else if(_this.loginForm.identity==3&&resp.data.login){
+                sessionStorage.setItem('token',resp.data.token)
+                sessionStorage.setItem('identity',_this.loginForm.identity)
+                _this.$store.commit('setAdminId',resp.data.id)
+                _this.$store.commit('setAdminName',resp.data.name)
+                _this.$router.push({
+                  path:'/adminlayout',
+                })
+              } else {
                 _this.$alert('用户名或密码输入错误','提示');
               }
             })

@@ -7,11 +7,18 @@
     <result column="Item_Name" jdbcType="VARCHAR" property="itemName" />
     <result column="Item_Price" jdbcType="DOUBLE" property="itemPrice" />
   </resultMap>
+  <resultMap id="DetailResultMap" type="com.example.recycle_system_springboot.pojo.vo.ItemVo">
+    <id column="Item_ID" jdbcType="INTEGER" property="itemId" />
+    <result column="Item_Type_ID" jdbcType="INTEGER" property="itemTypeId" />
+    <result column="Item_Type_Name" jdbcType="VARCHAR" property="itemTypeName" />
+    <result column="Item_Name" jdbcType="VARCHAR" property="itemName" />
+    <result column="Item_Price" jdbcType="DOUBLE" property="itemPrice" />
+  </resultMap>
   <sql id="Base_Column_List">
     Item_ID, Item_Type_ID, Item_Name, Item_Price
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
-    select 
+    select
     <include refid="Base_Column_List" />
     from item
     where Item_ID = #{itemId,jdbcType=INTEGER}
@@ -73,4 +80,11 @@
       Item_Price = #{itemPrice,jdbcType=DOUBLE}
     where Item_ID = #{itemId,jdbcType=INTEGER}
   </update>
+
+  <select id="findAll" resultMap="DetailResultMap">
+    select r.Item_ID,r.Item_Type_ID,i.Item_Type_Name,r.Item_Name,r.Item_Price
+    from item r
+    left join item_type i
+    on r.Item_Type_ID = i.Item_Type_ID
+  </select>
 </mapper>

@@ -16,6 +16,9 @@ import CollectorAllInorder from '../views/Collector/collectorallInorder'
 import CollectorDoingInorder from '../views/Collector/collectordoingInorder'
 import CollectorAlterInfo from '../views/Collector/collectoralterinfo'
 import NotFound from '../views/404'
+
+import Additems from '../views/Admin/additems'
+import Adminlayout from '../views/Admin/adminlayout'
 Vue.use(Router)
 
 export default new Router({
@@ -144,7 +147,25 @@ export default new Router({
           },
         }
       ]
-    }
+    },
 
+    {
+      path:'/adminlayout',
+      component:Adminlayout,
+      meta: {
+        needLogin: true, //需要登录
+        needAdmin:true
+      },
+      children:[
+        {
+          path:'/additems',
+          component:Additems,
+          meta: {
+            needLogin: true, //需要登录
+            needAdmin:true
+          }
+        }
+      ]
+    }
   ]
 })
