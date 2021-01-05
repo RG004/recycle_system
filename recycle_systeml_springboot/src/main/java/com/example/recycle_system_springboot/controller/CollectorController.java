@@ -1,5 +1,6 @@
 package com.example.recycle_system_springboot.controller;
 
+import com.example.recycle_system_springboot.pojo.entity.Collector;
 import com.example.recycle_system_springboot.pojo.vo.CollectorVo;
 import com.example.recycle_system_springboot.pojo.vo.UserVo;
 import com.example.recycle_system_springboot.service.CollectorService;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 @Controller
 public class CollectorController {
@@ -30,4 +32,10 @@ public class CollectorController {
         return result;
     }
 
+    @GetMapping("/allCollector")
+    @ResponseBody
+    public List<Collector> selectAll(){
+        List<Collector> result=collectorService.selectAll();
+        return result;
+    }
 }

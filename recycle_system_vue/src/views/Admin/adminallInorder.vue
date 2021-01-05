@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="show">
     根据用户名查询订单：<el-input v-model="adminrequire.username" placeholder="请输入快递员名" style="width: 130px"></el-input>
     根据快递员姓名查询订单:<el-input v-model="adminrequire.collectorname" placeholder="请输入用户名" style="width: 120px"></el-input>
     根据日期查询订单：
@@ -22,9 +22,13 @@
           <span v-else>未完成</span>
         </template>
       </el-table-column>
-      <el-table-column prop="userName" label="用户" width="140">
+      <el-table-column prop="username" label="用户" width="140">
       </el-table-column>
-      <el-table-column prop="collectorName" label="派送员" >
+      <el-table-column label="派送员" width="200px">
+        <template slot-scope="scope" >
+          <span v-if="scope.row.collectorName!=null">{{scope.row.collectorName}}</span>
+          <span v-else><el-button  type="primary" round @click="edit(scope.row)">选择派送员</el-button></span>
+        </template>
       </el-table-column>
       <el-table-column fixed="right" label="操作">
         <template slot-scope="scope">
@@ -41,12 +45,47 @@
       </el-table-column>
     </el-table>
     <el-pagination background layout="total, prev, pager, next, jumper" :page-size="pageSize" :total="total" @current-change="page"></el-pagination>
+    <el-dialog :visible.sync="editVisible">
+      <el-form  :model="editForm" ref="editForm" @submit.prevent.native >
+        <el-select v-model="editForm.collectorName" placeholder="请选择" style="width: 500px">
+          <el-option v-for="item in collector" :key="item.collectorId" :label="item.collectorName" :value="item.collectorName"></el-option>
+        </el-select>
+        <div>
+          <el-button @click="closeDialog()">取消</el-button>
+          <el-button type="primary" @click="submit()">确定</el-button>
+        </div>
+      </el-form>
+    </el-dialog>
   </div>
 </template>
 
 <script>
   export default {
     methods:{
+      edit(row){
+        this.editForm.recycleOrderId=row.recycleOrderId
+        this.editForm.collectorName=''
+        this.editVisible=true
+      },
+      closeDialog(){
+        this.editVisible=false
+      },
+      submit(){
+        const _this=this
+        axios.get('http://localhost:8181/placecollector/'+this.editForm.recycleOrderId+'/'+this.editForm.collectorName+'').then(function (resp) {
+          for(var j=0,len=_this.tableData.length;j<len;j++){
+            if(_this.tableData[j].recycleOrderId==resp.data){
+              _this.tableData[j].collectorName=_this.editForm.collectorName
+            }
+          }
+          if(resp.data!=0){
+            _this.$alert('修改派送员成功','消息',{
+              confirmButtonText:'确定',
+            });
+          }
+          _this.editVisible=false
+        })
+      },
       findbyrequire(){
         const _this = this
         axios.post('http://localhost:8181/adminfindAllOrders/1/4',this.adminrequire).then(function (resp) {
@@ -93,10 +132,20 @@
         _this.tableData=resp.data.list
         _this.pageSize = resp.data.pageSize
         _this.total = resp.data.total
+        _this.show=true
+      })
+      axios.get('http://localhost:8181/allCollector').then(function (r) {
+        _this.collector=r.data
       })
     },
     data(){
       return{
+        show:false,
+        editVisible:false,
+        editForm:{
+          recycleOrderId:1,
+          collectorName:'',
+        },
         pageSize:1,
         total:1,
         adminrequire:{
@@ -106,6 +155,20 @@
           datebymonth:'',
           datepick:'day',
         },
+        collector:[
+          {
+            collectorId:1,
+            collectorName:'杨昕语',
+          },
+          {
+            collectorId:2,
+            collectorName:'陈南',
+          },
+          {
+            collectorId:3,
+            collectorName:'陈小南',
+          },
+        ],
         options:[
           {
             value:'day',
@@ -141,14 +204,14 @@
           recycleOrderId: 1,
           scheduledTime: '12月15日 下午17：00',
           finishedTime: '12月15日 下午17：10',
-          userName: '陈南',
+          username: '陈南',
           collectorName: '陈南',
         },
           {
             recycleOrderId: 2,
             scheduledTime: '12月15日 下午17：00',
             finishedTime:'12月15日 下午17：10',
-            userName: '陈南',
+            username: '陈南',
             collectorName: '陈南',
         }]
       }

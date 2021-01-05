@@ -1,19 +1,10 @@
 <template>
-  <el-container direction="vertical">
+  <el-container direction="vertical" >
     <!--      <el-header style="height: 1px"></el-header>-->
     <div>
 
       <div class="menu-wrapper" ref="menuWrapper">
-        <el-menu
-
-          class="el-menu-demo"
-          mode="horizontal"
-          @select="handleSelect"
-          background-color="#545c64"
-          text-color="#fff"
-          active-text-color="#ffd04b"
-          style="width: 100%;"
-        >
+        <el-menu class="el-menu-demo" mode="horizontal" @select="handleSelect" background-color="#545c64" text-color="#fff" active-text-color="#ffd04b" style="width: 100%;">
           <el-menu-item style="width: 14%" v-for="(item,index) in orderform.tableData"  @click="selectMenu(index)" :key="index">{{item.itemTypeName}}</el-menu-item>
         </el-menu>
       </div>
@@ -35,7 +26,6 @@
     </div>
     <div style="float: left;margin-top: 50px;">
       <div>确认货物数量都正确后请确认订单，系统将直接支付相应的费用给用户</div>
-      <div>{{currentTime}}</div>
       <el-button style="margin-top: 12px;"  @click="finish" > 确认订单</el-button>
     </div>
   </el-container>
@@ -46,7 +36,7 @@
     data() {
       return {
         timer: "",//定义一个定时器的变量
-        currentTime: new Date(), // 获取当前时间
+        currentTime:'', // 获取当前时间
         maxWeight:0,
         listHeight: [],
         scrollY: 0,
@@ -119,7 +109,7 @@
           new Date().getMinutes() +
           ":" +
           new Date().getSeconds();
-      }, 1000);
+      }, 0);
       axios.get('http://localhost:8181/getallitem').then(function (resp) {
         // console.log(resp);
         _this.orderform.tableData=resp.data;
@@ -150,7 +140,6 @@
         }
       })
       axios.get('http://localhost:8181/getAnOrder/'+_this.orderform.recycleOrderId+'').then(function (resp) {
-        console.log(resp)
         _this.orderform.scheduledTime=resp.data.scheduledTime
       })
 

@@ -22,7 +22,9 @@
     <!-- 登录面板 -->
     <div class="login-box">
       <div class="login-box-title">
+
         资源回收平台
+
       </div>
       <div class="login-box-from">
         <el-form :model="loginForm" :rules="rules" ref="loginForm"  class="demo-ruleForm">
@@ -51,6 +53,9 @@
           <el-form-item>
             <el-button type="primary" size="medium"  style="width:100%" @click="jump" v-if="loginForm.identity==1">用户注册</el-button>
             <el-button type="primary" size="medium"  style="width:100%" @click="jump" v-if="loginForm.identity==2">派送员注册</el-button>
+          </el-form-item>
+          <el-form-item>
+            <el-button type="primary" size="medium"  style="width:100%" @click="jump" >注册</el-button>
           </el-form-item>
         </el-form>
       </div>
@@ -137,7 +142,13 @@
             _this.$alert('用户名或密码格式错误','提示');
           }
         });
-      },
+      },jump(){
+        //this.$router.push("/cart")
+        //传递的参数用{{ $route.query.goodsId }}获取
+        this.$router.push({path: '/register'})
+        //this.$router.go(-2)
+        //后退两步
+      }
     }
   }
 </script>
@@ -163,7 +174,7 @@
     left: 50%;
     top: 50%;
     margin-left: -175px;
-    margin-top: -150px;
+    margin-top: -225px;
 
   }
   .login-box-title{

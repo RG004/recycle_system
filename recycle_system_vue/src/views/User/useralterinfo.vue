@@ -51,12 +51,12 @@
     <el-dialog :visible.sync="centerDialogVisible">
       <el-form  :model="editForm" @submit.native.prevent>
         <el-form-item label="修改地址">
-          <el-input v-model="editForm.addressDetails2"  @keyup.enter.native="sumbitEditRow()"></el-input>
+          <el-input v-model="editForm.addressDetails2"  @keyup.enter.native="submitEditRow()"></el-input>
         </el-form-item>
       </el-form>
       <div>
         <el-button @click="closeDialog()">取消</el-button>
-        <el-button type="primary"  @click="sumbitEditRow()">确定</el-button>
+        <el-button type="primary"  @click="submitEditRow()">确定</el-button>
       </div>
     </el-dialog>
 
@@ -192,7 +192,7 @@
         this.editForm.addressDetails2 = row.addressDetails;//重置对象
         _index = index;
       },
-      sumbitEditRow() {
+      submitEditRow() {
         const _this=this
         let editData = _index;
         this.addressList[editData].addressDetails = this.editForm.addressDetails2;
@@ -201,12 +201,15 @@
         this.updateaddress.userId=this.$store.getters.getUserId
         axios.get('https://restapi.amap.com/v3/geocode/geo?address='+this.updateaddress.addressDetails+'&key=8c922d0176df163a311ac3425db373c6').then(function (resp) {
           _this.jingwei=resp.data.geocodes[0].location
-          _this.updateaddress.latitude=parseFloat(_this.jingwei.substr(0,10))
-          _this.updateaddress.longitude=parseFloat(_this.jingwei.substr(11,10))
+          _this.updateaddress.longitude=parseFloat(_this.jingwei.substr(0,10))
+          _this.updateaddress.latitude=parseFloat(_this.jingwei.substr(11,10))
           axios.post('http://localhost:8181/updateAddress',_this.updateaddress).then(function (r) {
+            _this.$alert(_this.updateaddress.addressDetails+'修改成功','消息',{
+              confirmButtonText:'确定',
           })
         })
-        this.centerDialogVisible = false;
+          this.centerDialogVisible = false;
+        })
       },
       closeDialog(){
         this.centerDialogVisible=false
@@ -227,8 +230,8 @@
         this.addressList.push(this.form);
         axios.get('https://restapi.amap.com/v3/geocode/geo?address='+this.form.addressDetails+'&key=8c922d0176df163a311ac3425db373c6').then(function (resp) {
           _this.jingwei=resp.data.geocodes[0].location
-          _this.form.latitude=parseFloat(_this.jingwei.substr(0,10))
-          _this.form.longitude=parseFloat(_this.jingwei.substr(11,10))
+          _this.form.longitude=parseFloat(_this.jingwei.substr(0,10))
+          _this.form.latitude=parseFloat(_this.jingwei.substr(11,10))
           axios.post('http://localhost:8181/insertAddress',_this.form).then(function (r) {
           })
         })

@@ -71,8 +71,6 @@
           password: '',
           repassword:'',
           phone:'',
-          identity:'1',
-          id:''
         },
         rules:{  //登陆验证规则
           userName:[
@@ -108,30 +106,20 @@
         const _this=this
         this.$refs[formName].validate((valid) => {
           if (valid) {
-            if(this.registerForm.identity==1){
-              axios.post('http://localhost:8181/register/user',this.registerForm).then(function (resp) {
+              axios.post('http://localhost:8181/registeruser',this.registerForm).then(function (resp) {
                 console.log(resp)
                 if(resp.data){
-                  _this.$alert('注册成功');
-                  _this.$router.push({
-                    path:'/login',
-                  })
+                  _this.$alert('注册成功','消息',{
+                    confirmButtonText:'确定',
+                    callback:action => {
+                      _this.$router.push('/login')
+                    }
+                  });
                 }
                 else {
                   _this.$alert('用户名已存在');
                 }
-                // if(resp.data.login){
-                //   _this.$store.commit('setUserId',resp.data.id)
-                //   _this.$store.commit('setUserName',resp.data.name)
-                //   _this.$router.push({
-                //     path:'/userlayout',
-                //   })
-                // }else {
-                //   _this.$alert('用户名或密码输入错误','提示');
-                // }
               })
-            }
-
           }else{
             _this.$alert('注册信息填写错误','提示');
           }
@@ -163,7 +151,7 @@
     left: 50%;
     top: 50%;
     margin-left: -175px;
-    margin-top: -300px;
+    margin-top: -225px;
 
   }
   .login-box-title{

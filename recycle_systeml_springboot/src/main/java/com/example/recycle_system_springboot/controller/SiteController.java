@@ -19,7 +19,7 @@ public class SiteController {
 
     @PostMapping("/updateSite")
     @ResponseBody
-    public boolean updateAddress(@RequestBody RecycleSite site){
+    public boolean updateSite(@RequestBody RecycleSite site){
         boolean result =siteService.updatesite(site);
         return result;
     }

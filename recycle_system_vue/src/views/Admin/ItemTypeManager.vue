@@ -1,5 +1,8 @@
 <template>
   <div>
+    <div style="text-align: center; position:absolute;top:20px;z-index: 1;">
+      <el-button type="primary" @click="additemTypeName" icon="el-icon-plus" style ="background-color: #B3C0D1; border-color: #B3C0D1;"></el-button>
+    </div>
     <el-table :data="ItemType">
       <el-table-column prop="itemTypeId" label="Id" width="300"></el-table-column>
       <el-table-column prop="itemTypeName" label="名字" width="300"></el-table-column>
@@ -10,9 +13,6 @@
         </template>
       </el-table-column>
     </el-table>
-    <div style="text-align: center; position:relative;">
-      <el-button type="primary" @click="additemTypeName" icon="el-icon-plus" style ="background-color: #B3C0D1; border-color: #B3C0D1;margin-left: -600px"></el-button>
-    </div>
     <el-dialog title="编辑物品种类" :visible.sync="editdialogFormVisible">
       <el-form :model="editform" @submit.native.prevent>
         <el-form-item label="物品种类" :label-width="formLabelWidth">
@@ -46,7 +46,6 @@
     created () {
       const _this =this
       axios.get('http://localhost:8181/allItemType').then(function (resp) {
-        console.log(resp)
         _this.ItemType=resp.data
       })
     },
@@ -71,7 +70,6 @@
         this.editdialogFormVisible=false
       },
       additemTypeName(){
-
         this.adddialogFormVisible=true
         this.addform.itemTypeName=''
       },
@@ -79,7 +77,6 @@
         const _this=this
         this.adddialogFormVisible=false
         axios.post('http://localhost:8181/insertItemType',this.addform).then(function (resp) {
-          console.log(resp)
           _this.ItemType.push(resp.data);
         })
       },

@@ -6,16 +6,20 @@ import lombok.Data;
 public class DonationVo {
     private Integer donateId;
 
-    private Integer userName;
+    private String  userName;
 
     private Integer addressId;
 
     private String collectorName;
+
+    private Integer evaluationId;
 
     private String scheduledTime;
 
     private String finishedTime;
 
     private String donateDetail;
+
+    private String phone;
 
 }

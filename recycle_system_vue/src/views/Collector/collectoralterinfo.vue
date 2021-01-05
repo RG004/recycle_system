@@ -132,8 +132,8 @@
         axios.get('https://restapi.amap.com/v3/geocode/geo?address='+this.siteForm.siteName+'&key=8c922d0176df163a311ac3425db373c6').then(function (resp) {
           console.log(resp)
           _this.jingwei=resp.data.geocodes[0].location
-          _this.siteForm.latitude=parseFloat(_this.jingwei.substr(0,10))
-          _this.siteForm.longitude=parseFloat(_this.jingwei.substr(11,10))
+          _this.siteForm.longitude=parseFloat(_this.jingwei.substr(0,10))
+          _this.siteForm.latitude=parseFloat(_this.jingwei.substr(11,10))
           axios.post('http://localhost:8181/updateSite',_this.siteForm).then(function (r) {
             console.log(r)
           })

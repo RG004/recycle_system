@@ -8,25 +8,18 @@ import java.util.List;
 
 
 public interface RecycleOrderService {
-    PageInfo<RecycleOrdersVo> userfindAllOrders(int id,int start,int limit);
 
-    PageInfo<DoingOrdersVo> userfindDoingOrders(int id,int start,int limit);
+    PageInfo<OrdersVo> userfindAllOrders(int userid,String collectorname,String datebyday,String datebymonth,String datepick,int start,int limit);
 
-    PageInfo<CollectorOrdersVo> collectorfindAllOrders(int id,int start,int limit);
+    PageInfo<OrdersVo> userfindAllDoingOrders(int userid,String collectorname,String datebyday,String datebymonth,String datepick,int start,int limit);
 
-    PageInfo<CollectorDoingOrdersVo> collectorfindDoingOrders(int id, int start, int limit);
+    PageInfo<OrdersVo> collectorfindAllOrders(int collectorid,String collectorname,String datebyday,String datebymonth,String datepick,int start,int limit);
 
-    PageInfo<RecycleOrdersVo> userfindOrdersByCollectorname(int id,String collectorname,String datebyday,String datebymonth,String datepick,int start,int limit);
+    PageInfo<OrdersVo> collectorfindAllDoingOrders(int collectorid,String collectorname,String datebyday,String datebymonth,String datepick,int start,int limit);
 
-    PageInfo<DoingOrdersVo> userfindDoingOrdersByCollectorname(int id,String collectorname,int start,int limit);
+    PageInfo<OrdersVo> adminfindAllOrders(String username,String collectorname,String datebyday,String datebymonth,String datepick,int start,int limit);
 
-    PageInfo<CollectorOrdersVo> collectorfindOrdersByUsername(int id,String username,String datebyday,String datebymonth,String datepick,int start,int limit);
-
-    PageInfo<CollectorDoingOrdersVo> collectorfindDoingOrdersByUsername(int id,String username,int start,int limit);
-
-    PageInfo<AllOrdersVo> adminfindAllOrders(String username,String collectorname,String datebyday,String datebymonth,String datepick,int start,int limit);
-
-    PageInfo<AllDoingOrdersVo> adminfindAllDoingOrders(String username,String collectorname,String datebyday,String datebymonth,String datepick,int start,int limit);
+    PageInfo<OrdersVo> adminfindAllDoingOrders(String username,String collectorname,String datebyday,String datebymonth,String datepick,int start,int limit);
 
     //得到所有的items
     List<ItemVo> getAllItems();
@@ -39,4 +32,8 @@ public interface RecycleOrderService {
     Boolean updateAnOrder(OrderDto orderVo);
 
     RecycleOrders findAnOrder(int id);
+
+    Boolean placecollector(int recycleorderId,String collectorname);
+
+    Boolean confirmOrder(OrderDto orderVo);
 }

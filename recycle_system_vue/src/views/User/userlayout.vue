@@ -18,6 +18,8 @@
           <el-menu-item-group>
             <el-menu-item index="/userallinorder" >查看历史订单</el-menu-item>
             <el-menu-item index="/userdoinginorder" >进行中订单</el-menu-item>
+            <el-menu-item index="/useralldonate" >查看历史捐赠</el-menu-item>
+            <el-menu-item index="/userdoingdonate" >进行中捐赠</el-menu-item>
           </el-menu-item-group>
         </el-submenu>
         <el-submenu index="4">
@@ -51,7 +53,7 @@
         </el-menu>
 
       </el-header>
-      <el-main>
+      <el-main style="height: 600px">
         <router-view/>
       </el-main>
 

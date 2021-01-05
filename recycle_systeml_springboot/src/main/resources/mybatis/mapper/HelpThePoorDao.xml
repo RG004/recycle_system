@@ -18,12 +18,18 @@
     from help_the_poor
     where Help_ID = #{helpId,jdbcType=INTEGER}
   </select>
-    <select id="selectAllHelp" resultMap="BaseResultMap">
-      select
-      <include refid="Base_Column_List" />
-      from help_the_poor
-    </select>
-    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+  <select id="selectAll"  resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from help_the_poor
+  </select>
+  <select id="selectAllHelp"  resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from help_the_poor
+    where Help_Status="启用"
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from help_the_poor
     where Help_ID = #{helpId,jdbcType=INTEGER}
   </delete>

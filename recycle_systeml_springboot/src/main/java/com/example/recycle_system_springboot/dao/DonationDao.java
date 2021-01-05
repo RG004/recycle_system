@@ -1,6 +1,9 @@
 package com.example.recycle_system_springboot.dao;
 
 import com.example.recycle_system_springboot.pojo.entity.Donation;
+import com.example.recycle_system_springboot.pojo.vo.DonationVo;
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageInfo;
 
 public interface DonationDao {
     int deleteByPrimaryKey(Integer donateId);
@@ -14,4 +17,18 @@ public interface DonationDao {
     int updateByPrimaryKeySelective(Donation record);
 
     int updateByPrimaryKey(Donation record);
+
+    Page<DonationVo> selectAllByuser(Integer userid,String collectorname,String date,String datepick);
+
+    Page<DonationVo> selectDoingByuser(Integer userid,String collectorname,String date,String datepick);
+
+    Page<DonationVo> selectAllBycollector(Integer collectorid,String username,String date,String datepick);
+
+    Page<DonationVo> selectDoingBycollector(Integer collectorid,String username,String date,String datepick);
+
+    Page<DonationVo> selectAllByadmin(String username,String collectorname,String date,String datepick);
+
+    Page<DonationVo> selectDoingByadmin(String username,String collectorname,String date,String datepick);
+
+    int updatecollector(Integer donateId,Integer collectorid);
 }

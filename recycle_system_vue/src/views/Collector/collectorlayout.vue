@@ -10,12 +10,14 @@
           <template slot="title">确认信息</template>
           <el-menu-item-group>
             <el-menu-item index="/collectordoinginorder" >进行中订单</el-menu-item>
+            <el-menu-item index="/collectordoingdonate" >进行中捐赠</el-menu-item>
           </el-menu-item-group>
         </el-submenu>
         <el-submenu index="3">
           <template slot="title">查看信息</template>
           <el-menu-item-group>
             <el-menu-item index="/collectorallinorder" >查看历史订单</el-menu-item>
+            <el-menu-item index="/collectoralldonate" >查看历史捐赠</el-menu-item>
           </el-menu-item-group>
         </el-submenu>
         <el-submenu index="4">

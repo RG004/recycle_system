@@ -15,8 +15,10 @@
           style="width: 100%;"
         >
           <el-menu-item style="width: 14%" v-for="(item,index) in orderform.tableData"  @click="selectMenu(index)" :key="index">{{item.itemTypeName}}</el-menu-item>
+
         </el-menu>
       </div>
+
       <div style="height: 380px;overflow: hidden;padding-left: 0px;"  class="foods-wrapper" ref="foodsWrapper">
         <ul style="list-style:none;">
           <li v-for="item in orderform.tableData" class="food-list food-list-hook" :key="item.itemTypeId">
@@ -40,7 +42,7 @@
       <el-date-picker
         v-model="orderform.scheduledTime"
         type="datetime"
-        value-format="yyyy-MM-dd hh:mm:ss"
+        value-format="yyyy-MM-dd HH:mm:ss"
         placeholder="选择日期时间">
       </el-date-picker>
     </div>
@@ -62,7 +64,9 @@
           </template>
         </el-table-column>
       </el-table>
+
     </div>
+
     <el-steps :active="active" finish-status="success" style="float: left ;padding-top: 40px" >
       <el-step title="挑选物品"></el-step>
       <el-step title="预约时间"></el-step>
@@ -72,6 +76,7 @@
       <el-button style="margin-top: 12px;"  @click="back" v-if="active!=1"> 上一步</el-button>
       <el-button style="margin-top: 12px;"  @click="next1" v-if="active==1"> 下一步</el-button>
       <el-button style="margin-top: 12px;"  @click="next2" v-if="active==2"> 下一步</el-button>
+
       <el-button style="margin-top: 12px;"  @click="finish"  v-if="active==3"> 确认修改</el-button>
     </div>
   </el-container>
@@ -79,6 +84,7 @@
 <script>
   import BScroll from 'better-scroll'
   export default {
+
     data() {
       return {
         maxWeight:0,
@@ -100,6 +106,8 @@
               itemTypeName:'塑料',
               itemsList:[
 
+
+
                 {
                   itemId:1,
                   itemName:'塑料瓶',
@@ -120,7 +128,9 @@
                 },
                 {
                   itemId:1,
+
                   itemName:'1451651651',
+
                   itemPrice:'5',
                   quantity:0.5
                 },
@@ -142,10 +152,12 @@
       axios.get('http://localhost:8181/getallitem').then(function (resp) {
         // console.log(resp);
         _this.orderform.tableData=resp.data;
+
         _this.$nextTick(() => {
           _this._initScroll()
           _this._calculateHeight()
         });
+
         console.log(_this.orderform.tableData.length)
         console.log(resp.data.length)
 
@@ -211,11 +223,13 @@
 
         let height=0;
         this.listHeight.push(height)
+
         for (let i = 0; i < foodList.length; i++) {
           let item = foodList[i];
           height += item.clientHeight;
           this.listHeight.push(height);
         }
+
       },
       //  点击左侧列表 右侧列表滑动到指定位置
       selectMenu (index) {
@@ -277,10 +291,7 @@
   }
 </script>
 <style   scoped>
-  .menu-wrapper{
-    height: 58px;
-    overflow: hidden;
-  }
+
   .foods-wrapper .title{
     border-left: 2px solid #d9dde1;
     font-size: 12px;

@@ -11,6 +11,8 @@
           <el-menu-item-group>
             <el-menu-item index="/adminallinorder" >查看历史订单</el-menu-item>
             <el-menu-item index="/admindoinginorder" >进行中订单</el-menu-item>
+            <el-menu-item index="/adminalldonate" >查看历史捐赠</el-menu-item>
+            <el-menu-item index="/admindoingdonate" >进行中捐赠</el-menu-item>
           </el-menu-item-group>
         </el-submenu>
         <el-submenu index="4">
@@ -18,6 +20,7 @@
           <el-menu-item-group>
             <el-menu-item index="/ItemTypeManage">管理物品种类</el-menu-item>
             <el-menu-item index="/ItemManage">管理物品</el-menu-item>
+            <el-menu-item index="/HelpThePoorManager">管理资助地区</el-menu-item>
             <el-menu-item index="/login" @click="d">退出登录</el-menu-item>
           </el-menu-item-group>
         </el-submenu>

@@ -1,5 +1,6 @@
 package com.example.recycle_system_springboot.service.impl;
 
+import com.example.recycle_system_springboot.dao.CollectorDao;
 import com.example.recycle_system_springboot.dao.ItemDao;
 import com.example.recycle_system_springboot.dao.RecycleOrderDetailDao;
 import com.example.recycle_system_springboot.dao.RecycleOrdersDao;
@@ -24,110 +25,92 @@ public class RecycleOrderServiceImpl implements RecycleOrderService {
     @Resource
     RecycleOrderDetailDao recycleOrderDetailDao;
     @Resource
+    CollectorDao collectorDao;
+    @Resource
     ItemDao itemDao;
     @Resource
     RecycleOrderDetail recycleOrderDetail;
 
     @Override
-    public PageInfo<RecycleOrdersVo> userfindAllOrders(int id,int start,int limit) {
-        PageHelper.startPage(start,limit);
-        Page<RecycleOrdersVo> list = recycleOrdersDao.selectOrderByUserId(id);
-        PageInfo<RecycleOrdersVo> result= new PageInfo<>(list);
-        return result;
-    }
-
-    @Override
-    public PageInfo<DoingOrdersVo> userfindDoingOrders(int id,int start,int limit) {
-        PageHelper.startPage(start,limit);
-        Page<DoingOrdersVo> list = recycleOrdersDao.selectDoingOrderByUserId(id);
-        PageInfo<DoingOrdersVo> result= new PageInfo<>(list);
-        return result;
-    }
-
-    @Override
-    public PageInfo<CollectorOrdersVo> collectorfindAllOrders(int id, int start, int limit) {
-        PageHelper.startPage(start,limit);
-        Page<CollectorOrdersVo> list = recycleOrdersDao.selectOrderByCollectorId(id);
-        PageInfo<CollectorOrdersVo> result= new PageInfo<>(list);
-        return result;
-    }
-
-    @Override
-    public PageInfo<CollectorDoingOrdersVo> collectorfindDoingOrders(int id, int start, int limit) {
-        PageHelper.startPage(start,limit);
-        Page<CollectorDoingOrdersVo> list = recycleOrdersDao.selectDoingOrderByCollectorId(id);
-        PageInfo<CollectorDoingOrdersVo> result= new PageInfo<>(list);
-        return result;
-    }
-
-    @Override
-    public PageInfo<RecycleOrdersVo> userfindOrdersByCollectorname(int id, String collectorname,String datebyday,String datebymonth,String datepick,int start, int limit) {
+    public PageInfo<OrdersVo> userfindAllOrders(int userid, String collectorname, String datebyday, String datebymonth, String datepick, int start, int limit) {
         PageHelper.startPage(start,limit);
         if(datepick.equals("day")){
-            Page<RecycleOrdersVo> list = recycleOrdersDao.selectOrderByCollectorname(id,collectorname,datebyday);
-            PageInfo<RecycleOrdersVo> result= new PageInfo<>(list);
-            return result;
-        }else {
-            Page<RecycleOrdersVo> list = recycleOrdersDao.selectOrderByCollectornameBymonth(id, collectorname, datebymonth);
-            PageInfo<RecycleOrdersVo> result = new PageInfo<>(list);
-            return result;
-        }
-    }
-
-    @Override
-    public PageInfo<DoingOrdersVo> userfindDoingOrdersByCollectorname(int id, String collectorname, int start, int limit) {
-        PageHelper.startPage(start,limit);
-        Page<DoingOrdersVo> list = recycleOrdersDao.selectDoingOrderByCollectorname(id,collectorname);
-        PageInfo<DoingOrdersVo> result= new PageInfo<>(list);
-        return result;
-    }
-
-    @Override
-    public PageInfo<CollectorOrdersVo> collectorfindOrdersByUsername(int id, String username, String datebyday, String datebymonth, String datepick, int start, int limit) {
-        PageHelper.startPage(start,limit);
-        if(datepick.equals("day")){
-            Page<CollectorOrdersVo> list = recycleOrdersDao.CollectorselctOrderByUsername(id,username,datebyday);
-            PageInfo<CollectorOrdersVo> result= new PageInfo<>(list);
-            return result;
-        }else {
-            Page<CollectorOrdersVo> list = recycleOrdersDao.CollectorselctOrderByUsernameBymonth(id, username, datebymonth);
-            PageInfo<CollectorOrdersVo> result = new PageInfo<>(list);
-            return result;
-        }
-    }
-
-    @Override
-    public PageInfo<CollectorDoingOrdersVo> collectorfindDoingOrdersByUsername(int id, String username, int start, int limit) {
-        PageHelper.startPage(start,limit);
-        Page<CollectorDoingOrdersVo> list = recycleOrdersDao.CollectorselectDoingOrderByUsername(id,username);
-        PageInfo<CollectorDoingOrdersVo> result= new PageInfo<>(list);
-        return result;
-    }
-
-    @Override
-    public PageInfo<AllOrdersVo> adminfindAllOrders(String username, String collectorname, String datebyday, String datebymonth, String datepick, int start, int limit) {
-        PageHelper.startPage(start,limit);
-        if(datepick.equals("day")){
-            Page<AllOrdersVo> list =recycleOrdersDao.selectAllByadmin(username,collectorname,datebyday,datepick);
-            PageInfo<AllOrdersVo> result= new PageInfo<>(list);
+            Page<OrdersVo> list =recycleOrdersDao.selectAllByuser(userid,collectorname,datebyday,datepick);
+            PageInfo<OrdersVo> result= new PageInfo<>(list);
             return result;
         }else{
-            Page<AllOrdersVo> list =recycleOrdersDao.selectAllByadmin(username,collectorname,datebymonth,datepick);
-            PageInfo<AllOrdersVo> result= new PageInfo<>(list);
+            Page<OrdersVo> list =recycleOrdersDao.selectAllByuser(userid,collectorname,datebymonth,datepick);
+            PageInfo<OrdersVo> result= new PageInfo<>(list);
             return result;
         }
     }
 
     @Override
-    public PageInfo<AllDoingOrdersVo> adminfindAllDoingOrders(String username, String collectorname, String datebyday, String datebymonth, String datepick, int start, int limit) {
+    public PageInfo<OrdersVo> userfindAllDoingOrders(int userid, String collectorname, String datebyday, String datebymonth, String datepick, int start, int limit) {
         PageHelper.startPage(start,limit);
         if(datepick.equals("day")){
-            Page<AllDoingOrdersVo> list =recycleOrdersDao.selectDoingByadmin(username,collectorname,datebyday,datepick);
-            PageInfo<AllDoingOrdersVo> result= new PageInfo<>(list);
+            Page<OrdersVo> list =recycleOrdersDao.selectDoingByuser(userid,collectorname,datebyday,datepick);
+            PageInfo<OrdersVo> result= new PageInfo<>(list);
             return result;
         }else{
-            Page<AllDoingOrdersVo> list =recycleOrdersDao.selectDoingByadmin(username,collectorname,datebymonth,datepick);
-            PageInfo<AllDoingOrdersVo> result= new PageInfo<>(list);
+            Page<OrdersVo> list =recycleOrdersDao.selectDoingByuser(userid,collectorname,datebymonth,datepick);
+            PageInfo<OrdersVo> result= new PageInfo<>(list);
+            return result;
+        }
+    }
+
+    @Override
+    public PageInfo<OrdersVo> collectorfindAllOrders(int collectorid, String collectorname, String datebyday, String datebymonth, String datepick, int start, int limit) {
+        PageHelper.startPage(start,limit);
+        if(datepick.equals("day")){
+            Page<OrdersVo> list =recycleOrdersDao.selectAllBycollector(collectorid,collectorname,datebyday,datepick);
+            PageInfo<OrdersVo> result= new PageInfo<>(list);
+            return result;
+        }else{
+            Page<OrdersVo> list =recycleOrdersDao.selectAllBycollector(collectorid,collectorname,datebymonth,datepick);
+            PageInfo<OrdersVo> result= new PageInfo<>(list);
+            return result;
+        }
+    }
+
+    @Override
+    public PageInfo<OrdersVo> collectorfindAllDoingOrders(int collectorid, String collectorname, String datebyday, String datebymonth, String datepick, int start, int limit) {
+        PageHelper.startPage(start,limit);
+        if(datepick.equals("day")){
+            Page<OrdersVo> list =recycleOrdersDao.selectDoingBycollector(collectorid,collectorname,datebyday,datepick);
+            PageInfo<OrdersVo> result= new PageInfo<>(list);
+            return result;
+        }else{
+            Page<OrdersVo> list =recycleOrdersDao.selectDoingBycollector(collectorid,collectorname,datebymonth,datepick);
+            PageInfo<OrdersVo> result= new PageInfo<>(list);
+            return result;
+        }
+    }
+
+    @Override
+    public PageInfo<OrdersVo> adminfindAllOrders(String username, String collectorname, String datebyday, String datebymonth, String datepick, int start, int limit) {
+        PageHelper.startPage(start,limit);
+        if(datepick.equals("day")){
+            Page<OrdersVo> list =recycleOrdersDao.selectAllByadmin(username,collectorname,datebyday,datepick);
+            PageInfo<OrdersVo> result= new PageInfo<>(list);
+            return result;
+        }else{
+            Page<OrdersVo> list =recycleOrdersDao.selectAllByadmin(username,collectorname,datebymonth,datepick);
+            PageInfo<OrdersVo> result= new PageInfo<>(list);
+            return result;
+        }
+    }
+
+    @Override
+    public PageInfo<OrdersVo> adminfindAllDoingOrders(String username, String collectorname, String datebyday, String datebymonth, String datepick, int start, int limit) {
+        PageHelper.startPage(start,limit);
+        if(datepick.equals("day")){
+            Page<OrdersVo> list =recycleOrdersDao.selectDoingByadmin(username,collectorname,datebyday,datepick);
+            PageInfo<OrdersVo> result= new PageInfo<>(list);
+            return result;
+        }else{
+            Page<OrdersVo> list =recycleOrdersDao.selectDoingByadmin(username,collectorname,datebymonth,datepick);
+            PageInfo<OrdersVo> result= new PageInfo<>(list);
             return result;
         }
     }
@@ -140,7 +123,6 @@ public class RecycleOrderServiceImpl implements RecycleOrderService {
 
     @Override
     public Boolean placeAnOrder(OrderDto orderVo) {
-        Boolean result=false;
         int i=recycleOrdersDao.insert(orderVo);
         recycleOrderDetail.setRecycleOrderId(orderVo.getRecycleOrderId());
         for(ItemVo itemVo:orderVo.getTableData()){
@@ -152,7 +134,7 @@ public class RecycleOrderServiceImpl implements RecycleOrderService {
                 }
             }
         }
-        return result;
+        return true;
     }
 
     @Override
@@ -198,4 +180,28 @@ public class RecycleOrderServiceImpl implements RecycleOrderService {
         return recycleOrders;
     }
 
+    @Override
+    public Boolean placecollector(int recycleorderId, String collectorname) {
+        int collectorId=collectorDao.selectBycollectorname(collectorname);
+        recycleOrdersDao.updateCollector(recycleorderId,collectorId);
+        return true;
+    }
+
+    @Override
+    public Boolean confirmOrder(OrderDto orderVo) {
+        Boolean result=false;
+        int i=recycleOrdersDao.updateByPrimaryKey(orderVo);
+        recycleOrderDetailDao.deleteByRecycleOrderId(orderVo.getRecycleOrderId());
+        recycleOrderDetail.setRecycleOrderId(orderVo.getRecycleOrderId());
+        for(ItemVo itemVo:orderVo.getTableData()){
+            for(ItemRecycleVo item:itemVo.getItemsList()){
+                if(item.getQuantity()>0.0){
+                    recycleOrderDetail.setQuantity(item.getQuantity());
+                    recycleOrderDetail.setItemId(item.getItemId());
+                    int j=recycleOrderDetailDao.insert(recycleOrderDetail);
+                }
+            }
+        }
+        return result;
+    }
 }
