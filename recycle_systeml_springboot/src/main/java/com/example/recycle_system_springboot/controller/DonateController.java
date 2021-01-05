@@ -5,6 +5,7 @@ import com.example.recycle_system_springboot.pojo.query.AdminReqirueQuery;
 import com.example.recycle_system_springboot.pojo.query.CollectorRequireQuery;
 import com.example.recycle_system_springboot.pojo.query.UserRequireQuery;
 import com.example.recycle_system_springboot.pojo.vo.DonationVo;
+import com.example.recycle_system_springboot.pojo.vo.EvaluationVo;
 import com.example.recycle_system_springboot.service.DonationService;
 import com.github.pagehelper.PageInfo;
 import org.springframework.stereotype.Controller;
@@ -74,5 +75,12 @@ public class DonateController {
         }else {
             return 0;
         }
+    }
+
+    @PostMapping("/evaluationdonation")
+    @ResponseBody
+    public Boolean Evaluationdonation(@RequestBody EvaluationVo order){
+        Boolean result=donationService.Evaluatedonation(order);
+        return result;
     }
 }

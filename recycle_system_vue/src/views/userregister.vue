@@ -31,7 +31,7 @@
             </el-input>
           </el-form-item>
           <el-form-item prop="phone">
-            <el-input v-model="registerForm.phone"  placeholder="请输入电话号码" size="medium" >
+            <el-input v-model="registerForm.phone"  placeholder="请输入电话号码" size="medium" @keyup.enter.native="submitForm('registerForm')">
               <el-button slot="prepend" icon="el-icon-phone"></el-button>
             </el-input>
           </el-form-item>
@@ -118,6 +118,7 @@
                 }
                 else {
                   _this.$alert('用户名已存在');
+                  _this.registerForm.userName='用户名已存在，请重新输入用户名'
                 }
               })
           }else{
