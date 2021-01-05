@@ -2,9 +2,7 @@ package com.example.recycle_system_springboot.controller;
 
 import com.example.recycle_system_springboot.pojo.vo.EchartsItemVo;
 import com.example.recycle_system_springboot.pojo.vo.RecycleOrdersDetailVo;
-import com.example.recycle_system_springboot.pojo.vo.RecycleOrdersVo;
 import com.example.recycle_system_springboot.service.RecycleOrderDetailService;
-import com.github.pagehelper.PageInfo;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -26,10 +24,16 @@ public class RecycleOrderDetailController {
         return result;
     }
 
-    @GetMapping("/EchartsByitemid")
+    @GetMapping("/adminselectCountByitemid")
     @ResponseBody
-    public List<EchartsItemVo> selectCountByitemid(){
-        List<EchartsItemVo> result = recycleOrderDetailService.selectCountByitemid();
+    public List<EchartsItemVo> adminselectCountByitemid(){
+        List<EchartsItemVo> result = recycleOrderDetailService.adminselectCountByitemid();
+        return result;
+    }
+    @GetMapping("/userselectCountByitemid/{id}")
+    @ResponseBody
+    public List<EchartsItemVo> userselectCountByitemid(@PathVariable("id") int id){
+        List<EchartsItemVo> result = recycleOrderDetailService.userselectCountByitemid(id);
         return result;
     }
 

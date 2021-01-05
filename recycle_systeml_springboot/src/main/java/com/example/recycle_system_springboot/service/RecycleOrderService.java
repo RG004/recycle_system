@@ -25,9 +25,10 @@ public interface RecycleOrderService {
 
     PageInfo<CollectorDoingOrdersVo> collectorfindDoingOrdersByUsername(int id,String username,int start,int limit);
 
-    List<EchartsTimeVo> echartsBytime(int id);
-    List<EchartsTimeVo> echartsBydate(int id);
-
+    List<EchartsTimeVo> userselectCountbytime(int id);
+    List<EchartsTimeVo> userselectCountbydate(int id);
+    List<EchartsTimeVo> adminselectCountbydate();
+    List<EchartsTimeVo> adminselectCountbytime();
     PageInfo<AllOrdersVo> adminfindAllOrders(String username,String collectorname,String datebyday,String datebymonth,String datepick,int start,int limit);
 
     PageInfo<AllDoingOrdersVo> adminfindAllDoingOrders(String username,String collectorname,String datebyday,String datebymonth,String datepick,int start,int limit);

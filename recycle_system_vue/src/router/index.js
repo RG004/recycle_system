@@ -26,6 +26,9 @@ import adminallInorder from '../views/Admin/adminallInorder'
 import admindoingInorder from '../views/Admin/admindoingInorder'
 import userregister from '../views/userregister'
 import collectorregister from '../views/collectorregister'
+import adminecharts from '../views/Admin/adminecharts'
+import collectorecharts from '../views/Collector/collectorecharts'
+import register from '../views/register'
 Vue.use(Router)
 
 export default new Router({
@@ -96,6 +99,14 @@ export default new Router({
             needLogin: true, //需要登录
             needAdmin:true,
           },
+        },
+        {
+          path:'/adminecharts',
+          component:adminecharts,
+          meta: {
+            needLogin: true, //需要登录
+            needAdmin:true,
+          }
         }
       ]
     },
@@ -148,6 +159,14 @@ export default new Router({
             needCollector:true,
           },
         },
+        {
+          path:'/collectorecharts',
+          component:collectorecharts,
+          meta: {
+            needLogin: true, //需要登录
+            needAdmin:true,
+          }
+        }
       ]
     },
     {

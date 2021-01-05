@@ -33,11 +33,21 @@
     on r.Item_ID = i.Item_ID
     where Recycle_Order_ID= #{rerecycleOrderId,jdbcType=INTEGER}
   </select>
-  <select id="selectCountByitemid" resultMap="EchartsItem">
+  <select id="adminselectCountByitemid" resultMap="EchartsItem">
     select distinct i.Item_Name,SUM(r.Quantity) AS Countquantity
     from recycle_order_detail r
     left join item i
     on r.Item_ID = i.Item_ID
+    group by (r.Item_ID)
+  </select>
+  <select id="userselectCountByitemid" resultMap="EchartsItem">
+    select distinct i.Item_Name,SUM(r.Quantity) AS Countquantity
+    from recycle_order_detail r
+    left join item i
+    on r.Item_ID = i.Item_ID
+    left join recycle_orders o
+    on r.Recycle_Order_ID = o.Recycle_Order_ID
+    where o.User_ID=#{rerecycleOrderId,jdbcType=INTEGER}
     group by (r.Item_ID)
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">

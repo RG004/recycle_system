@@ -7,5 +7,6 @@ import java.util.List;
 
 public interface RecycleOrderDetailService {
     List<RecycleOrdersDetailVo> findOrdersDetail(int id);
-    List<EchartsItemVo> selectCountByitemid();
+    List<EchartsItemVo> adminselectCountByitemid();
+    List<EchartsItemVo> userselectCountByitemid(int id);
 }

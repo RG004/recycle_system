@@ -1,6 +1,5 @@
 package com.example.recycle_system_springboot.controller;
 
-import com.example.recycle_system_springboot.dao.RecycleOrdersDao;
 import com.example.recycle_system_springboot.pojo.dto.OrderDto;
 import com.example.recycle_system_springboot.pojo.entity.RecycleOrders;
 
@@ -83,19 +82,30 @@ public class RecycleOrderController {
         return result;
     }
 
-    @GetMapping("/echartsBytime/{id}")
+    @GetMapping("/userselectCountbytime/{id}")
     @ResponseBody
-    public List<EchartsTimeVo> echartsBytime(@PathVariable("id") int id){
-        List<EchartsTimeVo> result=recycleOrderService.echartsBytime(id);
+    public List<EchartsTimeVo> userselectCountbytime(@PathVariable("id") int id){
+        List<EchartsTimeVo> result=recycleOrderService.userselectCountbytime(id);
         return result;
     }
-    @GetMapping("/echartsBydate/{id}")
+    @GetMapping("/userselectCountbydate/{id}")
     @ResponseBody
-    public List<EchartsTimeVo> echartsBydate(@PathVariable("id") int id){
-        List<EchartsTimeVo> result=recycleOrderService.echartsBydate(id);
+    public List<EchartsTimeVo> userselectCountbydate(@PathVariable("id") int id){
+        List<EchartsTimeVo> result=recycleOrderService.userselectCountbydate(id);
         return result;
     }
-
+    @GetMapping("/adminselectCountbytime")
+    @ResponseBody
+    public List<EchartsTimeVo> adminselectCountbytime(){
+        List<EchartsTimeVo> result=recycleOrderService.adminselectCountbytime();
+        return result;
+    }
+    @GetMapping("/adminselectCountbydate")
+    @ResponseBody
+    public List<EchartsTimeVo> adminselectCountbydate(){
+        List<EchartsTimeVo> result=recycleOrderService.adminselectCountbydate();
+        return result;
+    }
     @PostMapping("/adminfindAllOrders/{start}/{limit}")
     @ResponseBody
     public PageInfo<AllOrdersVo> adminfindAllOrders(@RequestBody AdminReqirueQuery a,@PathVariable("start") int start, @PathVariable("limit") int limit){

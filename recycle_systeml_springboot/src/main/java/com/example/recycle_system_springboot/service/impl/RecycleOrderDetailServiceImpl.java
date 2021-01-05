@@ -20,8 +20,13 @@ public class RecycleOrderDetailServiceImpl implements RecycleOrderDetailService 
         return result;
     }
     @Override
-    public List<EchartsItemVo> selectCountByitemid(){
-        List<EchartsItemVo> result = recycleOrderDetailDao.selectCountByitemid();
+    public List<EchartsItemVo> adminselectCountByitemid(){
+        List<EchartsItemVo> result = recycleOrderDetailDao.adminselectCountByitemid();
+        return result;
+    }
+    @Override
+    public List<EchartsItemVo> userselectCountByitemid(int id){
+        List<EchartsItemVo> result = recycleOrderDetailDao.userselectCountByitemid(id);
         return result;
     }
 }

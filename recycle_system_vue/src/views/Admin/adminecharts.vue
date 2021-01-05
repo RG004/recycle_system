@@ -2,7 +2,7 @@
   <div>
     <div ref="chart" style="width: 600px;height: 300px"></div>
     <div ref="chart1" style="width: 600px;height: 300px"></div>
-    <div ref="chart2" style="width: 600px;height: 300px"></div>
+    <div ref="chart2" style="width: 600px;height: 400px"></div>
     <div ref="chart3" style="width: 600px;height: 300px"></div>
   </div>
 </template>
@@ -16,9 +16,9 @@ var yData = [1, 2, 1, 2]
 var xData1= ['8:00', '9:00', '12:00', '13:00']
 var yData1 = [1, 2, 1, 2]
 var Data=[{value: 335, name: '铝'},
-          {value: 310, name: '铁'},
-         {value: 234, name: '电池'},
-          {value: 135, name: '消毒剂'}]
+  {value: 310, name: '铁'},
+  {value: 234, name: '电池'},
+  {value: 135, name: '消毒剂'}]
 // eslint-disable-next-line no-unused-vars,no-undef
 export default {
   methods: {
@@ -50,10 +50,10 @@ export default {
     }
     // 绘制图表
     this.initChart(this.$refs.chart, option)
-       let option1 = {
-         title: {
-           text: '根据下单时间统计订单数'
-         },
+    let option1 = {
+      title: {
+        text: '根据下单时间统计订单数'
+      },
       tooltip: {},
       xAxis: {
         type: 'category',
@@ -213,7 +213,7 @@ export default {
   created () {
     const _this = this
     // eslint-disable-next-line no-undef
-    axios.get('http://localhost:8181/userselectCountbydate/' + _this.$store.getters.getUserId ).then(function (resp) {
+    axios.get('http://localhost:8181/adminselectCountbydate').then(function (resp) {
         console.log(resp)
         for (var j = 0, len = resp.data.length; j < len; j++) {
           // alert(_this.x[j].recycleOrderId)
@@ -222,7 +222,7 @@ export default {
         }
       }
     )
-    axios.get('http://localhost:8181/userselectCountbytime/' + _this.$store.getters.getUserId ).then(function (resp) {
+    axios.get('http://localhost:8181/adminselectCountbytime').then(function (resp) {
         console.log(resp)
         for (var j = 0, len = resp.data.length; j < len; j++) {
           // alert(_this.x[j].recycleOrderId)
@@ -231,9 +231,9 @@ export default {
         }
       }
     )
-    axios.get('http://localhost:8181/userselectCountByitemid/'+_this.$store.getters.getUserId).then(function (resp) {
+    axios.get('http://localhost:8181/adminselectCountByitemid').then(function (resp) {
         console.log(resp)
-        /*Data=resp.data;
+     /*   Data=resp.data;
         alert(JSON.stringify(Data))*/
         for (var j = 0, len = resp.data.length; j < len; j++) {
           Data.splice(j, 1, resp.data[j])

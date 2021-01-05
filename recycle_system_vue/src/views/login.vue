@@ -65,132 +65,131 @@
 </template>
 
 <script>
-  export default {
-    data(){
-      let letterRule = (rule, value, callback) => {
-        if (value === '') {
-          callback(new Error('输入内容不能为空'));
-        } else{
-          callback();
-        }
-      };
-      return {
-        loginForm:{  // 登陆表单
-          username: 'zqy',
-          password: '123456',
-          identity:'1',
-          id:''
-        },
-        rules:{  //登陆验证规则
-          username:[
-            { required: true, message: '请输入用户名', trigger: 'blur' },
-            { min: 2, max: 10, message: '长度在 2 到 10 个字符', trigger: 'blur' },
-            { validator: letterRule, trigger: 'blur' }
-          ],
-          password: [
-            { required: true, message: '请输入密码', trigger: 'blur' },
-            { min: 6, max: 16, message: '长度在 6 到 16 个字符', trigger: 'blur' },
-            { validator: letterRule, trigger: 'blur' }
-          ]
-        }
+export default {
+  data(){
+    let letterRule = (rule, value, callback) => {
+      if (value === '') {
+        callback(new Error('输入内容不能为空'));
+      } else{
+        callback();
       }
-    },
-    methods:{
-      jump(){
-        if(this.loginForm.identity==1){
-          this.$router.push({path: '/userregister'})
-        }
-        if(this.loginForm.identity==2){
-          this.$router.push({path: '/collectorregister'})
-        }
+    };
+    return {
+      loginForm:{  // 登陆表单
+        username: 'zqy',
+        password: '123456',
+        identity:'1',
+        id:''
       },
-      submitForm(formName){
-        const _this=this
-        this.$refs[formName].validate((valid) => {
-          if (valid) {
-            axios.get('http://localhost:8181/checklogin/'+this.loginForm.identity+'/'+this.loginForm.username+'/'+this.loginForm.password+'').then(function (resp) {
-              console.log(resp)
-              if(_this.loginForm.identity==1&&resp.data.login){
-                  sessionStorage.setItem('token',resp.data.token)
-                  sessionStorage.setItem('identity',_this.loginForm.identity)
-                  _this.$store.commit('setUserId',resp.data.id)
-                  _this.$store.commit('setUserName',resp.data.name)
-                  _this.$router.push({
-                    path:'/userlayout',
-                  })
-              }else if(_this.loginForm.identity==2&&resp.data.login){
-                sessionStorage.setItem('token',resp.data.token)
-                sessionStorage.setItem('identity',_this.loginForm.identity)
-                _this.$store.commit('setCollectorId',resp.data.id)
-                _this.$store.commit('setCollectorName',resp.data.name)
-                _this.$router.push({
-                  path:'/collectorlayout',
-                })
-              }else if(_this.loginForm.identity==3&&resp.data.login){
-                sessionStorage.setItem('token',resp.data.token)
-                sessionStorage.setItem('identity',_this.loginForm.identity)
-                _this.$store.commit('setAdminId',resp.data.id)
-                _this.$store.commit('setAdminName',resp.data.name)
-                _this.$router.push({
-                  path:'/adminlayout',
-                })
-              } else{
-                _this.$alert('用户名或密码输入错误','提示');
-              }
-            })
-          }else{
-            _this.$alert('用户名或密码格式错误','提示');
-          }
-        });
-      },jump(){
-        //this.$router.push("/cart")
-        //传递的参数用{{ $route.query.goodsId }}获取
-        this.$router.push({path: '/register'})
-        //this.$router.go(-2)
-        //后退两步
+      rules:{  //登陆验证规则
+        username:[
+          { required: true, message: '请输入用户名', trigger: 'blur' },
+          { min: 2, max: 10, message: '长度在 2 到 10 个字符', trigger: 'blur' },
+          { validator: letterRule, trigger: 'blur' }
+        ],
+        password: [
+          { required: true, message: '请输入密码', trigger: 'blur' },
+          { min: 6, max: 16, message: '长度在 6 到 16 个字符', trigger: 'blur' },
+          { validator: letterRule, trigger: 'blur' }
+        ]
       }
     }
+  },
+  methods:{
+    jump(){
+      if(this.loginForm.identity==1){
+        this.$router.push({path: '/userregister'})
+      }
+      if(this.loginForm.identity==2){
+        this.$router.push({path: '/collectorregister'})
+      }
+    },
+    submitForm(formName){
+      const _this=this
+      this.$refs[formName].validate((valid) => {
+        if (valid) {
+          axios.get('http://localhost:8181/checklogin/'+this.loginForm.identity+'/'+this.loginForm.username+'/'+this.loginForm.password+'').then(function (resp) {
+            console.log(resp)
+            if(_this.loginForm.identity==1&&resp.data.login){
+              sessionStorage.setItem('token',resp.data.token)
+              sessionStorage.setItem('identity',_this.loginForm.identity)
+              _this.$store.commit('setUserId',resp.data.id)
+              _this.$store.commit('setUserName',resp.data.name)
+              _this.$router.push({
+                path:'/userlayout',
+              })
+            }else if(_this.loginForm.identity==2&&resp.data.login){
+              sessionStorage.setItem('token',resp.data.token)
+              sessionStorage.setItem('identity',_this.loginForm.identity)
+              _this.$store.commit('setCollectorId',resp.data.id)
+              _this.$store.commit('setCollectorName',resp.data.name)
+              _this.$router.push({
+                path:'/collectorlayout',
+              })
+            }else if(_this.loginForm.identity==3&&resp.data.login){
+              sessionStorage.setItem('token',resp.data.token)
+              sessionStorage.setItem('identity',_this.loginForm.identity)
+              _this.$store.commit('setAdminId',resp.data.id)
+              _this.$store.commit('setAdminName',resp.data.name)
+              _this.$router.push({
+                path:'/adminlayout',
+              })
+            } else{
+              _this.$alert('用户名或密码输入错误','提示');
+            }
+          })
+        }else{
+          _this.$alert('用户名或密码格式错误','提示');
+        }
+      });
+    },jump(){
+      //this.$router.push("/cart")
+      //传递的参数用{{ $route.query.goodsId }}获取
+      this.$router.push({path: '/register'})
+      //this.$router.go(-2)
+      //后退两步
+    }
   }
+}
 </script>
 
 <style scoped>
-  .login{
-    width: 100%;
-    height: 100%;
-    position: relative;
-  }
-  .login-bg{
-    width: 100%;
-    height: 100%;
-    background: #3E3E3E;
-  }
-  .login-box{
-    width: 350px;
-    background: hsla(0,0%,100%,.3);
-    border-radius: 5px;
-    box-shadow: 0 0 2px #f7f7f7;
-    border: 1px solid #f7f7f7;
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    margin-left: -175px;
-    margin-top: -150px;
-
-  }
-  .login-box-title{
-    line-height: 50px;
-    font-size: 20px;
-    color: #ffffff;
-    text-align: center;
-    border-bottom: 1px solid #ffffff;
-  }
-  .login-box-from{
-    width: 100%;
-    height: auto;
-    padding: 30px;
-    box-sizing: border-box;
-  }
-  b{
-    color: orange;
-  }
+.login{
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+.login-bg{
+  width: 100%;
+  height: 100%;
+  background: #3E3E3E;
+}
+.login-box{
+  width: 350px;
+  background: hsla(0,0%,100%,.3);
+  border-radius: 5px;
+  box-shadow: 0 0 2px #f7f7f7;
+  border: 1px solid #f7f7f7;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  margin-left: -175px;
+  margin-top: -150px;
+}
+.login-box-title{
+  line-height: 50px;
+  font-size: 20px;
+  color: #ffffff;
+  text-align: center;
+  border-bottom: 1px solid #ffffff;
+}
+.login-box-from{
+  width: 100%;
+  height: auto;
+  padding: 30px;
+  box-sizing: border-box;
+}
+b{
+  color: orange;
+}
 </style>

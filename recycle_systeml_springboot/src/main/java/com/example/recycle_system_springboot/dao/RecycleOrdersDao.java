@@ -40,9 +40,10 @@ public interface RecycleOrdersDao {
 
     Page<CollectorDoingOrdersVo> CollectorselectDoingOrderByUsername(Integer collectorid,String username);
 
-    List<EchartsTimeVo> EchartsBytime(Integer id);
-    List<EchartsTimeVo> EchartsBydate(Integer id);
-
+    List<EchartsTimeVo> userselectCountbytime(Integer id);
+    List<EchartsTimeVo> userselectCountbydate(Integer id);
+    List<EchartsTimeVo> adminselectCountbytime();
+    List<EchartsTimeVo> adminselectCountbydate();
 
     Page<AllOrdersVo> selectAllByadmin(String username,String collectorname,String date,String datepick);
 

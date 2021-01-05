@@ -22,6 +22,7 @@
           <template slot="title">设置</template>
           <el-menu-item-group>
             <el-menu-item index="/collectoralterinfo">修改个人信息</el-menu-item>
+            <el-menu-item index="/collectorecharts">查看统计信息</el-menu-item>
             <el-menu-item index="/login" @click="d">退出登录</el-menu-item>
           </el-menu-item-group>
         </el-submenu>

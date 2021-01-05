@@ -22,8 +22,8 @@ public interface RecycleOrderDetailDao {
 
     List<RecycleOrdersDetailVo> selectDetailByRecycleOrderId(Integer recycleOrderId);
 
-
-    List<EchartsItemVo> selectCountByitemid();
+    List<EchartsItemVo> userselectCountByitemid(Integer recycleOrderId);
+    List<EchartsItemVo> adminselectCountByitemid();
 
     void deleteByRecycleOrderId(Integer recycleOrderId);
 

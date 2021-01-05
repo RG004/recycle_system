@@ -7,7 +7,6 @@ import com.example.recycle_system_springboot.dao.ItemDao;
 import com.example.recycle_system_springboot.dao.RecycleOrderDetailDao;
 import com.example.recycle_system_springboot.dao.RecycleOrdersDao;
 import com.example.recycle_system_springboot.pojo.dto.OrderDto;
-import com.example.recycle_system_springboot.pojo.entity.Item;
 import com.example.recycle_system_springboot.pojo.entity.RecycleOrderDetail;
 import com.example.recycle_system_springboot.pojo.entity.RecycleOrders;
 import com.example.recycle_system_springboot.pojo.vo.*;
@@ -112,16 +111,25 @@ public class RecycleOrderServiceImpl implements RecycleOrderService {
     }
 
     @Override
-    public List<EchartsTimeVo> echartsBytime(int id){
-        List<EchartsTimeVo> list=recycleOrdersDao.EchartsBytime(id);
+    public List<EchartsTimeVo> userselectCountbytime(int id){
+        List<EchartsTimeVo> list=recycleOrdersDao.userselectCountbytime(id);
         return list;
     }
     @Override
-    public List<EchartsTimeVo> echartsBydate(int id){
-        List<EchartsTimeVo> list=recycleOrdersDao.EchartsBydate(id);
+    public List<EchartsTimeVo> userselectCountbydate(int id){
+        List<EchartsTimeVo> list=recycleOrdersDao.userselectCountbydate(id);
         return list;
     }
-	
+    @Override
+    public List<EchartsTimeVo> adminselectCountbydate(){
+        List<EchartsTimeVo> list=recycleOrdersDao.adminselectCountbydate();
+        return list;
+    }
+    @Override
+    public List<EchartsTimeVo> adminselectCountbytime(){
+        List<EchartsTimeVo> list=recycleOrdersDao.adminselectCountbytime();
+        return list;
+    }
 
     @Override
     public PageInfo<AllOrdersVo> adminfindAllOrders(String username, String collectorname, String datebyday, String datebymonth, String datepick, int start, int limit) {

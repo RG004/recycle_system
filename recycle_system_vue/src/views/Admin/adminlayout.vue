@@ -18,6 +18,7 @@
           <el-menu-item-group>
             <el-menu-item index="/ItemTypeManage">管理物品种类</el-menu-item>
             <el-menu-item index="/ItemManage">管理物品</el-menu-item>
+            <el-menu-item index="/adminecharts">查看统计信息</el-menu-item>
             <el-menu-item index="/login" @click="d">退出登录</el-menu-item>
           </el-menu-item-group>
         </el-submenu>

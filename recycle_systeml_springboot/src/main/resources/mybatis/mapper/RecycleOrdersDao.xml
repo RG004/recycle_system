@@ -12,8 +12,8 @@
     <result column="Total_Amount" jdbcType="DOUBLE" property="totalAmount" />
   </resultMap>
   <resultMap id="EchartsTime" type="com.example.recycle_system_springboot.pojo.vo.EchartsTimeVo">
-      <result column="Scheduled_Time" jdbcType="VARCHAR" property="scheduledTime" />
-      <result column="Count" jdbcType="INTEGER" property="count"/>
+    <result column="Scheduled_Time" jdbcType="VARCHAR" property="scheduledTime" />
+    <result column="Count" jdbcType="INTEGER" property="count"/>
   </resultMap>
   <resultMap id="AllOrderResultMap" type="com.example.recycle_system_springboot.pojo.vo.RecycleOrdersVo">
     <id column="Recycle_Order_ID" jdbcType="INTEGER" property="recycleOrderId" />
@@ -57,6 +57,36 @@
     Recycle_Order_ID, Address_ID, Collector_Person_ID, Evaluation_ID, User_ID, Scheduled_Time,
     Finished_Time, Total_Amount
   </sql>
+  <select id="userselectCountbydate" resultMap="EchartsTime">
+    select distinct r.Scheduled_Time,COUNT(*) AS Count
+    from recycle_orders r
+      left join user u
+    on r.User_ID=u.User_ID
+    where r.User_ID=#{id,jdbcType=INTEGER}
+    GROUP BY DATE_FORMAT(r.Scheduled_Time,'%Y-%m-%d')
+    order by DATE_FORMAT(r.Scheduled_Time,'%Y-%m-%d') asc
+  </select>
+  <select id="userselectCountbytime" resultMap="EchartsTime">
+    select distinct r.Scheduled_Time,COUNT(*) AS Count
+    from recycle_orders r
+      left join user u
+    on r.User_ID=u.User_ID
+    where r.User_ID=#{id,jdbcType=INTEGER}
+    GROUP BY DATE_FORMAT(r.Scheduled_Time,'%H-%M-%S')
+    order by DATE_FORMAT(r.Scheduled_Time,'%H-%M-%S') asc
+  </select>
+  <select id="adminselectCountbydate" resultMap="EchartsTime">
+    select distinct r.Scheduled_Time,COUNT(*) AS Count
+    from recycle_orders r
+    GROUP BY DATE_FORMAT(r.Scheduled_Time,'%Y-%m-%d')
+    order by DATE_FORMAT(r.Scheduled_Time,'%Y-%m-%d') asc
+  </select>
+  <select id="adminselectCountbytime" resultMap="EchartsTime">
+    select distinct r.Scheduled_Time,COUNT(*) AS Count
+    from recycle_orders r
+    GROUP BY DATE_FORMAT(r.Scheduled_Time,'%H-%M-%S')
+    order by DATE_FORMAT(r.Scheduled_Time,'%H-%M-%S') asc
+  </select>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select
     <include refid="Base_Column_List" />
@@ -64,48 +94,48 @@
     where Recycle_Order_ID = #{recycleOrderId,jdbcType=INTEGER}
   </select>
   <select id="selectOrderByUserId" resultMap="AllOrderResultMap">
-      select
+    select
       r.Recycle_Order_ID,r.Scheduled_Time,r.Finished_Time,a.Address_Details,c.Collector_Name,c.Phone
-      from recycle_orders r
-      left join address a
-      on r.Address_ID=a.Address_ID
-      left join collector c
-      on r.Collector_Person_ID=c.Collector_Person_ID
-      where r.User_ID=#{userid,jdbcType=INTEGER}
-      order by r.Scheduled_Time asc
+    from recycle_orders r
+           left join address a
+                     on r.Address_ID=a.Address_ID
+           left join collector c
+                     on r.Collector_Person_ID=c.Collector_Person_ID
+    where r.User_ID=#{userid,jdbcType=INTEGER}
+    order by r.Scheduled_Time asc
   </select>
   <select id="selectDoingOrderByUserId" resultMap="DoingOrderResultMap">
-      select
+    select
       r.Recycle_Order_ID,r.Scheduled_Time,a.Address_Details,c.Collector_Name,c.Phone
-      from recycle_orders r
-      left join address a
-      on r.Address_ID=a.Address_ID
-      left join collector c
-      on r.Collector_Person_ID=c.Collector_Person_ID
-      where r.User_ID=#{userid,jdbcType=INTEGER} and r.Finished_Time is null
-      order by r.Scheduled_Time asc
+    from recycle_orders r
+           left join address a
+                     on r.Address_ID=a.Address_ID
+           left join collector c
+                     on r.Collector_Person_ID=c.Collector_Person_ID
+    where r.User_ID=#{userid,jdbcType=INTEGER} and r.Finished_Time is null
+    order by r.Scheduled_Time asc
   </select>
   <select id="selectOrderByCollectorId" resultMap="AllOrderResultByCollectorMap">
     select
-    r.Recycle_Order_ID,r.Scheduled_Time,r.Finished_Time,a.Address_Details,u.User_Name,u.Phone
+      r.Recycle_Order_ID,r.Scheduled_Time,r.Finished_Time,a.Address_Details,u.User_Name,u.Phone
     from recycle_orders r
-    left join address a
-    on r.Address_ID=a.Address_ID
-    left join user u
-    on r.User_ID = u.User_ID
+           left join address a
+                     on r.Address_ID=a.Address_ID
+           left join user u
+                     on r.User_ID = u.User_ID
     where r.Collector_Person_ID=#{collectorid,jdbcType=INTEGER}
     order by r.Scheduled_Time asc
   </select>
   <select id="selectDoingOrderByCollectorId" resultMap="DoingOrderResultByCollectorMap">
     select
       r.Recycle_Order_ID,r.Scheduled_Time,a.Address_Details,u.User_Name,u.Phone
-      from recycle_orders r
-      left join address a
-      on r.Address_ID=a.Address_ID
-      left join user u
-      on r.User_ID=u.User_ID
-      where r.Collector_Person_ID=#{collectorid,jdbcType=INTEGER} and r.Finished_Time is null
-      order by r.Scheduled_Time asc
+    from recycle_orders r
+           left join address a
+                     on r.Address_ID=a.Address_ID
+           left join user u
+                     on r.User_ID=u.User_ID
+    where r.Collector_Person_ID=#{collectorid,jdbcType=INTEGER} and r.Finished_Time is null
+    order by r.Scheduled_Time asc
   </select>
   <select id="selectOrderByCollectorname" resultMap="AllOrderResultMap">
     select
@@ -126,17 +156,17 @@
   </select>
   <select id="selectDoingOrderByCollectorname" resultMap="DoingOrderResultMap">
     select
-      r.Recycle_Order_ID,r.Scheduled_Time,a.Address_Details,c.Collector_Name,c.Phone
-      from recycle_orders r
-      left join address a
-      on r.Address_ID=a.Address_ID
-      left join collector c
-      on r.Collector_Person_ID=c.Collector_Person_ID
-      where r.User_ID=#{userid,jdbcType=INTEGER} and r.Finished_Time is null
-      <if test="collectorname!=null and collectorname!=''">
-        and c.Collector_Name like "%"#{collectorname,jdbcType=VARCHAR}"%"
-      </if>
-      order by r.Scheduled_Time asc
+    r.Recycle_Order_ID,r.Scheduled_Time,a.Address_Details,c.Collector_Name,c.Phone
+    from recycle_orders r
+    left join address a
+    on r.Address_ID=a.Address_ID
+    left join collector c
+    on r.Collector_Person_ID=c.Collector_Person_ID
+    where r.User_ID=#{userid,jdbcType=INTEGER} and r.Finished_Time is null
+    <if test="collectorname!=null and collectorname!=''">
+      and c.Collector_Name like "%"#{collectorname,jdbcType=VARCHAR}"%"
+    </if>
+    order by r.Scheduled_Time asc
   </select>
   <select id="selectOrderByCollectornameBymonth" resultMap="AllOrderResultMap">
     select
@@ -189,24 +219,6 @@
     </if>
     order by r.Scheduled_Time asc
   </select>
-  <select id="EchartsBydate" resultMap="EchartsTime">
-    select distinct r.Scheduled_Time,COUNT(*) AS Count
-    from recycle_orders r
-    left join user u
-    on r.User_ID=u.User_ID
-    where r.User_ID=#{id,jdbcType=INTEGER}
-    GROUP BY DATE_FORMAT(r.Scheduled_Time,'%Y-%m-%d')
-    order by DATE_FORMAT(r.Scheduled_Time,'%Y-%m-%d') asc
-  </select>
-  <select id="EchartsBytime" resultMap="EchartsTime">
-  select distinct r.Scheduled_Time,COUNT(*) AS Count
-  from recycle_orders r
-    left join user u
-  on r.User_ID=u.User_ID
-  where r.User_ID=#{id,jdbcType=INTEGER}
-  GROUP BY DATE_FORMAT(r.Scheduled_Time,'%H-%M-%S')
-  order by DATE_FORMAT(r.Scheduled_Time,'%H-%M-%S') asc
-</select>
   <select id="CollectorselectDoingOrderByUsername" resultMap="DoingOrderResultByCollectorMap">
     select
     r.Recycle_Order_ID,r.Scheduled_Time,a.Address_Details,u.User_Name,u.Phone
@@ -223,31 +235,31 @@
   </select>
   <select id="selectAllByadmin" resultType="com.example.recycle_system_springboot.pojo.vo.AllOrdersVo">
     select
-      r.Recycle_Order_ID,r.Scheduled_Time,r.Finished_Time,a.Address_Details,c.Collector_Name,u.User_Name
-      from recycle_orders r
-      left join address a
-      on r.Address_ID=a.Address_ID
-      left join user u
-      on r.User_ID=u.User_ID
-      left join collector c
-      on r.Collector_Person_ID=c.Collector_Person_ID
-      where r.Recycle_Order_ID is not null
-      <if test="username!=null and username!=''">
-        and u.User_Name like "%"#{username,jdbcType=VARCHAR}"%"
-      </if>
-      <if test="collectorname != ''and collectorname!=null">
-        and c.Collector_Name like "%"#{collectorname,jdbcType=VARCHAR}"%"
-      </if>
-      <if test="datepick=='day' and date!=''and date!=null ">
-        and DATE_FORMAT(r.Scheduled_Time, '%Y-%m-%d')=#{date}
-      </if>
-      <if test="datepick=='month' and date!=''and date!=null">
-        and DATE_FORMAT(r.Scheduled_Time, '%Y-%m')=#{date}
-      </if>
-      order by r.Scheduled_Time asc
+    r.Recycle_Order_ID,r.Scheduled_Time,r.Finished_Time,a.Address_Details,c.Collector_Name,u.User_Name
+    from recycle_orders r
+    left join address a
+    on r.Address_ID=a.Address_ID
+    left join user u
+    on r.User_ID=u.User_ID
+    left join collector c
+    on r.Collector_Person_ID=c.Collector_Person_ID
+    where r.Recycle_Order_ID is not null
+    <if test="username!=null and username!=''">
+      and u.User_Name like "%"#{username,jdbcType=VARCHAR}"%"
+    </if>
+    <if test="collectorname != ''and collectorname!=null">
+      and c.Collector_Name like "%"#{collectorname,jdbcType=VARCHAR}"%"
+    </if>
+    <if test="datepick=='day' and date!=''and date!=null ">
+      and DATE_FORMAT(r.Scheduled_Time, '%Y-%m-%d')=#{date}
+    </if>
+    <if test="datepick=='month' and date!=''and date!=null">
+      and DATE_FORMAT(r.Scheduled_Time, '%Y-%m')=#{date}
+    </if>
+    order by r.Scheduled_Time asc
   </select>
   <select id="selectDoingByadmin"
-            resultType="com.example.recycle_system_springboot.pojo.vo.AllDoingOrdersVo">
+          resultType="com.example.recycle_system_springboot.pojo.vo.AllDoingOrdersVo">
     select
     r.Recycle_Order_ID,r.Scheduled_Time,a.Address_Details,c.Collector_Name,u.User_Name
     from recycle_orders r
@@ -278,11 +290,11 @@
   </delete>
   <insert id="insert" keyColumn="Recycle_Order_ID" keyProperty="recycleOrderId" parameterType="com.example.recycle_system_springboot.pojo.entity.RecycleOrders" useGeneratedKeys="true">
     insert into recycle_orders (Address_ID, Collector_Person_ID, Evaluation_ID,
-      User_ID, Scheduled_Time, Finished_Time,
-      Total_Amount)
+                                User_ID, Scheduled_Time, Finished_Time,
+                                Total_Amount)
     values (#{addressId,jdbcType=INTEGER}, #{collectorPersonId,jdbcType=INTEGER}, #{evaluationId,jdbcType=INTEGER},
-      #{userId,jdbcType=INTEGER}, #{scheduledTime,jdbcType=TIMESTAMP}, #{finishedTime,jdbcType=TIMESTAMP},
-      #{totalAmount,jdbcType=DOUBLE})
+            #{userId,jdbcType=INTEGER}, #{scheduledTime,jdbcType=TIMESTAMP}, #{finishedTime,jdbcType=TIMESTAMP},
+            #{totalAmount,jdbcType=DOUBLE})
   </insert>
   <insert id="insertSelective" keyColumn="Recycle_Order_ID" keyProperty="recycleOrderId" parameterType="com.example.recycle_system_springboot.pojo.entity.RecycleOrders" useGeneratedKeys="true">
     insert into recycle_orders
@@ -363,12 +375,12 @@
   <update id="updateByPrimaryKey" parameterType="com.example.recycle_system_springboot.pojo.entity.RecycleOrders">
     update recycle_orders
     set Address_ID = #{addressId,jdbcType=INTEGER},
-      Collector_Person_ID = #{collectorPersonId,jdbcType=INTEGER},
-      Evaluation_ID = #{evaluationId,jdbcType=INTEGER},
-      User_ID = #{userId,jdbcType=INTEGER},
-      Scheduled_Time = #{scheduledTime,jdbcType=TIMESTAMP},
-      Finished_Time = #{finishedTime,jdbcType=TIMESTAMP},
-      Total_Amount = #{totalAmount,jdbcType=DOUBLE}
+        Collector_Person_ID = #{collectorPersonId,jdbcType=INTEGER},
+        Evaluation_ID = #{evaluationId,jdbcType=INTEGER},
+        User_ID = #{userId,jdbcType=INTEGER},
+        Scheduled_Time = #{scheduledTime,jdbcType=TIMESTAMP},
+        Finished_Time = #{finishedTime,jdbcType=TIMESTAMP},
+        Total_Amount = #{totalAmount,jdbcType=DOUBLE}
     where Recycle_Order_ID = #{recycleOrderId,jdbcType=INTEGER}
   </update>
   <update id="updateCollector">
