@@ -1,5 +1,6 @@
 package com.example.recycle_system_springboot.pojo.vo;
 
+
 import lombok.Data;
 
 import java.util.List;
@@ -10,4 +11,5 @@ public class ItemVo {
     private String itemTypeName;
 
     private List<ItemRecycleVo> itemsList;
+
 }

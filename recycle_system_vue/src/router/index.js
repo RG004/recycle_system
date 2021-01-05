@@ -35,6 +35,7 @@ import AddHelpThePoor from '../views/Admin/AddHelpThePoor'
 import AddItem from '../views/Admin/AddItem'
 import userregister from '../views/userregister'
 import collectorregister from '../views/collectorregister'
+
 Vue.use(Router)
 
 export default new Router({
@@ -49,6 +50,10 @@ export default new Router({
       path:'/login',
       name:"登录页面",
       component: Login,
+    },{
+      path:'/register',
+      name:"注册页面",
+      component: register
     },
     {
       path:'/userregister',
