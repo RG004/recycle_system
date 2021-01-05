@@ -6,8 +6,11 @@ import UserLayout from '../views/User/userlayout'
 import UserAllInorder from '../views/User/userallInorder'
 import UserDoingInorder from '../views/User/userdoingInorder'
 import Recycle from '../views/User/recycle'
+import donate from '../views/User/donate'
 import UserAlterInfo from '../views/User/useralterinfo'
 import userupdateorder from '../views/User/userupdateorder'
+import useralldonate from '../views/User/useralldonate'
+import userdoingdonate from '../views/User/userdoingdonate'
 import Test from  '../views/User/test'
 import UserHomePage from '../views/User/userhomepage'
 import maptest from '../views/User/maptest'
@@ -16,6 +19,8 @@ import CollectorHomePage from '../views/Collector/collectorhomepage'
 import CollectorAllInorder from '../views/Collector/collectorallInorder'
 import CollectorDoingInorder from '../views/Collector/collectordoingInorder'
 import CollectorAlterInfo from '../views/Collector/collectoralterinfo'
+import collectoralldonate from '../views/Collector/collectoralldonate'
+import collectordoingdonate from '../views/Collector/collectordoingdonate'
 import confirmorder from '../views/Collector/confirmorder'
 import NotFound from '../views/404'
 import AdminLayout from '../views/Admin/adminlayout'
@@ -23,6 +28,11 @@ import ItemTypeManager from '../views/Admin/ItemTypeManager'
 import ItemManager from '../views/Admin/ItemManager'
 import adminallInorder from '../views/Admin/adminallInorder'
 import admindoingInorder from '../views/Admin/admindoingInorder'
+import adminalldonate from '../views/Admin/adminalldonate'
+import admindoingdonate from '../views/Admin/admindoingdonate'
+import HelpThePoorManager from '../views/Admin/HelpThePoorManager'
+import AddHelpThePoor from '../views/Admin/AddHelpThePoor'
+import AddItem from '../views/Admin/AddItem'
 import userregister from '../views/userregister'
 import collectorregister from '../views/collectorregister'
 Vue.use(Router)
@@ -77,6 +87,14 @@ export default new Router({
           },
         },
         {
+          path:'/AddItem',
+          component:AddItem,
+          meta: {
+            needLogin: true, //需要登录
+            needAdmin:true,
+          },
+        },
+        {
           path:'/adminallinorder',
           component:adminallInorder,
           meta: {
@@ -87,6 +105,38 @@ export default new Router({
         {
           path:'/admindoinginorder',
           component:admindoingInorder,
+          meta: {
+            needLogin: true, //需要登录
+            needAdmin:true,
+          },
+        },
+        {
+          path:'/adminalldonate',
+          component:adminalldonate,
+          meta: {
+            needLogin: true, //需要登录
+            needAdmin:true,
+          },
+        },
+        {
+          path:'/admindoingdonate',
+          component:admindoingdonate,
+          meta: {
+            needLogin: true, //需要登录
+            needAdmin:true,
+          },
+        },
+        {
+          path:'/HelpThePoorManager',
+          component:HelpThePoorManager,
+          meta: {
+            needLogin: true, //需要登录
+            needAdmin:true,
+          },
+        },
+        {
+          path:'/AddHelpThePoor',
+          component:AddHelpThePoor,
           meta: {
             needLogin: true, //需要登录
             needAdmin:true,
@@ -130,6 +180,22 @@ export default new Router({
         {
           path: '/collectordoinginorder',
           component: CollectorDoingInorder,
+          meta: {
+            needLogin: true, //需要登录
+            needCollector:true,
+          },
+        },
+        {
+          path: '/collectoralldonate',
+          component:collectoralldonate,
+          meta: {
+            needLogin: true, //需要登录
+            needCollector:true,
+          },
+        },
+        {
+          path: '/collectordoingdonate',
+          component: collectordoingdonate,
           meta: {
             needLogin: true, //需要登录
             needCollector:true,
@@ -180,8 +246,32 @@ export default new Router({
           },
         },
         {
+          path: '/useralldonate',
+          component: useralldonate,
+          meta: {
+            needLogin: true, //需要登录
+            needUser:true,
+          },
+        },
+        {
+          path: '/userdoingdonate',
+          component: userdoingdonate,
+          meta: {
+            needLogin: true, //需要登录
+            needUser:true,
+          },
+        },
+        {
           path: '/recycle',
           component: Recycle,
+          meta: {
+            needLogin: true, //需要登录
+            needUser:true,
+          },
+        },
+        {
+          path: '/donate',
+          component: donate,
           meta: {
             needLogin: true, //需要登录
             needUser:true,

@@ -22,74 +22,49 @@ public class RecycleOrderController {
     RecycleOrderService recycleOrderService;
 
 
-    @GetMapping("/userAllorders/{id}/{start}/{limit}")
+    @PostMapping("/userfindAllOrders/{start}/{limit}")
     @ResponseBody
-    public PageInfo<RecycleOrdersVo> userfindAllOrders(@PathVariable("id") int id,@PathVariable("start") int start, @PathVariable("limit") int limit){
-        PageInfo<RecycleOrdersVo> result =recycleOrderService.userfindAllOrders(id,start,limit);
+    public PageInfo<OrdersVo> userfindAllOrders(@RequestBody UserRequireQuery u,@PathVariable("start") int start, @PathVariable("limit") int limit){
+        PageInfo<OrdersVo> result = recycleOrderService.userfindAllOrders(u.getId(),u.getCollectorname(),u.getDatebyday(),u.getDatebymonth(),u.getDatepick(),start,limit);
         return result;
     }
 
-    @GetMapping("/userDoingorders/{id}/{start}/{limit}")
+    @PostMapping("/userfindAllDoingOrders/{start}/{limit}")
     @ResponseBody
-    public PageInfo<DoingOrdersVo> userfindDoingOrders(@PathVariable("id") int id,@PathVariable("start") int start, @PathVariable("limit") int limit){
-        PageInfo<DoingOrdersVo> result = recycleOrderService.userfindDoingOrders(id,start,limit);
+    public PageInfo<OrdersVo> userfindAllDoingOrders(@RequestBody UserRequireQuery u,@PathVariable("start") int start, @PathVariable("limit") int limit){
+        PageInfo<OrdersVo> result = recycleOrderService.userfindAllDoingOrders(u.getId(),u.getCollectorname(),u.getDatebyday(),u.getDatebymonth(),u.getDatepick(),start,limit);
         return result;
     }
 
-    @GetMapping("/collectorAllorders/{id}/{start}/{limit}")
+    @PostMapping("/collectorfindAllOrders/{start}/{limit}")
     @ResponseBody
-    public PageInfo<CollectorOrdersVo> collectorfindAllOrders(@PathVariable("id") int id, @PathVariable("start") int start, @PathVariable("limit") int limit){
-        PageInfo<CollectorOrdersVo> result = recycleOrderService.collectorfindAllOrders(id,start,limit);
+    public PageInfo<OrdersVo> collectorfindAllOrders(@RequestBody CollectorRequireQuery c,@PathVariable("start") int start, @PathVariable("limit") int limit){
+        PageInfo<OrdersVo> result = recycleOrderService.collectorfindAllOrders(c.getId(),c.getUsername(),c.getDatebyday(),c.getDatebymonth(),c.getDatepick(),start,limit);
         return result;
     }
 
-    @GetMapping("/collectorDoingorders/{id}/{start}/{limit}")
+    @PostMapping("/collectorfindAllDoingOrders/{start}/{limit}")
     @ResponseBody
-    public PageInfo<CollectorDoingOrdersVo> collectorfindDoingOrders(@PathVariable("id") int id, @PathVariable("start") int start, @PathVariable("limit") int limit){
-        PageInfo<CollectorDoingOrdersVo> result = recycleOrderService.collectorfindDoingOrders(id,start,limit);
-        return result;
-    }
-
-    @PostMapping("/userFindordersByrequire/{start}/{limit}")
-    @ResponseBody
-    public PageInfo<RecycleOrdersVo> selectOrderByCollectorname(@RequestBody UserRequireQuery u,@PathVariable("start") int start, @PathVariable("limit") int limit){
-        PageInfo<RecycleOrdersVo> result = recycleOrderService.userfindOrdersByCollectorname(u.getId(),u.getCollectorname(),u.getDatebyday(),u.getDatebymonth(),u.getDatepick(),start,limit);
-        return result;
-    }
-
-    @GetMapping("/userFinddoingordersBycollectorname/{id}/{collectorname}/{start}/{limit}")
-    @ResponseBody
-    public PageInfo<DoingOrdersVo> selectDoingOrderByCollectorname(@PathVariable("id") int id,@PathVariable("collectorname") String collectorname,@PathVariable("start") int start, @PathVariable("limit") int limit){
-        PageInfo<DoingOrdersVo> result = recycleOrderService.userfindDoingOrdersByCollectorname(id,collectorname,start,limit);
-        return result;
-    }
-    @PostMapping("/collectorFindordersByrequire/{start}/{limit}")
-    @ResponseBody
-    public PageInfo<CollectorOrdersVo> selectOrderByUsername(@RequestBody CollectorRequireQuery c, @PathVariable("start") int start, @PathVariable("limit") int limit){
-        PageInfo<CollectorOrdersVo> result = recycleOrderService.collectorfindOrdersByUsername(c.getId(),c.getUsername(),c.getDatebyday(),c.getDatebymonth(),c.getDatepick(),start,limit);
-        return result;
-    }
-
-    @GetMapping("/collectorDoingordersByusername/{id}/{username}/{start}/{limit}")
-    @ResponseBody
-    public PageInfo<CollectorDoingOrdersVo> collectorfindDoingOrdersByusername(@PathVariable("id") int id,  @PathVariable("username") String username,@PathVariable("start") int start, @PathVariable("limit") int limit){
-        PageInfo<CollectorDoingOrdersVo> result = recycleOrderService.collectorfindDoingOrdersByUsername(id,username,start,limit);
+    public PageInfo<OrdersVo> collectorfindAllDoingOrders(@RequestBody CollectorRequireQuery c,@PathVariable("start") int start, @PathVariable("limit") int limit){
+        PageInfo<OrdersVo> result = recycleOrderService.collectorfindAllDoingOrders(c.getId(),c.getUsername(),c.getDatebyday(),c.getDatebymonth(),c.getDatepick(),start,limit);
         return result;
     }
 
     @PostMapping("/adminfindAllOrders/{start}/{limit}")
     @ResponseBody
-    public PageInfo<AllOrdersVo> adminfindAllOrders(@RequestBody AdminReqirueQuery a,@PathVariable("start") int start, @PathVariable("limit") int limit){
-        PageInfo<AllOrdersVo> result = recycleOrderService.adminfindAllOrders(a.getUsername(),a.getCollectorname(),a.getDatebyday(),a.getDatebymonth(),a.getDatepick(),start,limit);
+    public PageInfo<OrdersVo> adminfindAllOrders(@RequestBody AdminReqirueQuery a,@PathVariable("start") int start, @PathVariable("limit") int limit){
+        PageInfo<OrdersVo> result = recycleOrderService.adminfindAllOrders(a.getUsername(),a.getCollectorname(),a.getDatebyday(),a.getDatebymonth(),a.getDatepick(),start,limit);
         return result;
     }
 
     @PostMapping("/adminfindAllDoingOrders/{start}/{limit}")
     @ResponseBody
-    public PageInfo<AllDoingOrdersVo> adminfindAllDoingOrders(@RequestBody AdminReqirueQuery a,@PathVariable("start") int start, @PathVariable("limit") int limit){
-        PageInfo<AllDoingOrdersVo> result = recycleOrderService.adminfindAllDoingOrders(a.getUsername(),a.getCollectorname(),a.getDatebyday(),a.getDatebymonth(),a.getDatepick(),start,limit);
+    public PageInfo<OrdersVo> adminfindAllDoingOrders(@RequestBody AdminReqirueQuery a,@PathVariable("start") int start, @PathVariable("limit") int limit){
+        PageInfo<OrdersVo> result = recycleOrderService.adminfindAllDoingOrders(a.getUsername(),a.getCollectorname(),a.getDatebyday(),a.getDatebymonth(),a.getDatepick(),start,limit);
         return result;
     }
+
+
     @GetMapping("/getallitem")
     @ResponseBody
     public List<ItemVo> getAllItem(){

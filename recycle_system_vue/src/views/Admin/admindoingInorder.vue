@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="show">
     根据用户名查询订单：<el-input v-model="adminrequire.username" placeholder="请输入快递员名" style="width: 130px"></el-input>
     根据快递员姓名查询订单:<el-input v-model="adminrequire.collectorname" placeholder="请输入用户名" style="width: 120px"></el-input>
     根据日期查询订单：
@@ -16,9 +16,7 @@
       </el-table-column>
       <el-table-column prop="scheduledTime" label="预约时间" width="200px">
       </el-table-column>
-      <el-table-column prop="addressDetails" label="地址" width="200">
-      </el-table-column>
-      <el-table-column prop="userName" label="用户" width="200">
+      <el-table-column prop="username" label="用户" width="200">
       </el-table-column>
       <el-table-column label="派送员" width="200px">
         <template slot-scope="scope" >
@@ -74,6 +72,11 @@
               _this.tableData[j].collectorName=_this.editForm.collectorName
             }
           }
+          if(resp.data!=0){
+            _this.$alert('修改派送员成功','消息',{
+              confirmButtonText:'确定',
+            });
+          }
           _this.editVisible=false
         })
       },
@@ -123,6 +126,7 @@
           _this.tableData = resp.data.list
           _this.pageSize = resp.data.pageSize
           _this.total = resp.data.total
+          _this.show=true
         })
         axios.get('http://localhost:8181/allCollector').then(function (r) {
           console.log(r)
@@ -131,6 +135,7 @@
       },
       data () {
         return {
+          show:false,
           editVisible:false,
           editForm:{
             recycleOrderId:1,
@@ -194,7 +199,7 @@
             recycleOrderId: 1,
             scheduledTime: '12月15日 下午17：00',
             addressDetails:'',
-            userName: '陈南',
+            username: '陈南',
             collectorName: '陈南',
           }],
         }

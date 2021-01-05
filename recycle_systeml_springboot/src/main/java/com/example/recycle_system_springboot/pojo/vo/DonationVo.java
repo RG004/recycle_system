@@ -2,21 +2,24 @@ package com.example.recycle_system_springboot.pojo.vo;
 
 import lombok.Data;
 
-import java.util.Date;
-import java.util.List;
-
 @Data
-public class RecycleOrdersVo  {
-    //返回给前端所有订单信息类
-    private Integer recycleOrderId;
+public class DonationVo {
+    private Integer donateId;
 
-    private String addressDetails;
+    private String  userName;
+
+    private Integer addressId;
 
     private String collectorName;
+
+    private Integer evaluationId;
 
     private String scheduledTime;
 
     private String finishedTime;
 
+    private String donateDetail;
+
     private String phone;
+
 }

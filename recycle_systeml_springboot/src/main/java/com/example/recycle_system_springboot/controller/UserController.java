@@ -1,8 +1,10 @@
 package com.example.recycle_system_springboot.controller;
 
 import com.example.recycle_system_springboot.dao.UserDao;
+import com.example.recycle_system_springboot.pojo.entity.HelpThePoor;
 import com.example.recycle_system_springboot.pojo.vo.AddressVo;
 import com.example.recycle_system_springboot.pojo.vo.UserVo;
+import com.example.recycle_system_springboot.service.HelpThePoorService;
 import com.example.recycle_system_springboot.service.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -15,7 +17,6 @@ public class UserController {
     //用于查询用户的信息、修改用户的手机号
     @Resource
     UserService userService;
-
     @GetMapping("/userAlladdress/{id}")
     @ResponseBody
     public UserVo userfindAlladdress(@PathVariable("id") int id){//查找
@@ -30,6 +31,10 @@ public class UserController {
         return result;
     }
 
-
-
+    @GetMapping("/userAllHelp")
+    @ResponseBody
+    public List<HelpThePoor> userfindAllHelp(){//查找
+        List<HelpThePoor> list = userService.userfindAllHelp();
+        return list;
+    }
 }

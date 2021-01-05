@@ -145,18 +145,8 @@
                 else {
                   _this.$alert('用户名已存在');
                 }
-                // if(resp.data.login){
-                //   _this.$store.commit('setUserId',resp.data.id)
-                //   _this.$store.commit('setUserName',resp.data.name)
-                //   _this.$router.push({
-                //     path:'/userlayout',
-                //   })
-                // }else {
-                //   _this.$alert('用户名或密码输入错误','提示');
-                // }
               })
             }
-
           }else{
             _this.$alert('注册信息填写错误','提示');
           }

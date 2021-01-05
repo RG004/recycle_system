@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="show">
     根据快递员姓名查询订单:<el-input v-model="userrequire.collectorname" placeholder="请输入快递员姓名" style="width: 200px"></el-input>
     根据日期查询订单：
     <el-select v-model="userrequire.datepick" placeholder="请选择">
@@ -15,15 +15,30 @@
       </el-table-column>
       <el-table-column prop="scheduledTime" label="预约时间" width="300">
       </el-table-column>
-      <el-table-column  label="完成时间" width="300">
+      <el-table-column  label="完成时间" width="200">
         <template slot-scope="scope">
           <span v-if="scope.row.finishedTime!=null">{{scope.row.finishedTime}}</span>
           <span v-else>未完成</span>
         </template>
       </el-table-column>
-      <el-table-column prop="collectorName" label="配送员" width="140">
+      <el-table-column  label="评价" width="200">
+        <template slot-scope="scope">
+          <span v-if="scope.row.evaluationId!=null&&scope.row.finishedTime!=null"><el-button type="primary" round >查看评价</el-button></span>
+          <span v-else-if="scope.row.evaluationId==null&&scope.row.finishedTime!=null"><el-button type="primary" round >评价</el-button></span>
+          <span v-else>未完成</span>
+        </template>
       </el-table-column>
-      <el-table-column prop="phone" label="联系电话" >
+      <el-table-column label="配送员" width="140">
+        <template slot-scope="scope">
+          <span v-if="scope.row.collectorName!=null">{{scope.row.collectorName}}</span>
+          <span v-else>未分配</span>
+        </template>
+      </el-table-column>
+      <el-table-column fixed=right  label="联系电话" >
+        <template slot-scope="scope">
+          <span v-if="scope.row.phone!=null">{{scope.row.phone}}</span>
+          <span v-else>未分配</span>
+        </template>
       </el-table-column>
       <el-table-column fixed="right" label="操作">
         <template slot-scope="scope">
@@ -50,7 +65,7 @@
         const _this = this
         this.selectbyrequire=true
         this.selectbynormal=false
-        axios.post('http://localhost:8181/userFindordersByrequire/1/8',this.userrequire).then(function (resp) {
+        axios.post('http://localhost:8181/userfindAllOrders/1/8',this.userrequire).then(function (resp) {
           console.log(resp)
           _this.tableData = resp.data.list
           _this.pageSize = resp.data.pageSize
@@ -59,13 +74,13 @@
       },
       findall(){
         const _this=this
-        this.selectbyrequire=false
-        this.selectbynormal=true
         this.userrequire.collectorname=''
         this.userrequire.datebymonth=''
         this.userrequire.datebyday=''
         this.userrequire.datepick='day'
-        axios.get('http://localhost:8181/userAllorders/'+_this.$store.getters.getUserId+'/1/8').then(function (resp) {
+        axios.post('http://localhost:8181/userfindAllOrders/1/8',this.userrequire).then(function (resp) {
+          console.log(resp
+          )
           _this.tableData=resp.data.list
           _this.pageSize = resp.data.pageSize
           _this.total = resp.data.total
@@ -82,30 +97,27 @@
       },
       page(currentPage){
         const _this = this
-        if(this.selectbynormal){
-          axios.get('http://localhost:8181/userAllorders/'+_this.$store.getters.getUserId+'/'+currentPage+'/8').then(function(resp){
-            _this.tableData = resp.data.list
-            _this.pageSize = resp.data.pageSize
-            _this.total = resp.data.total
-          })}else if(this.selectbyrequire){
-          axios.post('http://localhost:8181/userFindordersByrequire/'+currentPage+'/8',_this.userrequire).then(function (resp) {
+          axios.post('http://localhost:8181/userfindAllOrders/'+currentPage+'/8',this.userrequire).then(function (resp) {
             _this.tableData = resp.data.list
             _this.pageSize = resp.data.pageSize
             _this.total = resp.data.total
           })
-        }
       }
     },
     created () {
       const _this=this;
-      axios.get('http://localhost:8181/userAllorders/'+_this.$store.getters.getUserId+'/1/8').then(function (resp) {
-        _this.tableData=resp.data.list
+      axios.post('http://localhost:8181/userfindAllOrders/1/8',this.userrequire).then(function (resp) {
+        console.log(resp)
+        _this.show=true
         _this.pageSize = resp.data.pageSize
         _this.total = resp.data.total
+        _this.tableData=resp.data.list
+
       })
     },
     data(){
       return{
+        show:false,
         pageSize:1,
         total:1,
         userrequire:{
@@ -115,8 +127,6 @@
           datebymonth:'',
           datepick:'day',//判断是按月查询还是按日查询
         },
-        selectbyrequire:false,
-        selectbynormal:true,
         options:[
           {
             value:'day',
@@ -153,6 +163,7 @@
           scheduledTime: '12月15日 下午17：00',
           finishedTime: '12月15日 下午17：10',
           collectorName: '陈南',
+          evaluationId:'',
           phone: 13615787610,
         },
           {
@@ -160,6 +171,7 @@
             scheduledTime: '12月15日 下午17：00',
             finishedTime:'12月15日 下午17：10',
             collectorName: '陈南',
+            evaluationId:'',
             phone:13615787610,
           }]
       }

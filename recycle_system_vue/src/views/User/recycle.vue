@@ -1,5 +1,5 @@
 <template>
-  <el-container direction="vertical">
+  <el-container direction="vertical" v-if="show">
     <div v-if="active==1">
       <div class="menu-wrapper" ref="menuWrapper">
         <el-menu class="el-menu-demo" mode="horizontal" @select="handleSelect" background-color="#545c64" text-color="#fff" active-text-color="#ffd04b" style="width: 100%;">
@@ -28,7 +28,7 @@
       <el-date-picker
         v-model="orderform.scheduledTime"
         type="datetime"
-        value-format="yyyy-MM-dd hh:mm:ss"
+        value-format="yyyy-MM-dd HH:mm:ss"
         placeholder="选择日期时间">
       </el-date-picker>
     </div>
@@ -70,6 +70,7 @@
     name: 'recycle',
     data() {
       return {
+        show:false,
         maxWeight:0,
         active:1 ,
         listHeight: [],
@@ -127,9 +128,11 @@
     },
     created(){
       const _this=this;
+
       axios.get('http://localhost:8181/getallitem').then(function (resp) {
           console.log(resp);
           _this.orderform.tableData=resp.data;
+          _this.show=true
         _this.$nextTick(() => {
           _this._initScroll()
           _this._calculateHeight()
@@ -229,14 +232,18 @@
         this.orderform.addressId=addressID;
       },
       finish(){
+        const _this=this
         axios.post('http://localhost:8181/placeanorder',this.orderform).then(function (resp) {
           console.log(resp)
+          if(resp.data){
+            _this.$alert('下单成功','消息',{
+              confirmButtonText:'确定',
+              callback:action => {
+                _this.$router.push('/userdoinginorder')
+              }
+            });
+          }
         })
-        this.active=1;
-        this.$router.push({
-          path:'/userdoinginorder'
-        })
-
       }
     }
   }

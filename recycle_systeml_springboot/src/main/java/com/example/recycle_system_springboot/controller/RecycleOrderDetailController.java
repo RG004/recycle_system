@@ -1,9 +1,7 @@
 package com.example.recycle_system_springboot.controller;
 
 import com.example.recycle_system_springboot.pojo.vo.RecycleOrdersDetailVo;
-import com.example.recycle_system_springboot.pojo.vo.RecycleOrdersVo;
 import com.example.recycle_system_springboot.service.RecycleOrderDetailService;
-import com.github.pagehelper.PageInfo;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;

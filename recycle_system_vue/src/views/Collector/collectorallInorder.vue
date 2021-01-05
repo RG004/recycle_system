@@ -1,6 +1,6 @@
 <template>
-  <div>
-    根据快递员姓名查询订单:<el-input v-model="collectorrequire.username" placeholder="请输入用户名" style="width: 200px"></el-input>
+  <div v-if="show">
+    根据用户名姓名查询订单:<el-input v-model="collectorrequire.username" placeholder="请输入用户名" style="width: 200px"></el-input>
     根据日期查询订单：
     <el-select v-model="collectorrequire.datepick" placeholder="请选择">
       <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value"></el-option>
@@ -13,15 +13,22 @@
     <el-table :data="tableData">
       <el-table-column prop="recycleOrderId" label="订单号" width="140">
       </el-table-column>
-      <el-table-column prop="scheduledTime" label="预约时间" width="300">
+      <el-table-column prop="scheduledTime" label="预约时间" width="200">
       </el-table-column>
-      <el-table-column  label="完成时间" width="300">
+      <el-table-column  label="完成时间" width="200">
         <template slot-scope="scope">
           <span v-if="scope.row.finishedTime!=null">{{scope.row.finishedTime}}</span>
           <span v-else>未完成</span>
         </template>
       </el-table-column>
-      <el-table-column prop="userName" label="用户" width="140">
+      <el-table-column  label="评价" width="200">
+        <template slot-scope="scope">
+          <span v-if="scope.row.evaluationId!=null&&scope.row.finishedTime!=null"><el-button type="primary" round >查看评价</el-button></span>
+          <span v-else-if="scope.row.evaluationId==null&&scope.row.finishedTime!=null">未评价</span>
+          <span v-else>未完成</span>
+        </template>
+      </el-table-column>
+      <el-table-column prop="username" label="用户" width="140">
       </el-table-column>
       <el-table-column prop="phone" label="联系电话" >
       </el-table-column>
@@ -48,9 +55,7 @@
     methods:{
       findbyusername () {
         const _this = this
-        this.selectbyrequire=true
-        this.selectbynormal=false
-        axios.post('http://localhost:8181/collectorFindordersByrequire/1/2',this.collectorrequire).then(function (resp) {
+        axios.post('http://localhost:8181/collectorfindAllOrders/1/2',this.collectorrequire).then(function (resp) {
           console.log(resp)
           _this.tableData = resp.data.list
           _this.pageSize = resp.data.pageSize
@@ -59,13 +64,11 @@
       },
       findall(){
         const _this=this
-        this.selectbyrequire=false
-        this.selectbynormal=true
         this.collectorrequire.username=''
         this.collectorrequire.datebymonth=''
         this.collectorrequire.datebyday=''
         this.collectorrequire.datepick='day'
-        axios.get('http://localhost:8181/collectorAllorders/'+_this.$store.getters.getCollectorId+'/1/2').then(function (resp) {
+        axios.post('http://localhost:8181/collectorfindAllOrders/1/2',this.collectorrequire).then(function (resp) {
           _this.tableData=resp.data.list
           _this.pageSize = resp.data.pageSize
           _this.total = resp.data.total
@@ -82,34 +85,28 @@
       },
       page(currentPage){
         const _this = this
-        if(this.selectbynormal){
-          axios.get('http://localhost:8181/collectorAllorders/'+_this.$store.getters.getCollectorId+'/'+currentPage+'/2').then(function(resp){
-            _this.tableData = resp.data.list
-            _this.pageSize = resp.data.pageSize
-            _this.total = resp.data.total
-          })}else if(this.selectbyrequire){
-            axios.post('http://localhost:8181/collectorFindordersByrequire/'+currentPage+'/2',_this.collectorrequire).then(function (resp) {
+            axios.post('http://localhost:8181/collectorfindAllOrders/'+currentPage+'/2',this.collectorrequire).then(function (resp) {
               _this.tableData = resp.data.list
               _this.pageSize = resp.data.pageSize
               _this.total = resp.data.total
             })
-        }
       }
     },
     created () {
       const _this=this;
-      axios.get('http://localhost:8181/collectorAllorders/'+_this.$store.getters.getCollectorId+'/1/2').then(function (resp) {
+      axios.post('http://localhost:8181/collectorfindAllOrders/1/2',this.collectorrequire).then(function (resp) {
+        console.log(resp)
         _this.tableData=resp.data.list
         _this.pageSize = resp.data.pageSize
         _this.total = resp.data.total
+        _this.show=true
       })
     },
     data(){
       return{
+        show:false,
         pageSize:1,
         total:1,
-        selectbyrequire:false,
-        selectbynormal:true,
         collectorrequire:{
           id:this.$store.getters.getCollectorId,
           username:'',
@@ -152,15 +149,17 @@
           recycleOrderId: 1,
           scheduledTime: '12月15日 下午17：00',
           finishedTime: '12月15日 下午17：10',
-          userName: '陈南',
+          username: '陈南',
+          evaluationId:'',
           phone: 13615787610,
         },
           {
-          recycleOrderId: 2,
-          scheduledTime: '12月15日 下午17：00',
-          finishedTime:'12月15日 下午17：10',
-          userName: '陈南',
-          phone:13615787610,
+            recycleOrderId: 2,
+            scheduledTime: '12月15日 下午17：00',
+            finishedTime:'12月15日 下午17：10',
+            username: '陈南',
+            evaluationId:'',
+            phone:13615787610,
         }]
       }
     }

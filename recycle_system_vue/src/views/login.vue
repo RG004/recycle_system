@@ -163,7 +163,7 @@
     left: 50%;
     top: 50%;
     margin-left: -175px;
-    margin-top: -150px;
+    margin-top: -225px;
 
   }
   .login-box-title{
