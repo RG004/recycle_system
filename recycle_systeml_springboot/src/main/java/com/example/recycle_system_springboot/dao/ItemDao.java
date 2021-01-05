@@ -23,9 +23,7 @@ public interface ItemDao {
 
     int updateByPrimaryKey(Item record);
 
-
     Page<ItemManageVo> selectAll();
-
 
     List<ItemVo> getAllItems();
 }

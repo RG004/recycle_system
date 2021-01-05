@@ -60,7 +60,7 @@
       },
       submit(){
         const _this=this
-        axios.get('http://localhost:8181/placecollector/'+this.editForm.donateId+'/'+this.editForm.collectorName+'').then(function (resp) {
+        axios.get('http://localhost:8181/donateplacecollector/'+this.editForm.donateId+'/'+this.editForm.collectorName+'').then(function (resp) {
           for(var j=0,len=_this.tableData.length;j<len;j++){
             if(_this.tableData[j].donateId==resp.data){
               _this.tableData[j].collectorName=_this.editForm.collectorName

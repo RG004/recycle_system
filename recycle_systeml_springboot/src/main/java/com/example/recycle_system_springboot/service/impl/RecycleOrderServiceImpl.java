@@ -139,7 +139,6 @@ public class RecycleOrderServiceImpl implements RecycleOrderService {
 
     @Override
     public Boolean updateAnOrder(OrderDto orderVo) {
-        Boolean result=false;
         int i=recycleOrdersDao.updateByPrimaryKey(orderVo);
         recycleOrderDetailDao.deleteByRecycleOrderId(orderVo.getRecycleOrderId());
         recycleOrderDetail.setRecycleOrderId(orderVo.getRecycleOrderId());
@@ -153,7 +152,7 @@ public class RecycleOrderServiceImpl implements RecycleOrderService {
             }
         }
 
-        return result;
+        return true;
     }
 
     @Override
@@ -171,7 +170,6 @@ public class RecycleOrderServiceImpl implements RecycleOrderService {
 
     @Override
     public Boolean confirmOrder(OrderDto orderVo) {
-        Boolean result=false;
         int i=recycleOrdersDao.updateByPrimaryKey(orderVo);
         recycleOrderDetailDao.deleteByRecycleOrderId(orderVo.getRecycleOrderId());
         recycleOrderDetail.setRecycleOrderId(orderVo.getRecycleOrderId());
@@ -184,6 +182,6 @@ public class RecycleOrderServiceImpl implements RecycleOrderService {
                 }
             }
         }
-        return result;
+        return true;
     }
 }

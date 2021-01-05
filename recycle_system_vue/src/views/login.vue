@@ -54,9 +54,6 @@
             <el-button type="primary" size="medium"  style="width:100%" @click="jump" v-if="loginForm.identity==1">用户注册</el-button>
             <el-button type="primary" size="medium"  style="width:100%" @click="jump" v-if="loginForm.identity==2">派送员注册</el-button>
           </el-form-item>
-          <el-form-item>
-            <el-button type="primary" size="medium"  style="width:100%" @click="jump" >注册</el-button>
-          </el-form-item>
         </el-form>
       </div>
     </div>
@@ -142,13 +139,7 @@
             _this.$alert('用户名或密码格式错误','提示');
           }
         });
-      },jump(){
-        //this.$router.push("/cart")
-        //传递的参数用{{ $route.query.goodsId }}获取
-        this.$router.push({path: '/register'})
-        //this.$router.go(-2)
-        //后退两步
-      }
+      },
     }
   }
 </script>

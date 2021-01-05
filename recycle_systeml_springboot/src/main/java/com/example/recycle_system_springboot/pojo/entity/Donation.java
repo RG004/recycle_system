@@ -1,6 +1,8 @@
 package com.example.recycle_system_springboot.pojo.entity;
 
 import lombok.Data;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Controller;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -10,6 +12,7 @@ import java.util.Date;
  * @author
  */
 @Data
+@Component
 public class Donation implements Serializable {
     private Integer donateId;
 

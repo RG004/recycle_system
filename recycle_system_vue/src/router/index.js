@@ -11,7 +11,7 @@ import UserAlterInfo from '../views/User/useralterinfo'
 import userupdateorder from '../views/User/userupdateorder'
 import useralldonate from '../views/User/useralldonate'
 import userdoingdonate from '../views/User/userdoingdonate'
-import Test from  '../views/User/test'
+import evaluate from '../views/User/evaluate'
 import UserHomePage from '../views/User/userhomepage'
 import maptest from '../views/User/maptest'
 import CollectorLayout from '../views/Collector/collectorlayout'
@@ -33,6 +33,7 @@ import admindoingdonate from '../views/Admin/admindoingdonate'
 import HelpThePoorManager from '../views/Admin/HelpThePoorManager'
 import AddHelpThePoor from '../views/Admin/AddHelpThePoor'
 import AddItem from '../views/Admin/AddItem'
+import adminCollectorManage from '../views/Admin/adminCollectorManage'
 import userregister from '../views/userregister'
 import collectorregister from '../views/collectorregister'
 
@@ -50,10 +51,6 @@ export default new Router({
       path:'/login',
       name:"登录页面",
       component: Login,
-    },{
-      path:'/register',
-      name:"注册页面",
-      component: register
     },
     {
       path:'/userregister',
@@ -126,6 +123,14 @@ export default new Router({
         {
           path:'/admindoingdonate',
           component:admindoingdonate,
+          meta: {
+            needLogin: true, //需要登录
+            needAdmin:true,
+          },
+        },
+        {
+          path:'/adminCollectorManage',
+          component:adminCollectorManage,
           meta: {
             needLogin: true, //需要登录
             needAdmin:true,
@@ -275,6 +280,14 @@ export default new Router({
           },
         },
         {
+          path: '/evaluate',
+          component: evaluate,
+          meta: {
+            needLogin: true, //需要登录
+            needUser:true,
+          },
+        },
+        {
           path: '/donate',
           component: donate,
           meta: {
@@ -299,13 +312,6 @@ export default new Router({
           },
         },
         {
-          path:'/test',
-          component: Test,
-          meta: {
-            needLogin: true, //需要登录
-            needUser:true,
-          },
-        },{
           path:'/maptest',
           component:maptest,
           meta: {

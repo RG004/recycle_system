@@ -15,7 +15,13 @@ public class RegisterServiceImpl implements RegisterService {
 
     @Override
     public boolean insertuser(User user) {
-        userDao.insert(user);
-        return true;
+        User u=userDao.selectByUserName(user.getUserName());
+        if(u!=null){
+            return false;
+        }
+        else{
+            userDao.insert(user);
+            return true;
+        }
     }
 }

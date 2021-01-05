@@ -2,6 +2,7 @@ package com.example.recycle_system_springboot.service;
 
 import com.example.recycle_system_springboot.pojo.entity.Donation;
 import com.example.recycle_system_springboot.pojo.vo.DonationVo;
+import com.example.recycle_system_springboot.pojo.vo.EvaluationVo;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageInfo;
 
@@ -21,4 +22,6 @@ public interface DonationService {
     PageInfo<DonationVo> selectDoingbyadmin(String username,String collectorname,String datebyday,String datebymonth,String datepick,int start,int limit);
 
     boolean placecollector(int donateId,String collectorName);
+
+    Boolean Evaluatedonation(EvaluationVo order);
 }

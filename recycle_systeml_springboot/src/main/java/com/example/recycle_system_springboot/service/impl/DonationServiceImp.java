@@ -2,8 +2,10 @@ package com.example.recycle_system_springboot.service.impl;
 
 import com.example.recycle_system_springboot.dao.CollectorDao;
 import com.example.recycle_system_springboot.dao.DonationDao;
+import com.example.recycle_system_springboot.dao.EvaluationDao;
 import com.example.recycle_system_springboot.pojo.entity.Donation;
 import com.example.recycle_system_springboot.pojo.vo.DonationVo;
+import com.example.recycle_system_springboot.pojo.vo.EvaluationVo;
 import com.example.recycle_system_springboot.service.DonationService;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
@@ -18,6 +20,10 @@ public class DonationServiceImp implements DonationService {
     DonationDao donationDao;
     @Resource
     CollectorDao collectorDao;
+    @Resource
+    EvaluationDao evaluationDao;
+    @Resource
+    Donation donation;
     @Override
     public boolean placeAnDonation(Donation order) {
         boolean result=false;
@@ -117,5 +123,15 @@ public class DonationServiceImp implements DonationService {
         int collectorid=collectorDao.selectBycollectorname(collectorName);
         donationDao.updatecollector(donateId,collectorid);
         return true;
+    }
+
+    @Override
+    public Boolean Evaluatedonation(EvaluationVo order) {
+        Boolean result=false;
+        int i=evaluationDao.insert(order);
+        donation.setDonateId(order.getDonateId());
+        donation.setEvaluationId(order.getEvaluationId());
+        donationDao.updateByPrimaryKeySelective(donation);
+        return result;
     }
 }
