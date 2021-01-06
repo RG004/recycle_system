@@ -24,13 +24,6 @@ public class UserController {
         return userVo;
     }
 
-    @GetMapping("/userAllHelp")
-    @ResponseBody
-    public List<HelpThePoor> userfindAllHelp(){//查找
-        List<HelpThePoor> list = userService.userfindAllHelp();
-        return list;
-    }
-
     @PostMapping("/userupdatePhone/{id}/{phone}")
     @ResponseBody
     public boolean updatePhone(@PathVariable("id") int id,@PathVariable("phone") String phone){

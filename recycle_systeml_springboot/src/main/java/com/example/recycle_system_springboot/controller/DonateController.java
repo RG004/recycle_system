@@ -1,5 +1,6 @@
 package com.example.recycle_system_springboot.controller;
 
+import com.example.recycle_system_springboot.pojo.dto.OrderDto;
 import com.example.recycle_system_springboot.pojo.entity.Donation;
 import com.example.recycle_system_springboot.pojo.query.AdminReqirueQuery;
 import com.example.recycle_system_springboot.pojo.query.CollectorRequireQuery;
@@ -81,6 +82,14 @@ public class DonateController {
     @ResponseBody
     public Boolean Evaluationdonation(@RequestBody EvaluationVo order){
         Boolean result=donationService.Evaluatedonation(order);
+        return result;
+    }
+
+    //派送员确认捐赠订单
+    @PostMapping("/confirmdonation")
+    @ResponseBody
+    public Boolean confirmDonation(@RequestBody Donation order){
+        Boolean result=donationService.confirmDonation(order);
         return result;
     }
 }

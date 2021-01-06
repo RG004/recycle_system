@@ -115,7 +115,7 @@
   </select>
   <select id="selectAllBycollector" resultMap="CollectorAllMap">
     select
-    d.Donate_ID,d.Address_ID,d.Scheduled_Time,d.Donate_Detail,d.Evaluation_ID,u.User_Name,u.Phone
+    d.Donate_ID,d.Address_ID,d.Scheduled_Time,d.Finished_Time,d.Donate_Detail,d.Evaluation_ID,u.User_Name,u.Phone
     from donation d
     left join user u
     on d.User_ID=u.User_ID

@@ -72,12 +72,6 @@ public class RecycleOrderController {
         return result;
 
     }
-    @PostMapping("/confirmorder")
-    @ResponseBody
-    public Boolean confirmOrder(@RequestBody OrderDto order){
-        Boolean result=recycleOrderService.confirmOrder(order);
-        return result;
-    }
     @PostMapping("/placeanorder")
     @ResponseBody
     public Boolean PlaceAnOrder(@RequestBody OrderDto order){

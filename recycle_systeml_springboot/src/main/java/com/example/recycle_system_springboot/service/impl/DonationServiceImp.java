@@ -134,4 +134,11 @@ public class DonationServiceImp implements DonationService {
         donationDao.updateByPrimaryKeySelective(donation);
         return result;
     }
+
+    @Override
+    public Boolean confirmDonation(Donation order) {
+        System.out.println(order);
+        donationDao.updateByPrimaryKeySelective(order);
+        return true;
+    }
 }

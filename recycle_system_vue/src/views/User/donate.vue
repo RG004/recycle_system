@@ -122,6 +122,9 @@
                 })
             }
           })
+          this.$router.push({
+            path:'/userdoingdonate'
+          })
         },
         GaodeMap () {
           let map = new AMap.Map('all-map', {
