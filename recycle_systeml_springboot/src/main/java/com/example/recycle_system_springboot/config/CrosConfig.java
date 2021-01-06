@@ -2,6 +2,7 @@ package com.example.recycle_system_springboot.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
@@ -15,4 +16,11 @@ public class CrosConfig implements WebMvcConfigurer {
                 .maxAge(3600)
                 .allowedHeaders("*");
     }
+
+    @Override
+
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        registry.addResourceHandler("/api/file/**").addResourceLocations("file:"+"C:\\Users\\92045\\Desktop\\javaee\\课程设计\\recycle_system\\recycle_system_vue\\src\\assets\\imagebox\\");
+    }
+
 }

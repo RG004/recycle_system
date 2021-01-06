@@ -6,6 +6,7 @@
     <result column="Item_Type_ID" jdbcType="INTEGER" property="itemTypeId" />
     <result column="Item_Name" jdbcType="VARCHAR" property="itemName" />
     <result column="Item_Price" jdbcType="DOUBLE" property="itemPrice" />
+    <result column="Item_Pic" jdbcType="VARCHAR" property="itemPic" />
   </resultMap>
   <resultMap id="DetailResultMap" type="com.example.recycle_system_springboot.pojo.vo.ItemVo">
     <id column="Item_ID" jdbcType="INTEGER" property="itemId" />
@@ -13,9 +14,10 @@
     <result column="Item_Type_Name" jdbcType="VARCHAR" property="itemTypeName" />
     <result column="Item_Name" jdbcType="VARCHAR" property="itemName" />
     <result column="Item_Price" jdbcType="DOUBLE" property="itemPrice" />
+    <result column="Item_Pic" jdbcType="VARCHAR" property="itemPic" />
   </resultMap>
   <sql id="Base_Column_List">
-    Item_ID, Item_Type_ID, Item_Name, Item_Price
+    Item_ID, Item_Type_ID, Item_Name, Item_Price, Item_Pic
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select
@@ -28,9 +30,9 @@
     where Item_ID = #{itemId,jdbcType=INTEGER}
   </delete>
   <insert id="insert" keyColumn="Item_ID" keyProperty="itemId" parameterType="com.example.recycle_system_springboot.pojo.entity.Item" useGeneratedKeys="true">
-    insert into item (Item_Type_ID, Item_Name, Item_Price
+    insert into item (Item_Type_ID, Item_Name, Item_Price,Item_Pic
       )
-    values (#{itemTypeId,jdbcType=INTEGER}, #{itemName,jdbcType=VARCHAR}, #{itemPrice,jdbcType=DOUBLE}
+    values (#{itemTypeId,jdbcType=INTEGER}, #{itemName,jdbcType=VARCHAR}, #{itemPrice,jdbcType=DOUBLE}, #{itemPic,jdbcType=VARCHAR}
       )
   </insert>
   <insert id="insertSelective" keyColumn="Item_ID" keyProperty="itemId" parameterType="com.example.recycle_system_springboot.pojo.entity.Item" useGeneratedKeys="true">
@@ -45,6 +47,9 @@
       <if test="itemPrice != null">
         Item_Price,
       </if>
+      <if test="itemPic != null">
+      Item_Pic,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="itemTypeId != null">
@@ -55,6 +60,9 @@
       </if>
       <if test="itemPrice != null">
         #{itemPrice,jdbcType=DOUBLE},
+      </if>
+      <if test="itemPic != null">
+        #{itemPic,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -70,6 +78,9 @@
       <if test="itemPrice != null">
         Item_Price = #{itemPrice,jdbcType=DOUBLE},
       </if>
+      <if test="itemPic != null">
+        Item_Pic = #{itemPic,jdbcType=VARCHAR},
+      </if>
     </set>
     where Item_ID = #{itemId,jdbcType=INTEGER}
   </update>
@@ -77,12 +88,13 @@
     update item
     set Item_Type_ID = #{itemTypeId,jdbcType=INTEGER},
       Item_Name = #{itemName,jdbcType=VARCHAR},
-      Item_Price = #{itemPrice,jdbcType=DOUBLE}
+      Item_Price = #{itemPrice,jdbcType=DOUBLE},
+      Item_Pic = #{itemPic,jdbcType=VARCHAR}
     where Item_ID = #{itemId,jdbcType=INTEGER}
   </update>
 
   <select id="findAll" resultMap="DetailResultMap">
-    select r.Item_ID,r.Item_Type_ID,i.Item_Type_Name,r.Item_Name,r.Item_Price
+    select r.Item_ID,r.Item_Type_ID,i.Item_Type_Name,r.Item_Name,r.Item_Price,r.Item_Pic
     from item r
     left join item_type i
     on r.Item_Type_ID = i.Item_Type_ID

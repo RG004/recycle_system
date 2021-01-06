@@ -9,4 +9,5 @@ public class ItemVo {
     private double itemPrice;
     private int itemId;
     private int itemTypeId;
+    private String itemPic;
 }

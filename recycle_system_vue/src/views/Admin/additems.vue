@@ -3,7 +3,8 @@
         <div style="text-align: center; position:absolute;top:20px;z-index: 1;">
           <el-button type="primary" @click="add" icon="el-icon-plus" style ="background-color: #B3C0D1; border-color: #B3C0D1;"></el-button>
         </div>
-    <el-table :data="itemList">
+
+    <el-table :data="itemList" >
       <el-table-column label="序号" width="150">
         <template slot-scope="scope">
           <span>{{scope.$index + 1}}</span>
@@ -15,9 +16,9 @@
       </el-table-column>
       <el-table-column prop="itemPrice" label="单价（元/斤）" width="200">
       </el-table-column>
-      <el-table-column  prop="image" label="废品图片" width="200">
+      <el-table-column  label="废品图片" width="200" >
         <template slot-scope="scope">
-          <el-image style="width: 30px; height: 30px" :src="scope.row.image" :preview-src-list="[scope.row.image]">
+          <el-image style="width: 30px; height: 30px" :src="scope.row.itemPic" :preview-src-list="[scope.row.itemPic]">
             <div slot="error" class="image-slot">
               <i class="el-icon-picture-outline"></i>
             </div>
@@ -32,11 +33,8 @@
         </template>
       </el-table-column>
     </el-table>
-<!--    <div style="text-align: center; position:relative;">-->
-<!--      <el-button type="primary" @click="add" icon="el-icon-plus" style ="background-color: #B3C0D1; border-color: #B3C0D1;"></el-button>-->
-<!--    </div>-->
 
-    <el-dialog title="新增废品种类" :visible.sync="dialogFormVisible">
+    <el-dialog  :visible.sync="dialogFormVisible"  title="新增废品种类">
       <!-- 在el-dialog中进行嵌套el-form实现弹出表格的效果 -->
       <el-form :model="form" @submit.native.prevent>
         <el-form-item label="种类" :label-width="formLabelWidth">
@@ -51,8 +49,9 @@
         <el-form-item label="单价" :label-width="formLabelWidth">
           <el-input v-model="form.itemPrice" auto-complete="off" @keyup.enter.native="update"></el-input>
         </el-form-item>
-        <el-form-item label="废品图片" :label-width="formLabelWidth">
-          <el-input v-model="form.image" auto-complete="off" @keyup.enter.native="update"></el-input>
+        <el-form-item label="废品图片" :label-width="formLabelWidth" prop="itemPic">
+          <el-input v-model="form.itemPic" autocomplete="off" placeholder="图片 URL"></el-input>
+          <img-upload @onUpload="uploadImg" ref="imgUpload"></img-upload>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -61,13 +60,10 @@
         <el-button type="primary"  @click="update">确 定</el-button>
       </div>
     </el-dialog>
-    <el-dialog :visible.sync="centerDialogVisible" title="修改废品信息">
+
+    <el-dialog  :visible.sync="centerDialogVisible" title="修改废品信息">
       <el-form  :model="editForm" @submit.native.prevent>
-<!--        <el-form-item label="种类" prop="alttype">-->
-<!--          <el-input v-model="editForm.alttype"  @keyup.enter.native="sumbitEditRow()"></el-input>-->
-<!--        </el-form-item>-->
         <el-form-item label="种类" :label-width="formLabelWidth">
-          <!--          <el-input v-model="form.type" auto-complete="off" @keyup.enter.native="update"></el-input>-->
           <el-select v-model="editForm.alttype" placeholder="请选择种类">
             <el-option v-for='item in option' :key="item.itemTypeId" :value='item.itemTypeId' :label='item.itemTypeName'></el-option>
           </el-select>
@@ -78,8 +74,9 @@
         <el-form-item label="单价" prop="altprice">
           <el-input v-model="editForm.altprice"  @keyup.enter.native="submitEditRow()"></el-input>
         </el-form-item>
-        <el-form-item label="废品图片" prop="altimage">
-          <el-input v-model="editForm.altimage"  @keyup.enter.native="submitEditRow()"></el-input>
+        <el-form-item label="废品图片" prop="altPic">
+          <el-input v-model="editForm.altPic" autocomplete="off" placeholder="图片 URL"></el-input>
+          <img-upload @onUpload="altImg" ref="imgUpload"></img-upload>
         </el-form-item>
       </el-form>
       <div>
@@ -87,12 +84,19 @@
         <el-button type="primary"  @click="submitEditRow()">确定</el-button>
       </div>
     </el-dialog>
+
   </div>
 </template>
 
 <script>
+
+  import ImgUpload from './ImgUpload'
+
   let _index,itemTypeName;
+
   export default {
+
+    components: {ImgUpload},
 
     created () {
       const _this=this
@@ -101,6 +105,7 @@
         _this.itemList=resp.data
       })
     },
+
     data() {
       let letterRule = (rule, value, callback) => {
         if (value === '') {
@@ -111,6 +116,7 @@
       };
 
       return {
+
         option:[{
           itemTypeId:1,
           itemTypeName:'钢铁'
@@ -123,8 +129,8 @@
             itemTypeId:3,
             itemTypeName:'有毒垃圾'
           }
-
         ],
+
 
         itemList: [{
           itemTypeId:1,
@@ -132,7 +138,7 @@
           itemId:1,
           itemName:'塑料瓶',
           itemPrice:5,
-          image:require("@/assets/imagebox/plasticbottle.jpg")
+          itemPic:"",
         }],
         centerDialogVisible: false,
         dialogFormVisible: false,
@@ -147,10 +153,11 @@
           alttype:'',
           altitem:'',
           altprice:'',
-          altimage:''
+          altPic:''
         },
       }
     },
+
     methods: {
       handleDelete (index, row) {
         // 设置类似于console类型的功能
@@ -177,13 +184,15 @@
             });
           });
       },
+
+
       modifyData(index, row) {
         this.centerDialogVisible = true
         this.editForm.alttype = row.itemTypeName;
         itemTypeName=row.itemTypeName;
         this.editForm.altitem = row.itemName;
         this.editForm.altprice = row.itemPrice;
-        this.editForm.altimage = row.image;//重置对象
+        this.editForm.altPic = row.itemPic;//重置对象
         _index = index;
       },
       submitEditRow() {
@@ -192,7 +201,7 @@
         {this.itemList[editData].itemTypeId = this.editForm.alttype;}
         this.itemList[editData].itemName = this.editForm.altitem;
         this.itemList[editData].itemPrice = this.editForm.altprice;
-        this.itemList[editData].image = this.editForm.altimage;
+        this.itemList[editData].itemPic = this.editForm.altPic;
         axios.post('http://localhost:8181/updateItem',this.itemList[editData]).then(function (resp){
           console.log(resp);
         })
@@ -204,12 +213,13 @@
         console.log("editfrom",this.editForm)
       },
 
+
       add() {
         this.form = {
           itemTypeId: "",
           itemName: "",
           itemPrice: "",
-          image: ""
+          itemPic: ""
         };
         //   设置点击按钮之后进行显示对话框
         this.dialogFormVisible = true;
@@ -225,30 +235,19 @@
       cancel() {
         // 取消的时候直接设置对话框不可见即可
         this.dialogFormVisible = false;
+      },
+
+
+      uploadImg () {
+        this.form.itemPic= this.$refs.imgUpload.url
+      },
+      altImg(){
+        this.editForm.altPic= this.$refs.imgUpload.url
       }
+
     }
   }
 </script>
 
 <style scoped>
-  .text {
-    font-size: 14px;
-  }
-
-  .item {
-    margin-bottom: 18px;
-  }
-
-  .clearfix:before,
-  .clearfix:after {
-    display: table;
-    content: "";
-  }
-  .clearfix:after {
-    clear: both
-  }
-
-  .box-card {
-    width: 1270px;
-  }
 </style>

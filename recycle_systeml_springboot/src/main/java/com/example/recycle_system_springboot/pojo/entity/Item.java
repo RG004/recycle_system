@@ -19,6 +19,8 @@ public class Item implements Serializable {
 
     private Double itemPrice;
 
+    private String itemPic;
+
     private static final long serialVersionUID = 1L;
 
 }
