@@ -41,7 +41,7 @@ public class LoginServiceImpl implements LoginService {
         }
         else if(identity==2){
             Collector collector = collectorDao.selectByUserName(username);
-            if (collector!=null&&collector.getPassword().equals(password)) {
+            if (collector!=null&&collector.getPassword().equals(password)&&collector.getUserStatus().equals("T")) {
                 msg.setId(collector.getCollectorPersonId());
                 msg.setIdentity(identity);
                 msg.setName(collector.getUserName());

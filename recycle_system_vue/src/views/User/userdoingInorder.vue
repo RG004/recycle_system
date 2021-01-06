@@ -10,9 +10,11 @@
     <el-button  type="primary" round  @click="findbycellectorname">查询</el-button>
     <el-button  type="primary" round  @click="findall">查询全部</el-button>
     <el-table :data="tableData">
-      <el-table-column prop="recycleOrderId" label="订单号" width="140">
+      <el-table-column prop="recycleOrderId" label="订单号" width="80">
       </el-table-column>
-      <el-table-column prop="scheduledTime" label="预约时间" width="300">
+      <el-table-column prop="scheduledTime" label="预约时间" width="200">
+      </el-table-column>
+      <el-table-column prop="totalAmount" label="总价" width="100">
       </el-table-column>
       <el-table-column label="配送员" width="140">
         <template slot-scope="scope">
@@ -20,13 +22,13 @@
           <span v-else>未分配</span>
         </template>
       </el-table-column>
-      <el-table-column fixed=right  label="联系电话" >
+      <el-table-column  label="联系电话" width="200">
         <template slot-scope="scope">
           <span v-if="scope.row.phone!=null">{{scope.row.phone}}</span>
           <span v-else>未分配</span>
         </template>
       </el-table-column>
-      <el-table-column fixed="right" label="操作">
+      <el-table-column fixed="right" label="操作" width="400">
         <template slot-scope="scope">
           <el-popover placement="right" width="400" trigger="click">
             <el-table :data="recycleOrdersDetailVoList">
@@ -38,8 +40,8 @@
             <el-button  type="primary" round slot="reference" @click="getDetail(scope.row.recycleOrderId)" >查询订单详情</el-button>
           </el-popover>
           <el-button  type="primary" round @click="jumpUpdate(scope.row.recycleOrderId)">修改订单</el-button>
+          <el-button  type="primary" round @click="Delete(scope.row.recycleOrderId)">删除订单</el-button>
         </template>
-
       </el-table-column>
     </el-table>
     <el-pagination background layout="total, prev, pager, next, jumper" :page-size="pageSize" :total="total" @current-change="page"></el-pagination>
@@ -48,6 +50,13 @@
 <script>
   export default {
     methods:{
+      Delete(recycleOrderId){
+        const _this=this;
+        axios.get('http://localhost:8181/userdeleteorder/'+recycleOrderId+'').then(function (resp) {
+          console.log(resp)
+          alert('删除成功')
+        })
+      },
       jumpUpdate(recycleOrderId){
         this.$router.push({
           path: "/userupdateorder",
@@ -156,6 +165,7 @@
           recycleOrderId: 1,
           scheduledTime: '12月15日 下午17：00',
           collectorName: '陈南',
+          totalAmount:'',
           phone:13615787610,
         }],
       }

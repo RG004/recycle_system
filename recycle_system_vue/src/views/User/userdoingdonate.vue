@@ -27,12 +27,43 @@
           <span v-else>未分配</span>
         </template>
       </el-table-column>
-      <el-table-column fixed="right" label="操作">
+      <el-table-column fixed="right" label="操作" width="400">
         <template slot-scope="scope">
           <el-popover placement="right" width="400" trigger="click">
             <div>{{scope.row.donateDetail}}</div>
-            <el-button  type="primary" round slot="reference" >捐赠详情</el-button>
+            <el-button  type="primary" round slot="reference" @click="selectdetail">捐赠详情</el-button>
           </el-popover>
+          <el-popover placement="right" width="400" trigger="click">
+            <div>
+              <div style="display: inline-block;">请选择上门地址：</div>
+              <el-select style="width: 400px" v-model="donationform.addressId"  clearable placeholder="请选择捐赠地点">
+                <el-option
+                  v-for="item in addressList"
+                  :key="item.addressId"
+                  :label="item.addressDetails"
+                  :value="item.addressId">
+                </el-option>
+              </el-select>
+              <div class="block"  style="margin: 0 auto ;">
+                <div class="demonstration" style="width: 128px;display: inline-block;">请选择上门时间:  </div>
+                <el-date-picker
+                  v-model="donationform.scheduledTime"
+                  type="datetime"
+                  value-format="yyyy-MM-dd hh:mm:ss"
+                  placeholder="选择日期时间">
+                </el-date-picker>
+              </div>
+              <div>
+                <div>请填写捐赠物品详细信息：</div>
+                <el-input type="textarea" :rows="5" v-model="donationform.donateDetail" ></el-input>
+              </div>
+              <div style="float: left;">
+                <el-button style="margin-top: 12px;"  @click="Update(scope.row.donateId)" >确认修改</el-button>
+              </div>
+            </div>
+            <el-button  type="primary" round slot="reference" @click="sure(scope.row.donateDetail,scope.row.scheduledTime)">修改捐赠物品</el-button>
+          </el-popover>
+          <el-button  type="primary" round @click="Delete(scope.row.donateId)">删除订单</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -43,6 +74,36 @@
 <script>
   export default {
     methods:{
+      Delete(donateId){
+        const _this=this;
+        axios.get('http://localhost:8181/userdeletedonation/'+donateId+'').then(function (resp) {
+          console.log(resp)
+          alert('删除成功')
+        })
+      },
+      selectdetail(){
+        const _this=this
+        axios.post('http://localhost:8181/userfinddoingdonate/1/8',this.userrequire).then(function (resp) {
+          console.log(resp)
+          _this.tableData=resp.data.list
+        })
+      },
+      sure(donateDetail,scheduledTime){
+        this.donationform.donateDetail=donateDetail
+        this.donationform.scheduledTime=scheduledTime
+      },
+      Update(donateId){
+        const _this=this
+        this.donationform.donateId=donateId
+        axios.post('http://localhost:8181/confirmdonation',this.donationform).then(function (resp) {
+          console.log(resp)
+          if(resp.data){
+            _this.$alert('捐赠订单已修改','消息',{
+              confirmButtonText:'确定',
+            })
+          }
+        })
+      },
       findbyrequire() {
         const _this = this
         axios.post('http://localhost:8181/userfinddoingdonate/1/8',this.userrequire).then(function (resp) {
@@ -83,6 +144,10 @@
         _this.total = resp.data.total
 
       })
+      axios.get('http://localhost:8181/userAlladdress/'+this.$store.getters.getUserId+'').then(function (resp) {
+        console.log(resp)
+        _this.addressList=resp.data.addressList
+      })
     },
     data(){
       return{
@@ -96,6 +161,10 @@
           datebymonth:'',
           datepick:'day',//判断是按月查询还是按日查询
         },
+        addressList: [{
+          addressId:1,
+          addressDetails:'浙江省杭州市西湖区留和路288号浙江工业大学屏峰校区'
+        }],
         options:[
           {
             value:'day',
@@ -106,6 +175,12 @@
             label:'按月查询',
           }
         ],
+        donationform:{
+          donateId:1,
+          addressId:1,
+          scheduledTime:'',
+          donateDetail:''
+        },
         tableData: [{
           donateId: 1,
           scheduledTime: '12月15日 下午17：00',

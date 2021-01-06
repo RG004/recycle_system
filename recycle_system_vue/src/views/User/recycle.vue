@@ -12,6 +12,7 @@
             <h1 class="title">{{item.itemTypeName}}</h1>
             <ul v-for="good in item.itemsList" class="food-item " :key="good.itemId">
               <div class="content" style="float: left">
+                <div style="display: inline-block;float: left" ><img style="width: 50px; height: 50px" :src="good.itemPic"/></div>
                 <div class="name" >{{good.itemName}}</div>
                 <div class="price" >单价：{{good.itemPrice}}（元/斤）</div>
                 <div class="weight" ><el-input-number  v-model="good.quantity"  :min="0" :precision="1" :step="0.5" ></el-input-number></div>
@@ -34,7 +35,7 @@
     </div>
     <div class="block2" v-if="active==3" style="width:900px; margin:  0 auto ;height: 280px;padding-top: 100px;">
       <span class="demonstration">请选择上门地址</span>
-      <div>{{this.orderform.addressId}}</div>
+
       <el-table :data="addressList" >
         <el-table-column label="序号" width="200">
           <template slot-scope="scope">
@@ -92,31 +93,8 @@
                   itemId:1,
                   itemName:'塑料瓶',
                   itemPrice:'5',
-                  quantity:0
-                },
-                {
-                  itemId:1,
-                  itemName:'塑料瓶',
-                  itemPrice:'5',
-                  quantity:0.5
-                },
-                {
-                  itemId:1,
-                  itemName:'塑料瓶',
-                  itemPrice:'5',
-                  quantity:0.5
-                },
-                {
-                  itemId:1,
-                  itemName:'塑料瓶',
-                  itemPrice:'5',
-                  quantity:0.5
-                },
-                {
-                  itemId:1,
-                  itemName:'塑料瓶',
-                  itemPrice:'5',
-                  quantity:0.5
+                  quantity:0,
+                  itemPic:'',
                 },
 
               ],

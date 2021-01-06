@@ -16,4 +16,5 @@ public interface RecycleSiteDao {
 
     int updateByPrimaryKey(RecycleSite record);
 
+    int selectBySiteName(String siteName);
 }

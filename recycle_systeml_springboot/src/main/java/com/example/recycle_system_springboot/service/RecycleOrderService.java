@@ -21,6 +21,21 @@ public interface RecycleOrderService {
 
     PageInfo<OrdersVo> adminfindAllDoingOrders(String username,String collectorname,String datebyday,String datebymonth,String datepick,int start,int limit);
 
+    List<EchartsTimeVo> userselectCountbytime(int id);
+
+    List<EchartsTimeVo> userselectCountbydate(int id);
+
+    List<EchartsTimeVo> adminselectCountbydate();
+
+    List<EchartsTimeVo> adminselectCountbytime();
+
+    List<EchartsTimeVo> adminselectAmountbydate();
+
+    List<EchartsTimeVo> collectorselectCountbydate(int collectorid);
+
+    List<EchartsTimeVo> collectorselectCountbytime(int collectorid);
+
+    List<EchartsTimeVo> collectorselectAmountbydate(int collectorid);
     //得到所有的items
     List<ItemVo> getAllItems();
     //下单
@@ -33,4 +48,8 @@ public interface RecycleOrderService {
     Boolean placecollector(int recycleorderId,String collectorname);
 
     Boolean confirmOrder(OrderDto orderVo);
+
+    Boolean Evaluateorder(EvaluationVo order);
+
+    Boolean DeleteOrder(int recycleorderId);
 }

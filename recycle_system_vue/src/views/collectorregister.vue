@@ -71,13 +71,14 @@
       let validateRePassword = (rule, value, callback) => {
         if (value === '') {
           callback(new Error('请再次输入密码！'))
-        } else if (value !== this.registerForm.password) {
+        } else if (value !== this.collectorregister.password) {
           callback(new Error('两次输入密码不一致！'))
         }
         callback()
       };
       return {
         identity:'2',
+        jingwei:'',
         collectorregister:{ //派送员注册表单
           collectorName:'',
           userName:'',
@@ -86,7 +87,8 @@
           phone:'',
           idcardNumber:'',
           siteName:'',
-          id:''
+          longitude:'',
+          latitude:'',
         },
         registerrules: {  //登陆验证规则
           userName: [
@@ -134,17 +136,25 @@
         this.$refs[formName].validate((valid) => {
           if (valid) {
             if(this.identity==2){
-              axios.post('http://localhost:8181/register/collector',this.collectorregister).then(function (resp) {
+              axios.get('https://restapi.amap.com/v3/geocode/geo?address='+this.collectorregister.siteName+'&key=8c922d0176df163a311ac3425db373c6').then(function (resp) {
                 console.log(resp)
-                if(resp.data){
-                  _this.$alert('注册成功');
-                  _this.$router.push({
-                    path:'/login',
-                  })
-                }
-                else {
-                  _this.$alert('用户名已存在');
-                }
+                _this.jingwei=resp.data.geocodes[0].location
+                _this.collectorregister.longitude=parseFloat(_this.jingwei.substr(0,10))
+                _this.collectorregister.latitude=parseFloat(_this.jingwei.substr(11,10))
+                axios.post('http://localhost:8181/register/collector',_this.collectorregister).then(function (r) {
+                  console.log(r)
+                  if(r.data){
+                    _this.$alert('注册成功，等待审核','消息',{
+                      confirmButtonText:'确定',
+                      callback:action => {
+                        _this.$router.push('/login')
+                      }
+                    })
+                  }
+                  else {
+                    _this.$alert('用户名已存在');
+                  }
+                })
               })
             }
           }else{

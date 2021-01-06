@@ -203,12 +203,14 @@
           _this.jingwei=resp.data.geocodes[0].location
           _this.updateaddress.longitude=parseFloat(_this.jingwei.substr(0,10))
           _this.updateaddress.latitude=parseFloat(_this.jingwei.substr(11,10))
+
           axios.post('http://localhost:8181/updateAddress',_this.updateaddress).then(function (r) {
+            console.log(r)
             _this.$alert(_this.updateaddress.addressDetails+'修改成功','消息',{
               confirmButtonText:'确定',
           })
         })
-          this.centerDialogVisible = false;
+          _this.centerDialogVisible = false;
         })
       },
       closeDialog(){

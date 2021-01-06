@@ -20,4 +20,5 @@ public class OrdersVo {
 
     private String phone;
 
+    private Double totalAmount;
 }

@@ -24,4 +24,8 @@ public interface DonationService {
     boolean placecollector(int donateId,String collectorName);
 
     Boolean Evaluatedonation(EvaluationVo order);
+
+    Boolean confirmDonation(Donation order);
+
+    Boolean DeleteDonation(int donateId);
 }

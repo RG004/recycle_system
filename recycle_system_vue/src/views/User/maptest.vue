@@ -42,7 +42,6 @@
             let marker = new AMap.Marker({
               position: [this.lnglats[i].j, this.lnglats[i].w],//不同标记点的经纬度
               map: map,
-              icon:el-icon-menu
             });
             marker.content = this.lnglats[i].content;
             marker.on('click', markerClick);

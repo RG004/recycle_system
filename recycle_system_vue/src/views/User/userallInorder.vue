@@ -11,9 +11,9 @@
     <el-button  type="primary" round  @click="findall">查询全部</el-button>
 
     <el-table :data="tableData">
-      <el-table-column prop="recycleOrderId" label="订单号" width="140">
+      <el-table-column prop="recycleOrderId" label="订单号" width="80">
       </el-table-column>
-      <el-table-column prop="scheduledTime" label="预约时间" width="300">
+      <el-table-column prop="scheduledTime" label="预约时间" width="200">
       </el-table-column>
       <el-table-column  label="完成时间" width="200">
         <template slot-scope="scope">
@@ -21,11 +21,19 @@
           <span v-else>未完成</span>
         </template>
       </el-table-column>
-      <el-table-column  label="评价" width="200">
+      <el-table-column prop="totalAmount" label="总价" width="100">
+      </el-table-column>
+      <el-table-column  label="评价" width="150">
         <template slot-scope="scope">
-          <span v-if="scope.row.evaluationId!=null&&scope.row.finishedTime!=null"><el-button type="primary" round >查看评价</el-button></span>
-          <span v-else-if="scope.row.evaluationId==null&&scope.row.finishedTime!=null"><el-button type="primary" round >评价</el-button></span>
-          <span v-else>未完成</span>
+          <el-popover placement="right" width="400" trigger="click">
+            <el-table :data="evaluationForm">
+              <el-table-column width="100" prop="evaluationScore" label="分数"></el-table-column>
+              <el-table-column width="300" prop="evaluationDetails" label="评价"></el-table-column>
+            </el-table>
+            <el-button  v-if="scope.row.evaluationId!=null&&scope.row.finishedTime!=null" type="primary" round slot="reference" @click="selectEvaluation(scope.row.evaluationId)">查看评价</el-button>
+          </el-popover>
+          <span v-if="scope.row.evaluationId==null&&scope.row.finishedTime!=null"><el-button type="primary" round @click="jump(scope.row.recycleOrderId)">评价</el-button></span>
+          <span v-if="scope.row.finishedTime==null">未完成</span>
         </template>
       </el-table-column>
       <el-table-column label="配送员" width="140">
@@ -61,6 +69,20 @@
 <script>
   export default {
     methods:{
+      selectEvaluation(evaluationId){
+        const _this=this
+        axios.get('http://localhost:8181/Evaluation/'+evaluationId+'').then(function (resp) {
+          console.log(resp)
+          _this.evaluationForm.pop()
+          _this.evaluationForm.push(resp.data)
+        })
+      },
+      jump(recycleOrderId){
+        this.$router.push({
+          path: "/evaluate",
+          query: {recycleOrderId: recycleOrderId }
+        });
+      },
       findbycellectorname () {
         const _this = this
         this.selectbyrequire=true
@@ -158,12 +180,18 @@
           itemPrice: 0.5,
           sum:'',
         }],
+        evaluationForm:[{
+          evaluationId:1,
+          evaluationDetails:'asfs',
+          evaluationScore:100,
+        }],
         tableData: [{
           recycleOrderId: 1,
           scheduledTime: '12月15日 下午17：00',
           finishedTime: '12月15日 下午17：10',
           collectorName: '陈南',
           evaluationId:'',
+          totalAmount:'',
           phone: 13615787610,
         },
           {
@@ -172,6 +200,7 @@
             finishedTime:'12月15日 下午17：10',
             collectorName: '陈南',
             evaluationId:'',
+            totalAmount:'',
             phone:13615787610,
           }]
       }

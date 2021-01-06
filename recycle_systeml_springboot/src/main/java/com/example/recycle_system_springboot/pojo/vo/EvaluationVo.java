@@ -6,4 +6,6 @@ import lombok.Data;
 @Data
 public class EvaluationVo extends Evaluation {
     private Integer donateId;
+
+    private Integer recycleOrderId;
 }

@@ -23,7 +23,8 @@
         <el-submenu index="4">
           <template slot="title">设置</template>
           <el-menu-item-group>
-            <el-menu-item index="/collectoralterinfo">修改个人信息</el-menu-item>
+            <el-menu-item index="/collectoralterinfo">个人中心</el-menu-item>
+            <el-menu-item index="/collectorecharts">echarts</el-menu-item>
             <el-menu-item index="/login" @click="d">退出登录</el-menu-item>
           </el-menu-item-group>
         </el-submenu>
@@ -43,8 +44,6 @@
             <el-menu-item index="/collectorallinorder">我的订单</el-menu-item>
             <el-menu-item index="/collectoralterinfo">修改个人信息</el-menu-item>
             <el-menu-item index="/login" @click="d">退出登录</el-menu-item>
-
-
           </el-submenu>
         </el-menu>
 

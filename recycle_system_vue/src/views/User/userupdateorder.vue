@@ -4,21 +4,10 @@
     <div v-if="active==1">
 
       <div class="menu-wrapper" ref="menuWrapper">
-        <el-menu
-
-          class="el-menu-demo"
-          mode="horizontal"
-          @select="handleSelect"
-          background-color="#545c64"
-          text-color="#fff"
-          active-text-color="#ffd04b"
-          style="width: 100%;"
-        >
+        <el-menu class="el-menu-demo" mode="horizontal" @select="handleSelect" background-color="#545c64" text-color="#fff" active-text-color="#ffd04b" style="width: 100%;">
           <el-menu-item style="width: 14%" v-for="(item,index) in orderform.tableData"  @click="selectMenu(index)" :key="index">{{item.itemTypeName}}</el-menu-item>
-
         </el-menu>
       </div>
-
       <div style="height: 380px;overflow: hidden;padding-left: 0px;"  class="foods-wrapper" ref="foodsWrapper">
         <ul style="list-style:none;">
           <li v-for="item in orderform.tableData" class="food-list food-list-hook" :key="item.itemTypeId">

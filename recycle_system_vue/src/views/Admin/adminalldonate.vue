@@ -14,12 +14,25 @@
     <el-table :data="tableData">
       <el-table-column prop="donateId" label="捐赠号" width="140">
       </el-table-column>
-      <el-table-column prop="scheduledTime" label="预约时间" width="300">
+      <el-table-column prop="scheduledTime" label="预约时间" width="200">
       </el-table-column>
-      <el-table-column  label=" 完成时间" width="300">
+      <el-table-column  label=" 完成时间" width="200">
         <template slot-scope="scope">
           <span v-if="scope.row.finishedTime!=null">{{scope.row.finishedTime}}</span>
           <span v-else>未完成</span>
+        </template>
+      </el-table-column>
+      <el-table-column  label="评价" width="200">
+        <template slot-scope="scope">
+          <el-popover placement="right" width="400" trigger="click">
+            <el-table :data="evaluationForm">
+              <el-table-column width="100" prop="evaluationScore" label="分数"></el-table-column>
+              <el-table-column width="300" prop="evaluationDetails" label="评价"></el-table-column>
+            </el-table>
+            <el-button  v-if="scope.row.evaluationId!=null&&scope.row.finishedTime!=null" type="primary" round slot="reference" @click="selectEvaluation(scope.row.evaluationId)">查看评价</el-button>
+          </el-popover>
+          <span v-if="scope.row.evaluationId==null&&scope.row.finishedTime!=null">未评价</span>
+          <span v-if="scope.row.finishedTime==null">未完成</span>
         </template>
       </el-table-column>
       <el-table-column prop="userName" label="用户" width="140">
@@ -34,7 +47,7 @@
         <template slot-scope="scope">
           <el-popover placement="right" width="400" trigger="click">
             <div>{{scope.row.donateDetail}}</div>
-            <el-button  type="primary" round slot="reference" >捐赠详情</el-button>
+            <el-button  type="primary" round slot="reference" >查询捐赠详情</el-button>
           </el-popover>
         </template>
       </el-table-column>
@@ -57,6 +70,14 @@
 <script>
   export default {
     methods:{
+      selectEvaluation(evaluationId){
+        const _this=this
+        axios.get('http://localhost:8181/Evaluation/'+evaluationId+'').then(function (resp) {
+          console.log(resp)
+          _this.evaluationForm.pop()
+          _this.evaluationForm.push(resp.data)
+        })
+      },
       edit(row){
         this.editForm.donateId=row.donateId
         this.editForm.collectorName=''
@@ -167,11 +188,17 @@
             label:'按月查询',
           }
         ],
+        evaluationForm:[{
+          evaluationId:1,
+          evaluationDetails:'asfs',
+          evaluationScore:100,
+        }],
         tableData: [{
           donateId: 1,
           scheduledTime: '12月15日 下午17：00',
           finishedTime: '12月15日 下午17：10',
           userName: '陈南',
+          evaluationId:'',
           collectorName: '陈南',
         },
           {
@@ -179,6 +206,7 @@
             scheduledTime: '12月15日 下午17：00',
             finishedTime:'12月15日 下午17：10',
             userName: '陈南',
+            evaluationId:'',
             collectorName: '陈南',
         }]
       }

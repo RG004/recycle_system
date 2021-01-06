@@ -10,9 +10,11 @@
     <el-button  type="primary" round  @click="findbyusername">查询</el-button>
     <el-button  type="primary" round  @click="findall">查询全部</el-button>
     <el-table :data="tableData">
-      <el-table-column prop="recycleOrderId" label="订单号" width="140">
+      <el-table-column prop="recycleOrderId" label="订单号" width="80">
       </el-table-column>
-      <el-table-column prop="scheduledTime" label="预约时间" width="300">
+      <el-table-column prop="scheduledTime" label="预约时间" width="200">
+      </el-table-column>
+      <el-table-column prop="totalAmount" label="总价" width="100">
       </el-table-column>
       <el-table-column prop="username" label="用户" width="140">
       </el-table-column>
@@ -146,6 +148,7 @@
             recycleOrderId: 1,
             scheduledTime: '12月15日 下午17：00',
             username: '陈南',
+            totalAmount:'',
             phone: 13615787610,
           }],
         }

@@ -1,12 +1,12 @@
 <template>
   <el-form  :model="editform" :rules="rules" ref="editform" style="width: 500px" >
-    <el-form-item label="修改地址名字"  prop="helpName">
+    <el-form-item label="地址名字"  prop="helpName">
       <el-input v-model="editform.helpName"></el-input>
     </el-form-item>
-    <el-form-item label="修改详细信息"  prop="helpDetail">
+    <el-form-item label="详细信息"  prop="helpDetail">
       <el-input v-model="editform.helpDetail" :rows="5" type="textarea"></el-input>
     </el-form-item>
-    <el-form-item label="修改状态"  prop="helpStatus">
+    <el-form-item label="状态"  prop="helpStatus">
       <el-radio-group v-model="editform.helpStatus">
         <el-radio label="启用" style="width: 75px"><b>启用</b></el-radio>
         <el-radio label="停用" style="width: 75px"><b>停用</b></el-radio>

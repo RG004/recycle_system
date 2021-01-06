@@ -28,4 +28,8 @@ public interface CollectorDao {
     List<Collector> selectAll();
 
     Integer selectBycollectorname(String collectorname);
+
+    int updateStatusByPrimaykey(@Param("collectorPersonId") int collectorPersonId,@Param("userStatus") String userStatus);
+
+    List<CollectorVo> selectAllCollector();
 }

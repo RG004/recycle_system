@@ -29,7 +29,6 @@
             </el-table>
             <el-button  v-if="scope.row.evaluationId!=null&&scope.row.finishedTime!=null" type="primary" round slot="reference" @click="selectEvaluation(scope.row.evaluationId)">查看评价</el-button>
           </el-popover>
-<!--          <span v-if="scope.row.evaluationId!=null&&scope.row.finishedTime!=null"><el-button type="primary" round @click="selectEvaluation(scope.row.evaluationId)">查看评价</el-button></span>-->
           <span v-if="scope.row.evaluationId==null&&scope.row.finishedTime!=null"><el-button type="primary" round @click="jump(scope.row.donateId)">评价</el-button></span>
           <span v-if="scope.row.finishedTime==null">未完成</span>
         </template>
@@ -50,7 +49,7 @@
         <template slot-scope="scope">
           <el-popover placement="right" width="400" trigger="click">
             <div>{{scope.row.donateDetail}}</div>
-            <el-button  type="primary" round slot="reference" >捐赠详情</el-button>
+            <el-button  type="primary" round slot="reference" >查询捐赠详情</el-button>
           </el-popover>
         </template>
       </el-table-column>

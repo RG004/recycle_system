@@ -127,11 +127,25 @@ public class DonationServiceImp implements DonationService {
 
     @Override
     public Boolean Evaluatedonation(EvaluationVo order) {
-        Boolean result=false;
-        int i=evaluationDao.insert(order);
+        evaluationDao.insert(order);
         donation.setDonateId(order.getDonateId());
         donation.setEvaluationId(order.getEvaluationId());
         donationDao.updateByPrimaryKeySelective(donation);
-        return result;
+        return true;
     }
+
+    @Override
+    public Boolean confirmDonation(Donation order) {
+        donationDao.updateByPrimaryKeySelective(order);
+        return true;
+    }
+
+    @Override
+    public Boolean DeleteDonation(int donateId) {
+        Donation donation=donationDao.selectByPrimaryKey(donateId);
+        donationDao.deleteByPrimaryKey(donateId);
+        evaluationDao.deleteByPrimaryKey(donation.getEvaluationId());
+        return true;
+    }
+
 }

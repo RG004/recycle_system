@@ -23,9 +23,9 @@
         <template slot-scope="scope">
           <el-popover placement="right" width="400" trigger="click">
             <div>{{scope.row.donateDetail}}</div>
-            <el-button  type="primary" round slot="reference" >捐赠详情</el-button>
+            <el-button  type="primary" round slot="reference" >查询捐赠详情</el-button>
           </el-popover>
-          <el-button  type="primary" round @click="jumpConfirm(scope.row.donateId)">确认订单</el-button>
+          <el-button  type="primary" round @click="finish(scope.row.donateId)">确认捐赠订单</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -64,10 +64,43 @@
           _this.pageSize = resp.data.pageSize
           _this.total = resp.data.total
         })
+      },
+      finish(doanteId){
+        const _this=this
+        this.donationform.finishedTime=this.currentTime
+        this.donationform.donateId=doanteId
+        axios.post('http://localhost:8181/confirmdonation',this.donationform).then(function (resp) {
+          console.log(resp)
+          if(resp.data){
+            _this.$alert('捐赠完成','消息',{
+              confirmButtonText:'确定',
+              callback:action => {
+                _this.$router.push('/collectoralldonate')
+              }
+            })
+          }
+
+        })
+
+
       }
     },
     created () {
       const _this=this;
+      this.timer = setInterval(function() {
+        _this.currentTime = //修改数据date
+          new Date().getFullYear() +
+          "-" +
+          (new Date().getMonth() + 1) +
+          "-" +
+          new Date().getDate() +
+          " " +
+          new Date().getHours() +
+          ":" +
+          new Date().getMinutes() +
+          ":" +
+          new Date().getSeconds();
+      }, 0);
       axios.post('http://localhost:8181/collectorfinddoingdonate/1/2',this.collectorrequire).then(function (resp) {
         console.log(resp)
         _this.tableData=resp.data.list
@@ -79,6 +112,7 @@
     data(){
       return{
         show:false,
+        currentTime:'', // 获取当前时间
         pageSize:1,
         total:1,
         collectorrequire:{
@@ -98,6 +132,10 @@
             label:'按月查询',
           }
         ],
+        donationform:{
+          donateId:1,
+          finishedTime:'',
+        },
         tableData: [{
           donateId: 1,
           scheduledTime: '12月15日 下午17：00',

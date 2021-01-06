@@ -24,6 +24,7 @@
       <id column="Item_ID" jdbcType="INTEGER" property="itemId"/>
       <result column="Item_Name" jdbcType="VARCHAR" property="itemName"/>
       <result column="Item_Price" jdbcType="DOUBLE" property="itemPrice"/>
+      <result column="Item_Pic" jdbcType="VARCHAR" property="itemPic" />
     </collection>
   </resultMap>
   <sql id="Base_Column_List">
@@ -44,7 +45,7 @@
   </select>
   <select id="getAllItems" resultMap="AllItems">
         select
-        t1.Item_Type_ID,t1.Item_Type_Name,t2.Item_ID,t2.Item_Name,t2.Item_Price
+        t1.Item_Type_ID,t1.Item_Type_Name,t2.Item_ID,t2.Item_Name,t2.Item_Price,Item_Pic
         from item_type t1
         left join item t2
         on t1.Item_Type_ID=t2.Item_Type_ID

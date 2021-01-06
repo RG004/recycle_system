@@ -11,6 +11,10 @@
     <result column="Finished_Time" jdbcType="TIMESTAMP" property="finishedTime" />
     <result column="Total_Amount" jdbcType="DOUBLE" property="totalAmount" />
   </resultMap>
+  <resultMap id="EchartsTime" type="com.example.recycle_system_springboot.pojo.vo.EchartsTimeVo">
+    <result column="Scheduled_Time" jdbcType="VARCHAR" property="scheduledTime" />
+    <result column="Count" jdbcType="INTEGER" property="count"/>
+  </resultMap>
   <resultMap id="userAllMap" type="com.example.recycle_system_springboot.pojo.vo.OrdersVo">
     <id column="Recycle_Order_ID" jdbcType="INTEGER" property="recycleOrderId" />
     <result column="Scheduled_Time" jdbcType="VARCHAR" property="scheduledTime" />
@@ -19,6 +23,7 @@
     <result column="Address_ID" jdbcType="VARCHAR" property="addressId" />
     <result column="Collector_Name" jdbcType="VARCHAR" property="collectorName" />
     <result column="Phone" jdbcType="VARCHAR" property="phone" />
+    <result column="Total_Amount" jdbcType="DOUBLE" property="totalAmount" />
   </resultMap>
   <resultMap id="userDoingMap" type="com.example.recycle_system_springboot.pojo.vo.OrdersVo">
     <id column="Recycle_Order_ID" jdbcType="INTEGER" property="recycleOrderId" />
@@ -26,6 +31,7 @@
     <result column="Address_ID" jdbcType="VARCHAR" property="addressId" />
     <result column="Collector_Name" jdbcType="VARCHAR" property="collectorName" />
     <result column="Phone" jdbcType="VARCHAR" property="phone" />
+    <result column="Total_Amount" jdbcType="DOUBLE" property="totalAmount" />
   </resultMap>
   <resultMap id="collectorAllMap" type="com.example.recycle_system_springboot.pojo.vo.OrdersVo">
     <id column="Recycle_Order_ID" jdbcType="INTEGER" property="recycleOrderId" />
@@ -35,6 +41,7 @@
     <result column="Address_ID" jdbcType="VARCHAR" property="addressId" />
     <result column="User_Name" jdbcType="VARCHAR" property="username" />
     <result column="Phone" jdbcType="VARCHAR" property="phone" />
+    <result column="Total_Amount" jdbcType="DOUBLE" property="totalAmount" />
   </resultMap>
   <resultMap id="collectorDoingMap" type="com.example.recycle_system_springboot.pojo.vo.OrdersVo">
     <id column="Recycle_Order_ID" jdbcType="INTEGER" property="recycleOrderId" />
@@ -42,6 +49,7 @@
     <result column="Address_ID" jdbcType="VARCHAR" property="addressId" />
     <result column="User_Name" jdbcType="VARCHAR" property="username" />
     <result column="Phone" jdbcType="VARCHAR" property="phone" />
+    <result column="Total_Amount" jdbcType="DOUBLE" property="totalAmount" />
   </resultMap>
   <resultMap id="adminAllMap" type="com.example.recycle_system_springboot.pojo.vo.OrdersVo">
     <id column="Recycle_Order_ID" jdbcType="INTEGER" property="recycleOrderId" />
@@ -51,6 +59,7 @@
     <result column="Address_ID" jdbcType="VARCHAR" property="addressId" />
     <result column="Collector_Name" jdbcType="VARCHAR" property="collectorName" />
     <result column="User_Name" jdbcType="VARCHAR" property="username" />
+    <result column="Total_Amount" jdbcType="DOUBLE" property="totalAmount" />
   </resultMap>
   <resultMap id="adminDoingMap" type="com.example.recycle_system_springboot.pojo.vo.OrdersVo">
     <id column="Recycle_Order_ID" jdbcType="INTEGER" property="recycleOrderId" />
@@ -58,14 +67,80 @@
     <result column="Address_ID" jdbcType="VARCHAR" property="addressId" />
     <result column="Collector_Name" jdbcType="VARCHAR" property="collectorName" />
     <result column="User_Name" jdbcType="VARCHAR" property="username" />
+    <result column="Total_Amount" jdbcType="DOUBLE" property="totalAmount" />
   </resultMap>
   <sql id="Base_Column_List">
     Recycle_Order_ID, Address_ID, Collector_Person_ID, Evaluation_ID, User_ID, Scheduled_Time,
     Finished_Time, Total_Amount
   </sql>
+
+  <select id="userselectCountbydate" resultMap="EchartsTime">
+    select distinct DATE_FORMAT(r.Scheduled_Time,'%Y-%m') AS Scheduled_Time,COUNT(*) AS Count
+    from recycle_orders r
+      left join user u
+    on r.User_ID=u.User_ID
+    where r.User_ID=#{id,jdbcType=INTEGER}
+    GROUP BY DATE_FORMAT(r.Scheduled_Time,'%Y-%m')
+    order by DATE_FORMAT(r.Scheduled_Time,'%Y-%m') asc
+  </select>
+  <select id="userselectCountbytime" resultMap="EchartsTime">
+    select distinct DATE_FORMAT(r.Scheduled_Time,'%H') AS Scheduled_Time,COUNT(*) AS Count
+    from recycle_orders r
+      left join user u
+    on r.User_ID=u.User_ID
+    where r.User_ID=#{id,jdbcType=INTEGER}
+    GROUP BY DATE_FORMAT(r.Scheduled_Time,'%H')
+    order by DATE_FORMAT(r.Scheduled_Time,'%H') asc
+  </select>
+  <select id="adminselectCountbydate" resultMap="EchartsTime">
+    select distinct DATE_FORMAT(r.Scheduled_Time,'%Y-%m') AS Scheduled_Time,COUNT(*) AS Count
+    from recycle_orders r
+    GROUP BY DATE_FORMAT(r.Scheduled_Time,'%Y-%m')
+    order by DATE_FORMAT(r.Scheduled_Time,'%Y-%m') asc
+  </select>
+  <select id="adminselectCountbytime" resultMap="EchartsTime">
+    select distinct DATE_FORMAT(r.Scheduled_Time,'%H') AS Scheduled_Time,COUNT(*) AS Count
+    from recycle_orders r
+    GROUP BY DATE_FORMAT(r.Scheduled_Time,'%H')
+    order by DATE_FORMAT(r.Scheduled_Time,'%H') asc
+  </select>
+  <select id="adminselectAmountbydate" resultMap="EchartsTime">
+    select distinct DATE_FORMAT(r.Scheduled_Time,'%Y-%m') AS Scheduled_Time,sum(r.Total_Amount) AS Count
+    from recycle_orders r
+    GROUP BY DATE_FORMAT(r.Scheduled_Time,'%Y-%m')
+    order by DATE_FORMAT(r.Scheduled_Time,'%Y-%m') asc
+  </select>
+  <select id="collectorselectCountbydate" resultMap="EchartsTime">
+    select distinct DATE_FORMAT(r.Scheduled_Time,'%Y-%m') AS Scheduled_Time,COUNT(*) AS Count
+    from recycle_orders r
+    left join collector c
+    on r.Collector_Person_ID=c.Collector_Person_ID
+    where c.Collector_Person_ID=#{collectorid,jdbcType=INTEGER}
+    GROUP BY DATE_FORMAT(r.Scheduled_Time,'%Y-%m')
+    order by DATE_FORMAT(r.Scheduled_Time,'%Y-%m') asc
+  </select>
+  <select id="collectorselectCountbytime" resultMap="EchartsTime">
+    select distinct DATE_FORMAT(r.Scheduled_Time,'%H') AS Scheduled_Time,COUNT(*) AS Count
+    from recycle_orders r
+    left join collector c
+    on r.Collector_Person_ID=c.Collector_Person_ID
+    where c.Collector_Person_ID=#{collectorid,jdbcType=INTEGER}
+    GROUP BY DATE_FORMAT(r.Scheduled_Time,'%H')
+    order by DATE_FORMAT(r.Scheduled_Time,'%H') asc
+  </select>
+  <select id="collectorselectAmountbydate" resultMap="EchartsTime">
+    select distinct DATE_FORMAT(r.Scheduled_Time,'%Y-%m') AS Scheduled_Time,sum(r.Total_Amount) AS Count
+    from recycle_orders r
+    left join collector c
+    on r.Collector_Person_ID=c.Collector_Person_ID
+    where c.Collector_Person_ID=#{collectorid,jdbcType=INTEGER}
+    GROUP BY DATE_FORMAT(r.Scheduled_Time,'%Y-%m')
+    order by DATE_FORMAT(r.Scheduled_Time,'%Y-%m') asc
+  </select>
+
   <select id="selectAllByadmin" resultMap="adminAllMap">
     select
-      r.Recycle_Order_ID,r.Scheduled_Time,r.Finished_Time,r.Address_ID,c.Collector_Name,u.User_Name
+      r.Recycle_Order_ID,r.Scheduled_Time,r.Finished_Time,r.Evaluation_ID,r.Address_ID,r.Total_Amount,c.Collector_Name,u.User_Name
       from recycle_orders r
       left join user u
       on r.User_ID=u.User_ID
@@ -88,7 +163,7 @@
   </select>
   <select id="selectDoingByadmin" resultMap="adminDoingMap">
     select
-    r.Recycle_Order_ID,r.Scheduled_Time,r.Address_ID,c.Collector_Name,u.User_Name
+    r.Recycle_Order_ID,r.Scheduled_Time,r.Address_ID,r.Total_Amount,c.Collector_Name,u.User_Name
     from recycle_orders r
     left join user u
     on r.User_ID=u.User_ID
@@ -111,7 +186,7 @@
   </select>
   <select id="selectAllByuser" resultMap="userAllMap">
     select
-    r.Recycle_Order_ID,r.Scheduled_Time,r.Finished_Time,r.Evaluation_ID,r.Address_ID,c.Collector_Name,c.Phone
+    r.Recycle_Order_ID,r.Scheduled_Time,r.Finished_Time,r.Evaluation_ID,r.Address_ID,r.Total_Amount,c.Collector_Name,c.Phone
     from recycle_orders r
     left join collector c
     on r.Collector_Person_ID=c.Collector_Person_ID
@@ -129,7 +204,7 @@
   </select>
   <select id="selectDoingByuser" resultMap="userDoingMap">
     select
-    r.Recycle_Order_ID,r.Scheduled_Time,r.Address_ID,c.Collector_Name,c.Phone
+    r.Recycle_Order_ID,r.Scheduled_Time,r.Address_ID,r.Total_Amount,c.Collector_Name,c.Phone
     from recycle_orders r
     left join collector c
     on r.Collector_Person_ID=c.Collector_Person_ID
@@ -147,7 +222,7 @@
   </select>
   <select id="selectAllBycollector" resultMap="collectorAllMap">
     select
-    r.Recycle_Order_ID,r.Scheduled_Time,r.Finished_Time,r.Address_ID,u.User_Name,u.Phone
+    r.Recycle_Order_ID,r.Scheduled_Time,r.Finished_Time,r.Evaluation_ID,r.Address_ID,r.Total_Amount,u.User_Name,u.Phone
     from recycle_orders r
     left join user u
     on r.User_ID=u.User_ID
@@ -165,7 +240,7 @@
   </select>
   <select id="selectDoingBycollector" resultMap="collectorDoingMap">
     select
-    r.Recycle_Order_ID,r.Scheduled_Time,r.Evaluation_ID,r.Address_ID,u.User_Name,u.Phone
+    r.Recycle_Order_ID,r.Scheduled_Time,r.Evaluation_ID,r.Address_ID,r.Total_Amount,u.User_Name,u.Phone
     from recycle_orders r
     left join user u
     on r.User_ID=u.User_ID

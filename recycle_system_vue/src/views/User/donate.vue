@@ -14,7 +14,6 @@
           </el-select>
         </div>
         <div>
-          <div>{{this.help_the_poor[0].latitude }}</div>
           <div>请填写捐赠物品详细信息：</div>
           <el-input type="textarea" :rows="5" v-model="form.donateDetail"></el-input>
         </div>
@@ -53,28 +52,6 @@
     export default {
       data(){
         return {
-          jing:120.047668,
-          wei:30.234097,
-          address:'',//经纬度
-          detail:'',//地址信息
-          lnglats: [{
-            j:120.047668,
-            w:30.234097,
-            content:'zqy笨比'
-          },{
-            j:120.047668,
-            w:30.235197,
-            content:'zqy笨比'
-          },{
-            j:120.047668,
-            w:30.236297,
-            content:'zqy笨比'
-          },{
-            j:120.047668,
-            w:30.237397,
-            content:'zqy笨比'
-          }
-          ],
           form:{
             helpId:1,
             userId:1,
@@ -117,8 +94,11 @@
           axios.post('http://localhost:8181/placeandonation',this.form).then(function (resp) {
             console.log(resp)
             if(resp.data){
-              _this.$alert('捐赠成功','消息',{
+              _this.$alert('捐赠订单已生成','消息',{
                 confirmButtonText:'确定',
+                callback:action => {
+                  _this.$router.push('/userdoingdonate')
+                }
                 })
             }
           })

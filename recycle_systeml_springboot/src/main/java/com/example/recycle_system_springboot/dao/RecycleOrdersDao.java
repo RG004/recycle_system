@@ -20,6 +20,22 @@ public interface RecycleOrdersDao {
 
     int updateByPrimaryKey(RecycleOrders record);
 
+    List<EchartsTimeVo> userselectCountbytime(Integer id);
+
+    List<EchartsTimeVo> userselectCountbydate(Integer id);
+
+    List<EchartsTimeVo> adminselectCountbytime();
+
+    List<EchartsTimeVo> adminselectCountbydate();
+
+    List<EchartsTimeVo> adminselectAmountbydate();
+
+    List<EchartsTimeVo> collectorselectCountbytime(Integer collectorid);
+
+    List<EchartsTimeVo> collectorselectCountbydate(Integer collectorid);
+
+    List<EchartsTimeVo> collectorselectAmountbydate(Integer collectorid);
+
     Page<OrdersVo> selectAllByuser(Integer userid,String collectorname,String date,String datepick);
 
     Page<OrdersVo> selectDoingByuser(Integer userid,String collectorname,String date,String datepick);

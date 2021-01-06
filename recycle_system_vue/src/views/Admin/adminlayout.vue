@@ -18,9 +18,11 @@
         <el-submenu index="4">
           <template slot="title">管理信息</template>
           <el-menu-item-group>
+            <el-menu-item index="/adminCollectorManage">管理派送员</el-menu-item>
             <el-menu-item index="/ItemTypeManage">管理物品种类</el-menu-item>
             <el-menu-item index="/ItemManage">管理物品</el-menu-item>
             <el-menu-item index="/HelpThePoorManager">管理资助地区</el-menu-item>
+            <el-menu-item index="/adminecharts">数据统计</el-menu-item>
             <el-menu-item index="/login" @click="d">退出登录</el-menu-item>
           </el-menu-item-group>
         </el-submenu>

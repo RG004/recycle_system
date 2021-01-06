@@ -12,13 +12,15 @@
     <el-button  type="primary" round  @click="findall">查询全部</el-button>
 
     <el-table :data="tableData">
-      <el-table-column prop="recycleOrderId" label="订单号" width="140px ">
+      <el-table-column prop="recycleOrderId" label="订单号" width="80">
       </el-table-column>
-      <el-table-column prop="scheduledTime" label="预约时间" width="200px">
+      <el-table-column prop="scheduledTime" label="预约时间" width="200">
+      </el-table-column>
+      <el-table-column prop="totalAmount" label="总价" width="100">
       </el-table-column>
       <el-table-column prop="username" label="用户" width="200">
       </el-table-column>
-      <el-table-column label="派送员" width="200px">
+      <el-table-column label="派送员" width="200">
         <template slot-scope="scope" >
           <span v-if="scope.row.collectorName!=null">{{scope.row.collectorName}}</span>
           <span v-else><el-button  type="primary" round @click="edit(scope.row)">选择派送员</el-button></span>
@@ -200,6 +202,7 @@
             scheduledTime: '12月15日 下午17：00',
             addressDetails:'',
             username: '陈南',
+            totalAmount:'',
             collectorName: '陈南',
           }],
         }

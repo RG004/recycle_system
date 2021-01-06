@@ -10,10 +10,21 @@ import javax.annotation.Resource;
 public class SiteServiceImpl implements SiteService {
     @Resource
     RecycleSiteDao recycleSiteDao;
-
+    @Resource
+    RecycleSite recycleSite;
     @Override
     public boolean updatesite(RecycleSite site) {
         recycleSiteDao.updateByPrimaryKey(site);
         return true;
     }
+
+    @Override
+    public int siteid(String siteName, Double longitude, Double latitude) {
+        recycleSite.setSiteName(siteName);
+        recycleSite.setLatitude(latitude);
+        recycleSite.setLongitude(longitude);
+        recycleSiteDao.insert(recycleSite);
+        return recycleSite.getSiteId();
+    }
+
 }

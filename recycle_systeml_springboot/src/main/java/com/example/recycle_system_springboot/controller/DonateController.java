@@ -83,4 +83,19 @@ public class DonateController {
         Boolean result=donationService.Evaluatedonation(order);
         return result;
     }
+
+    @PostMapping("/confirmdonation")
+    @ResponseBody
+    public Boolean confirmDonation(@RequestBody Donation order){
+        Boolean result=donationService.confirmDonation(order);
+        return result;
+    }
+
+    //删除订单
+    @GetMapping("/userdeletedonation/{donateId}")
+    @ResponseBody
+    public Boolean DeleteDonation(@PathVariable("donateId") int donateId){
+        Boolean result=donationService.DeleteDonation(donateId);
+        return true;
+    }
 }
