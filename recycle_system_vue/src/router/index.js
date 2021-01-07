@@ -18,7 +18,7 @@ import CollectorDoingInorder from '../views/Collector/collectordoingInorder'
 import CollectorAlterInfo from '../views/Collector/collectoralterinfo'
 import confirmorder from '../views/Collector/confirmorder'
 import NotFound from '../views/404'
-import Echartstest from '../views/User/echartstest'
+import userecharts from '../views/User/userecharts'
 import AdminLayout from '../views/Admin/adminlayout'
 import ItemTypeManager from '../views/Admin/ItemTypeManager'
 import ItemManager from '../views/Admin/ItemManager'
@@ -27,8 +27,9 @@ import admindoingInorder from '../views/Admin/admindoingInorder'
 import userregister from '../views/userregister'
 import collectorregister from '../views/collectorregister'
 import adminecharts from '../views/Admin/adminecharts'
-import collectorecharts from '../views/Collector/collectorecharts'
+import Collectorecharts from '../views/Collector/collectorecharts'
 import register from '../views/register'
+import adminhomepage from '../views/Admin/adminhomepage'
 Vue.use(Router)
 
 export default new Router({
@@ -107,6 +108,14 @@ export default new Router({
             needLogin: true, //需要登录
             needAdmin:true,
           }
+        },
+        {
+          path:'/adminhomepage',
+          component:adminhomepage,
+          meta: {
+            needLogin: true, //需要登录
+            needAdmin:true,
+          }
         }
       ]
     },
@@ -161,10 +170,10 @@ export default new Router({
         },
         {
           path:'/collectorecharts',
-          component:collectorecharts,
+          component:Collectorecharts,
           meta: {
             needLogin: true, //需要登录
-            needAdmin:true,
+            needCollector:true,
           }
         }
       ]
@@ -243,8 +252,8 @@ export default new Router({
           },
         },
         {
-          path:'/echartstest',
-          component:Echartstest,
+          path:'/userecharts',
+          component:userecharts,
           meta: {
             needLogin: true, //需要登录
             needUser:true,

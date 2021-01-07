@@ -23,7 +23,7 @@ public class RecycleOrderDetailController {
         List<RecycleOrdersDetailVo> result = recycleOrderDetailService.findOrdersDetail(id);
         return result;
     }
-
+    //Echarts统计废品
     @GetMapping("/adminselectCountByitemid")
     @ResponseBody
     public List<EchartsItemVo> adminselectCountByitemid(){
@@ -36,5 +36,11 @@ public class RecycleOrderDetailController {
         List<EchartsItemVo> result = recycleOrderDetailService.userselectCountByitemid(id);
         return result;
     }
-
+    @GetMapping("/collectorselectCountByitemid/{id}")
+    @ResponseBody
+    public List<EchartsItemVo> collectorselectCountByitemid(@PathVariable("id") int id){
+        List<EchartsItemVo> result = recycleOrderDetailService.collectorselectCountByitemid(id);
+        return result;
+    }
+    //
 }

@@ -19,6 +19,7 @@ public class RecycleOrderDetailServiceImpl implements RecycleOrderDetailService 
         List<RecycleOrdersDetailVo> result = recycleOrderDetailDao.selectDetailByRecycleOrderId(id);
         return result;
     }
+    //Echarts统计废品
     @Override
     public List<EchartsItemVo> adminselectCountByitemid(){
         List<EchartsItemVo> result = recycleOrderDetailDao.adminselectCountByitemid();
@@ -29,4 +30,10 @@ public class RecycleOrderDetailServiceImpl implements RecycleOrderDetailService 
         List<EchartsItemVo> result = recycleOrderDetailDao.userselectCountByitemid(id);
         return result;
     }
+    @Override
+    public List<EchartsItemVo> collectorselectCountByitemid(int id){
+        List<EchartsItemVo> result = recycleOrderDetailDao.collectorselectCountByitemid(id);
+        return result;
+    }
+    //
 }

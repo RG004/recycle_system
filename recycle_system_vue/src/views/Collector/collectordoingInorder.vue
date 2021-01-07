@@ -1,6 +1,6 @@
 <template>
   <div>
-    根据快递员姓名查询订单:<el-input v-model="username" placeholder="请输入用户名" style="width: 200px"></el-input>
+    根据客户名姓名查询订单:<el-input v-model="username" placeholder="请输入用户名" style="width: 200px"></el-input>
     <el-button  type="primary" round  @click="findbyusername">查询</el-button>
     <el-button  type="primary" round  @click="findall">查询全部</el-button>
     <el-table :data="tableData">
@@ -8,7 +8,7 @@
       </el-table-column>
       <el-table-column prop="scheduledTime" label="预约时间" width="300">
       </el-table-column>
-      <el-table-column prop="userName" label="配送员" width="140">
+      <el-table-column prop="userName" label="客户名" width="140">
       </el-table-column>
       <el-table-column prop="phone" label="联系电话" >
       </el-table-column>

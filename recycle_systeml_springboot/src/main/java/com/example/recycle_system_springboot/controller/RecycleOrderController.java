@@ -82,16 +82,11 @@ public class RecycleOrderController {
         return result;
     }
 
-    @GetMapping("/userselectCountbytime/{id}")
+    //Echarts根据预约时间统计订单
+    @GetMapping("/collectorselectCountbytime/{id}")
     @ResponseBody
-    public List<EchartsTimeVo> userselectCountbytime(@PathVariable("id") int id){
-        List<EchartsTimeVo> result=recycleOrderService.userselectCountbytime(id);
-        return result;
-    }
-    @GetMapping("/userselectCountbydate/{id}")
-    @ResponseBody
-    public List<EchartsTimeVo> userselectCountbydate(@PathVariable("id") int id){
-        List<EchartsTimeVo> result=recycleOrderService.userselectCountbydate(id);
+    public List<EchartsTimeVo> collectorselectCountbytime(@PathVariable("id") int id){
+        List<EchartsTimeVo> result=recycleOrderService.collectorselectCountbytime(id);
         return result;
     }
     @GetMapping("/adminselectCountbytime")
@@ -100,12 +95,47 @@ public class RecycleOrderController {
         List<EchartsTimeVo> result=recycleOrderService.adminselectCountbytime();
         return result;
     }
+    @GetMapping("/userselectCountbytime/{id}")
+    @ResponseBody
+    public List<EchartsTimeVo> userselectCountbytime(@PathVariable("id") int id){
+        List<EchartsTimeVo> result=recycleOrderService.userselectCountbytime(id);
+        return result;
+    }
+    //
+    //Echarts根据日期统计订单
+    @GetMapping("/collectorselectCountbydate/{id}")
+    @ResponseBody
+    public List<EchartsTimeVo> collectorselectCountbydate(@PathVariable("id") int id){
+        List<EchartsTimeVo> result=recycleOrderService.collectorselectCountbydate(id);
+        return result;
+    }
     @GetMapping("/adminselectCountbydate")
     @ResponseBody
     public List<EchartsTimeVo> adminselectCountbydate(){
         List<EchartsTimeVo> result=recycleOrderService.adminselectCountbydate();
         return result;
     }
+    @GetMapping("/userselectCountbydate/{id}")
+    @ResponseBody
+    public List<EchartsTimeVo> userselectCountbydate(@PathVariable("id") int id){
+        List<EchartsTimeVo> result=recycleOrderService.userselectCountbydate(id);
+        return result;
+    }
+    //
+    //Echarts根据日期统计回收金额
+    @GetMapping("/collectorselectAmountbydate/{id}")
+    @ResponseBody
+    public List<EchartsTimeVo> collectorselectAmountbydate(@PathVariable("id") int id){
+        List<EchartsTimeVo> result=recycleOrderService.collectorselectAmountbydate(id);
+        return result;
+    }
+    @GetMapping("/adminselectAmountbydate")
+    @ResponseBody
+    public List<EchartsTimeVo> adminselectAmountbydate(){
+        List<EchartsTimeVo> result=recycleOrderService.adminselectAmountbydate();
+        return result;
+    }
+
     @PostMapping("/adminfindAllOrders/{start}/{limit}")
     @ResponseBody
     public PageInfo<AllOrdersVo> adminfindAllOrders(@RequestBody AdminReqirueQuery a,@PathVariable("start") int start, @PathVariable("limit") int limit){

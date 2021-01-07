@@ -1,6 +1,6 @@
 <template>
   <div class="block">
-    <el-carousel :interval="4000" type="card" height="150px">
+    <el-carousel :interval="4000" type="card" height="300px">
       <el-carousel-item v-for="item in imagebox" :key="item.id" >
         <img :src="item.idView" class="image">
       </el-carousel-item>
@@ -14,7 +14,7 @@
               <span>我的订单</span>
               <el-button style="float: right; padding: 3px 0" type="text"  @click="doingInorder">查看</el-button>
             </div>
-            您有3个正在进行的订单
+            您有{{ count }}个正在进行的订单
           </el-card>
           <el-button style="width: 200px;height: 120px; box-shadow: 0px 1px 5px #cbcaca; " @click="recycle">立即下单</el-button>
         </div>
@@ -65,6 +65,7 @@ export default {
   name: 'index',
   data(){
     return{
+      count:3,
       tableData: [{
         id: 1304,
         booktime: '12月15日 下午17：00',
@@ -86,13 +87,13 @@ export default {
         idView:require('../../assets/imagebox/1.png')
       },{
         id:1,
-        idView:require('../../assets/imagebox/1.png')
+        idView:require('../../assets/imagebox/2.png')
       },{
         id:2,
-        idView:require('../../assets/imagebox/1.png')
+        idView:require('../../assets/imagebox/3.png')
       },{
         id:3,
-        idView:require('../../assets/imagebox/1.png')
+        idView:require('../../assets/imagebox/4.png')
       }
 
       ]
@@ -106,8 +107,15 @@ export default {
       this.$router.push('/recycle')
     }
 
+  },
+  created () {
+    const _this=this
+    axios.get('http://localhost:8181/userDoingorders/'+_this.$store.getters.getUserId+'/1/8').then(function(resp){
+      _this.count = resp.data.total
+    })
   }
 }
+
 </script>
 
 <style>

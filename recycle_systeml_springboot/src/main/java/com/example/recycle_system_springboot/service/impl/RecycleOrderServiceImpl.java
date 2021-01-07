@@ -130,7 +130,26 @@ public class RecycleOrderServiceImpl implements RecycleOrderService {
         List<EchartsTimeVo> list=recycleOrdersDao.adminselectCountbytime();
         return list;
     }
-
+    @Override
+    public List<EchartsTimeVo> adminselectAmountbydate(){
+        List<EchartsTimeVo> list=recycleOrdersDao.adminselectAmountbydate();
+        return list;
+    }
+    @Override
+    public List<EchartsTimeVo> collectorselectCountbydate(int collectorid){
+        List<EchartsTimeVo> list=recycleOrdersDao.collectorselectCountbydate(collectorid);
+        return list;
+    }
+    @Override
+    public List<EchartsTimeVo> collectorselectCountbytime(int collectorid){
+        List<EchartsTimeVo> list=recycleOrdersDao.collectorselectCountbytime(collectorid);
+        return list;
+    }
+    @Override
+    public List<EchartsTimeVo> collectorselectAmountbydate(int collectorid){
+        List<EchartsTimeVo> list=recycleOrdersDao.collectorselectAmountbydate(collectorid);
+        return list;
+    }
     @Override
     public PageInfo<AllOrdersVo> adminfindAllOrders(String username, String collectorname, String datebyday, String datebymonth, String datepick, int start, int limit) {
         PageHelper.startPage(start,limit);

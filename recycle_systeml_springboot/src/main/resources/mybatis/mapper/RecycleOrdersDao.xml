@@ -57,36 +57,72 @@
     Recycle_Order_ID, Address_ID, Collector_Person_ID, Evaluation_ID, User_ID, Scheduled_Time,
     Finished_Time, Total_Amount
   </sql>
+
   <select id="userselectCountbydate" resultMap="EchartsTime">
-    select distinct r.Scheduled_Time,COUNT(*) AS Count
+    select distinct DATE_FORMAT(r.Scheduled_Time,'%Y-%m') AS Scheduled_Time,COUNT(*) AS Count
     from recycle_orders r
       left join user u
     on r.User_ID=u.User_ID
     where r.User_ID=#{id,jdbcType=INTEGER}
-    GROUP BY DATE_FORMAT(r.Scheduled_Time,'%Y-%m-%d')
-    order by DATE_FORMAT(r.Scheduled_Time,'%Y-%m-%d') asc
+    GROUP BY DATE_FORMAT(r.Scheduled_Time,'%Y-%m')
+    order by DATE_FORMAT(r.Scheduled_Time,'%Y-%m') asc
   </select>
   <select id="userselectCountbytime" resultMap="EchartsTime">
-    select distinct r.Scheduled_Time,COUNT(*) AS Count
+    select distinct DATE_FORMAT(r.Scheduled_Time,'%H') AS Scheduled_Time,COUNT(*) AS Count
     from recycle_orders r
       left join user u
     on r.User_ID=u.User_ID
     where r.User_ID=#{id,jdbcType=INTEGER}
-    GROUP BY DATE_FORMAT(r.Scheduled_Time,'%H-%M-%S')
-    order by DATE_FORMAT(r.Scheduled_Time,'%H-%M-%S') asc
+    GROUP BY DATE_FORMAT(r.Scheduled_Time,'%H')
+    order by DATE_FORMAT(r.Scheduled_Time,'%H') asc
   </select>
   <select id="adminselectCountbydate" resultMap="EchartsTime">
-    select distinct r.Scheduled_Time,COUNT(*) AS Count
+    select distinct DATE_FORMAT(r.Scheduled_Time,'%Y-%m') AS Scheduled_Time,COUNT(*) AS Count
     from recycle_orders r
-    GROUP BY DATE_FORMAT(r.Scheduled_Time,'%Y-%m-%d')
-    order by DATE_FORMAT(r.Scheduled_Time,'%Y-%m-%d') asc
+    GROUP BY DATE_FORMAT(r.Scheduled_Time,'%Y-%m')
+    order by DATE_FORMAT(r.Scheduled_Time,'%Y-%m') asc
   </select>
   <select id="adminselectCountbytime" resultMap="EchartsTime">
-    select distinct r.Scheduled_Time,COUNT(*) AS Count
+    select distinct DATE_FORMAT(r.Scheduled_Time,'%H') AS Scheduled_Time,COUNT(*) AS Count
     from recycle_orders r
-    GROUP BY DATE_FORMAT(r.Scheduled_Time,'%H-%M-%S')
-    order by DATE_FORMAT(r.Scheduled_Time,'%H-%M-%S') asc
+    GROUP BY DATE_FORMAT(r.Scheduled_Time,'%H')
+    order by DATE_FORMAT(r.Scheduled_Time,'%H') asc
   </select>
+  <select id="adminselectAmountbydate" resultMap="EchartsTime">
+    select distinct DATE_FORMAT(r.Scheduled_Time,'%Y-%m') AS Scheduled_Time,sum(r.Total_Amount) AS Count
+    from recycle_orders r
+    GROUP BY DATE_FORMAT(r.Scheduled_Time,'%Y-%m')
+    order by DATE_FORMAT(r.Scheduled_Time,'%Y-%m') asc
+  </select>
+  <select id="collectorselectCountbydate" resultMap="EchartsTime">
+    select distinct DATE_FORMAT(r.Scheduled_Time,'%Y-%m') AS Scheduled_Time,COUNT(*) AS Count
+    from recycle_orders r
+    left join collector c
+    on r.Collector_Person_ID=c.Collector_Person_ID
+    where c.Collector_Person_ID=#{collectorid,jdbcType=INTEGER}
+    GROUP BY DATE_FORMAT(r.Scheduled_Time,'%Y-%m')
+    order by DATE_FORMAT(r.Scheduled_Time,'%Y-%m') asc
+  </select>
+  <select id="collectorselectCountbytime" resultMap="EchartsTime">
+    select distinct DATE_FORMAT(r.Scheduled_Time,'%H') AS Scheduled_Time,COUNT(*) AS Count
+    from recycle_orders r
+    left join collector c
+    on r.Collector_Person_ID=c.Collector_Person_ID
+    where c.Collector_Person_ID=#{collectorid,jdbcType=INTEGER}
+    GROUP BY DATE_FORMAT(r.Scheduled_Time,'%H')
+    order by DATE_FORMAT(r.Scheduled_Time,'%H') asc
+  </select>
+  <select id="collectorselectAmountbydate" resultMap="EchartsTime">
+    select distinct DATE_FORMAT(r.Scheduled_Time,'%Y-%m') AS Scheduled_Time,sum(r.Total_Amount) AS Count
+    from recycle_orders r
+    left join collector c
+    on r.Collector_Person_ID=c.Collector_Person_ID
+    where c.Collector_Person_ID=#{collectorid,jdbcType=INTEGER}
+    GROUP BY DATE_FORMAT(r.Scheduled_Time,'%Y-%m')
+    order by DATE_FORMAT(r.Scheduled_Time,'%Y-%m') asc
+  </select>
+
+
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select
     <include refid="Base_Column_List" />

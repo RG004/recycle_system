@@ -29,6 +29,10 @@ public interface RecycleOrderService {
     List<EchartsTimeVo> userselectCountbydate(int id);
     List<EchartsTimeVo> adminselectCountbydate();
     List<EchartsTimeVo> adminselectCountbytime();
+    List<EchartsTimeVo> adminselectAmountbydate();
+    List<EchartsTimeVo> collectorselectCountbydate(int collectorid);
+    List<EchartsTimeVo> collectorselectCountbytime(int collectorid);
+    List<EchartsTimeVo> collectorselectAmountbydate(int collectorid);
     PageInfo<AllOrdersVo> adminfindAllOrders(String username,String collectorname,String datebyday,String datebymonth,String datepick,int start,int limit);
 
     PageInfo<AllDoingOrdersVo> adminfindAllDoingOrders(String username,String collectorname,String datebyday,String datebymonth,String datepick,int start,int limit);

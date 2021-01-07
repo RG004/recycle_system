@@ -28,7 +28,7 @@
 
 
     <div class="block" v-if="active==2" style="margin: 0 auto ;height: 280px;padding-top: 100px;">
-      <span class="demonstration">请选择上门时间</span>
+      <div class="demonstration">请选择上门时间</div>
       <div>{{this.orderform.scheduledTime}}</div>
       <el-date-picker
         v-model="orderform.scheduledTime"
@@ -275,19 +275,27 @@
   }
   .food-item .name{
     /*display: inline-block;*/
-    margin: auto 0;
+    margin-top: 30px;
+    margin-right: 10px;
     float: left;
     line-height: 14px;
     font-size: 14px;
-    color: rgb(7,17,27);
-
+    color: rgb(5, 13, 19);
+    font-weight: 700
+  }
+  .demonstration{
+    margin-bottom: 20px;
+    font-size: 14px;
+    color: rgb(97, 120, 15);
+    font-weight: 500;
   }
   .price{
     /*display: inline-block;*/
+    margin-top: 30px;
     float: left;
     line-height: 14px;
     font-size: 14px;
-    color: rgb(240,20,20);
+    color: rgb(240, 97, 20);
     font-weight: 700;
 
   }
@@ -296,6 +304,9 @@
     vertical-align: middle;
     display: inline-block;
     float: right;
+  }
+  .title{
+
   }
 </style>
 

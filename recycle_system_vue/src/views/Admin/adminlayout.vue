@@ -2,7 +2,7 @@
   <el-container style="height:750px; border: 1px solid #eee">
     <el-aside width="220px" style="background-color: rgb(238, 241, 246)">
       <el-menu :default-active="this.$route.path" router>
-        <el-menu-item index="/userhomepage">
+        <el-menu-item index="/adminhomepage">
           <i class="el-icon-s-home"></i>
           <span  slot="title">主页</span>
         </el-menu-item>
