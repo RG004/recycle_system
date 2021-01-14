@@ -1,6 +1,7 @@
 package com.example.recycle_system_springboot.pojo.entity;
 
 import lombok.Data;
+import org.springframework.stereotype.Component;
 
 import java.io.Serializable;
 
@@ -9,8 +10,8 @@ import java.io.Serializable;
  * @author
  */
 @Data
+@Component
 public class Collector implements Serializable {
-    //派送员实体类
     private Integer collectorPersonId;
 
     private Integer siteId;
@@ -27,6 +28,5 @@ public class Collector implements Serializable {
 
     private String photo;
 
-    private static final long serialVersionUID = 1L;
-
+    private String userStatus;
 }

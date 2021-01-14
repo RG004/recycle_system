@@ -1,7 +1,7 @@
 package com.example.recycle_system_springboot.controller;
 
 
-import com.example.recycle_system_springboot.pojo.vo.LoginMsg;
+import com.example.recycle_system_springboot.pojo.dto.LoginMsg;
 import com.example.recycle_system_springboot.service.LoginService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;

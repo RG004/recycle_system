@@ -1,9 +1,10 @@
 package com.example.recycle_system_springboot.controller;
 
 import com.example.recycle_system_springboot.pojo.entity.Item;
-import com.example.recycle_system_springboot.pojo.vo.ItemVo;
+import com.example.recycle_system_springboot.pojo.vo.ItemManageVo;
 import com.example.recycle_system_springboot.service.ItemService;
 import com.example.recycle_system_springboot.utils.StringUtils;
+import com.github.pagehelper.PageInfo;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -11,20 +12,20 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.annotation.Resource;
 import java.io.File;
 import java.io.IOException;
-import java.util.List;
 
 @Controller
 public class ItemController {
-    //查询废品
+
     @Resource
     ItemService itemService;
 
-    @GetMapping("/Item")
+    @GetMapping("/allItem/{start}/{limit}")
     @ResponseBody
-    public List<ItemVo> findAllItem(){
-        List<ItemVo> result = itemService.findAllItem();
+    public PageInfo<ItemManageVo> findAllItems(@PathVariable("start") int start, @PathVariable("limit") int limit){
+        PageInfo<ItemManageVo> result =itemService.selectAll(start,limit);
         return result;
     }
+
     @PostMapping("/insertItem")
     @ResponseBody
     public Item insert(@RequestBody Item item){
@@ -44,11 +45,10 @@ public class ItemController {
         return result;
     }
 
-
     @PostMapping("/uploadimg")
     @ResponseBody
     public String coversUpload(MultipartFile file) throws Exception {
-        String folder = "C:\\Users\\92045\\Desktop\\javaee\\课程设计\\recycle_system\\recycle_system_vue\\src\\assets\\imagebox";
+        String folder = "C:\\Users\\92045\\Desktop\\javaee\\课程设计\\final\\recycle_system_vue\\src\\assets\\imagebox";
         File imageFolder = new File(folder);
         File f = new File(imageFolder, StringUtils.getRandomString(6) + file.getOriginalFilename()
                 .substring(file.getOriginalFilename().length() - 4));
@@ -63,5 +63,4 @@ public class ItemController {
             return "";
         }
     }
-
 }

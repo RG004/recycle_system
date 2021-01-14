@@ -1,8 +1,9 @@
 <template>
-  <div id="app">
+  <div id="app" v-cloak>
     <router-view/>
   </div>
 </template>
+
 
 <script>
 export default {
@@ -29,7 +30,10 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
+  [v-cloak] {
+    display:none !important;
+  }
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;

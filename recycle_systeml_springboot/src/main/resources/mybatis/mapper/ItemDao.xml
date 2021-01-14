@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.recycle_system_springboot.dao.ItemDao">
+
   <resultMap id="BaseResultMap" type="com.example.recycle_system_springboot.pojo.entity.Item">
     <id column="Item_ID" jdbcType="INTEGER" property="itemId" />
     <result column="Item_Type_ID" jdbcType="INTEGER" property="itemTypeId" />
@@ -8,13 +9,23 @@
     <result column="Item_Price" jdbcType="DOUBLE" property="itemPrice" />
     <result column="Item_Pic" jdbcType="VARCHAR" property="itemPic" />
   </resultMap>
-  <resultMap id="DetailResultMap" type="com.example.recycle_system_springboot.pojo.vo.ItemVo">
+  <resultMap id="AllMap" type="com.example.recycle_system_springboot.pojo.vo.ItemManageVo">
     <id column="Item_ID" jdbcType="INTEGER" property="itemId" />
     <result column="Item_Type_ID" jdbcType="INTEGER" property="itemTypeId" />
-    <result column="Item_Type_Name" jdbcType="VARCHAR" property="itemTypeName" />
     <result column="Item_Name" jdbcType="VARCHAR" property="itemName" />
     <result column="Item_Price" jdbcType="DOUBLE" property="itemPrice" />
     <result column="Item_Pic" jdbcType="VARCHAR" property="itemPic" />
+    <result column="Item_Type_Name" jdbcType="VARCHAR" property="itemTypeName" />
+  </resultMap>
+  <resultMap id="AllItems" type="com.example.recycle_system_springboot.pojo.vo.ItemVo">
+    <id column="Item_Type_ID" jdbcType="INTEGER" property="itemTypeId"/>
+    <result column="Item_Type_Name" jdbcType="VARCHAR" property="itemTypeName"/>
+    <collection property="itemsList" ofType="com.example.recycle_system_springboot.pojo.vo.ItemRecycleVo">
+      <id column="Item_ID" jdbcType="INTEGER" property="itemId"/>
+      <result column="Item_Name" jdbcType="VARCHAR" property="itemName"/>
+      <result column="Item_Price" jdbcType="DOUBLE" property="itemPrice"/>
+      <result column="Item_Pic" jdbcType="VARCHAR" property="itemPic" />
+    </collection>
   </resultMap>
   <sql id="Base_Column_List">
     Item_ID, Item_Type_ID, Item_Name, Item_Price, Item_Pic
@@ -25,15 +36,29 @@
     from item
     where Item_ID = #{itemId,jdbcType=INTEGER}
   </select>
+  <select id="selectAll" resultType="com.example.recycle_system_springboot.pojo.vo.ItemManageVo">
+    select
+    i.Item_ID,i.Item_Type_ID,i.Item_Name,i.Item_Price,i.Item_Pic,it.Item_Type_Name
+    from item i
+    left join item_type it
+    on i.Item_Type_ID=it.Item_Type_ID
+  </select>
+  <select id="getAllItems" resultMap="AllItems">
+        select
+        t1.Item_Type_ID,t1.Item_Type_Name,t2.Item_ID,t2.Item_Name,t2.Item_Price,Item_Pic
+        from item_type t1
+        left join item t2
+        on t1.Item_Type_ID=t2.Item_Type_ID
+  </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from item
     where Item_ID = #{itemId,jdbcType=INTEGER}
   </delete>
   <insert id="insert" keyColumn="Item_ID" keyProperty="itemId" parameterType="com.example.recycle_system_springboot.pojo.entity.Item" useGeneratedKeys="true">
-    insert into item (Item_Type_ID, Item_Name, Item_Price,Item_Pic
-      )
-    values (#{itemTypeId,jdbcType=INTEGER}, #{itemName,jdbcType=VARCHAR}, #{itemPrice,jdbcType=DOUBLE}, #{itemPic,jdbcType=VARCHAR}
-      )
+    insert into item (Item_Type_ID, Item_Name, Item_Price,
+      Item_Pic)
+    values (#{itemTypeId,jdbcType=INTEGER}, #{itemName,jdbcType=VARCHAR}, #{itemPrice,jdbcType=DOUBLE},
+      #{itemPic,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" keyColumn="Item_ID" keyProperty="itemId" parameterType="com.example.recycle_system_springboot.pojo.entity.Item" useGeneratedKeys="true">
     insert into item
@@ -48,7 +73,7 @@
         Item_Price,
       </if>
       <if test="itemPic != null">
-      Item_Pic,
+        Item_Pic,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -85,6 +110,7 @@
     where Item_ID = #{itemId,jdbcType=INTEGER}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.example.recycle_system_springboot.pojo.entity.Item">
+
     update item
     set Item_Type_ID = #{itemTypeId,jdbcType=INTEGER},
       Item_Name = #{itemName,jdbcType=VARCHAR},
@@ -92,11 +118,4 @@
       Item_Pic = #{itemPic,jdbcType=VARCHAR}
     where Item_ID = #{itemId,jdbcType=INTEGER}
   </update>
-
-  <select id="findAll" resultMap="DetailResultMap">
-    select r.Item_ID,r.Item_Type_ID,i.Item_Type_Name,r.Item_Name,r.Item_Price,r.Item_Pic
-    from item r
-    left join item_type i
-    on r.Item_Type_ID = i.Item_Type_ID
-  </select>
 </mapper>

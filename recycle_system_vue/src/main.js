@@ -9,8 +9,10 @@ import './plugins/element.js'
 import  VueParticles  from   'vue-particles'
 import id from 'element-ui/src/locale/lang/id'
 
+
 Vue.config.productionTip = false
 Vue.use(VueParticles)
+
 
 new Vue({
   el: '#app',
@@ -27,18 +29,14 @@ router.beforeEach((to, from, next) => {
       next()
         if(to.meta.needUser){
             if(identity==1){
-              next()
             }
             else next({path: '/404error'})
         }else if(to.meta.needCollector){
           if(identity==2){
-            next()
           }
           else next({path:'/404error'})
-        }
-        else if(to.meta.needAdmin){
+        }else if(to.meta.needAdmin){
           if(identity==3){
-            next()
           }
           else next({path:'/404error'})
         }

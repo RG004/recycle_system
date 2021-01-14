@@ -6,17 +6,25 @@
           <i class="el-icon-s-home"></i>
           <span  slot="title">主页</span>
         </el-menu-item>
+        <el-submenu index="2">
+          <template slot="title">确认信息</template>
+          <el-menu-item-group>
+            <el-menu-item index="/collectordoinginorder" >进行中订单</el-menu-item>
+            <el-menu-item index="/collectordoingdonate" >进行中捐赠</el-menu-item>
+          </el-menu-item-group>
+        </el-submenu>
         <el-submenu index="3">
-          <template slot="title">查看订单</template>
+          <template slot="title">查看信息</template>
           <el-menu-item-group>
             <el-menu-item index="/collectorallinorder" >查看历史订单</el-menu-item>
-            <el-menu-item index="/collectordoinginorder" >进行中订单</el-menu-item>
+            <el-menu-item index="/collectoralldonate" >查看历史捐赠</el-menu-item>
           </el-menu-item-group>
         </el-submenu>
         <el-submenu index="4">
           <template slot="title">设置</template>
           <el-menu-item-group>
-            <el-menu-item index="/collectoralterinfo">修改个人信息</el-menu-item>
+            <el-menu-item index="/collectoralterinfo">个人中心</el-menu-item>
+            <el-menu-item index="/collectorecharts">数据统计</el-menu-item>
             <el-menu-item index="/login" @click="d">退出登录</el-menu-item>
           </el-menu-item-group>
         </el-submenu>
@@ -27,17 +35,13 @@
       <el-header style="text-align: right; font-size: 12px">
 
         <el-menu  class="el-menu-demo" mode="horizontal" @select="handleSelect"  router>
-          <el-menu-item  style="width: 930px"></el-menu-item>
-          <el-menu-item><i class="el-icon-edit" style="font-size: 25px;"></i></el-menu-item>
+          <el-menu-item  style="width: 910px"></el-menu-item>
+          <el-menu-item index="/collectorhomepage"><i class="el-icon-s-home" style="font-size: 25px;" ></i></el-menu-item>
           <el-menu-item><i class="el-icon-share" style="font-size: 25px;"></i></el-menu-item>
-          <el-menu-item><i class="el-icon-set-up" style="font-size: 25px;"></i></el-menu-item>
+          <el-menu-item index="/collectoralterinfo"><i class="el-icon-set-up" style="font-size: 25px;"></i></el-menu-item>
           <el-submenu index="4">
             <template slot="title"><i class="el-icon-user" style="font-size: 25px ;"></i>{{this.$store.getters.getCollectorName}}</template>
-            <el-menu-item index="/collectorallinorder">我的订单</el-menu-item>
-            <el-menu-item index="/collectoralterinfo">修改个人信息</el-menu-item>
             <el-menu-item index="/login" @click="d">退出登录</el-menu-item>
-
-
           </el-submenu>
         </el-menu>
 

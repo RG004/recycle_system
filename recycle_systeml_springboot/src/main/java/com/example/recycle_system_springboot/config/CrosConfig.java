@@ -16,11 +16,10 @@ public class CrosConfig implements WebMvcConfigurer {
                 .maxAge(3600)
                 .allowedHeaders("*");
     }
-
+    //用于数据库中图片的存储路径和实际路径的转换
     @Override
-
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry.addResourceHandler("/api/file/**").addResourceLocations("file:"+"C:\\Users\\92045\\Desktop\\javaee\\课程设计\\recycle_system\\recycle_system_vue\\src\\assets\\imagebox\\");
+        registry.addResourceHandler("/api/file/**").addResourceLocations("file:"+"C:\\Users\\92045\\Desktop\\javaee\\课程设计\\final\\recycle_system_vue\\src\\assets\\imagebox\\");
     }
 
 }

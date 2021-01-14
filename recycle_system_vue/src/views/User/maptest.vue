@@ -1,7 +1,6 @@
 <template>
   <div>
     <div>
-            {{jing}} {{j1}}  {{j2}}  {{w1}}   {{w2}}
       <el-input v-model="detail" placeholder="请输入地址"></el-input>
       <el-button @click="put">提交</el-button>
     </div>
@@ -28,7 +27,7 @@
 
       },
       GaodeMap () {
-        var map = new AMap.Map('all-map', {
+        let map = new AMap.Map('all-map', {
           center: [this.jing, this.wei],
           resizeEnable: true,
           zoom: 17
@@ -37,12 +36,12 @@
           map.addControl(new AMap.ToolBar())
           map.addControl(new AMap.Scale())
         })
-        var infoWindow = new AMap.InfoWindow({offset: new AMap.Pixel(0, -30)});
+        let infoWindow = new AMap.InfoWindow({offset: new AMap.Pixel(0, -30)});
         //遍历生成多个标记点
-          for (var i = 0, marker; i < this.lnglats.length; i++) {
-            var marker = new AMap.Marker({
+          for (let i = 0, marker; i < this.lnglats.length; i++) {
+            let marker = new AMap.Marker({
               position: [this.lnglats[i].j, this.lnglats[i].w],//不同标记点的经纬度
-              map: map
+              map: map,
             });
             marker.content = this.lnglats[i].content;
             marker.on('click', markerClick);
@@ -56,10 +55,6 @@
       },
     data(){
       return{
-        j1:1,
-        j2:2,
-        w1:3,
-        w2:4,
         jing:120.047668,
         wei:30.234097,
         address:'',//经纬度

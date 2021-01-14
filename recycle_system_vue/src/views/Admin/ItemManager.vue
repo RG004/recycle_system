@@ -1,8 +1,8 @@
 <template>
   <div>
-        <div style="text-align: center; position:absolute;top:20px;z-index: 1;">
-          <el-button type="primary" @click="add" icon="el-icon-plus" style ="background-color: #B3C0D1; border-color: #B3C0D1;"></el-button>
-        </div>
+    <div style="text-align: center; position:absolute;top:20px;z-index: 1;">
+      <el-button type="primary" @click="add" icon="el-icon-plus" style ="background-color: #B3C0D1; border-color: #B3C0D1;"></el-button>
+    </div>
 
     <el-table :data="itemList" >
       <el-table-column label="序号" width="150">
@@ -33,12 +33,13 @@
         </template>
       </el-table-column>
     </el-table>
+    <el-pagination background layout="total, prev, pager, next, jumper" :page-size="pageSize" :total="total" @current-change="page"></el-pagination>
 
     <el-dialog  :visible.sync="dialogFormVisible"  title="新增废品种类">
       <!-- 在el-dialog中进行嵌套el-form实现弹出表格的效果 -->
       <el-form :model="form" @submit.native.prevent>
         <el-form-item label="种类" :label-width="formLabelWidth">
-<!--          <el-input v-model="form.type" auto-complete="off" @keyup.enter.native="update"></el-input>-->
+          <!--          <el-input v-model="form.type" auto-complete="off" @keyup.enter.native="update"></el-input>-->
           <el-select v-model="form.itemTypeId" placeholder="请选择种类">
             <el-option v-for='item in option' :key="item.itemTypeId" :value='item.itemTypeId' :label='item.itemTypeName'></el-option>
           </el-select>
@@ -91,18 +92,20 @@
 <script>
 
   import ImgUpload from './ImgUpload'
-
   let _index,itemTypeName;
-
   export default {
-
     components: {ImgUpload},
-
     created () {
       const _this=this
-      axios.get('http://localhost:8181/Item').then(function (resp) {
+      axios.get('http://localhost:8181/allItem/1/4').then(function (resp) {
         console.log(resp)
-        _this.itemList=resp.data
+        _this.itemList=resp.data.list
+        _this.pageSize = resp.data.pageSize
+        _this.total = resp.data.total
+        _this.show=true
+      })
+      axios.get('http://localhost:8181/allItemType').then(function (resp) {
+        _this.option=resp.data
       })
     },
 
@@ -125,10 +128,6 @@
             itemTypeId:2,
             itemTypeName:'电子设备'
           },
-          {
-            itemTypeId:3,
-            itemTypeName:'有毒垃圾'
-          }
         ],
 
 
@@ -157,8 +156,16 @@
         },
       }
     },
-
     methods: {
+      page (currentPage) {
+        const _this = this
+        axios.get('http://localhost:8181/allItem/'+currentPage+'/4').then(function (resp) {
+          console.log(resp)
+          _this.itemList = resp.data.list
+          _this.pageSize = resp.data.pageSize
+          _this.total = resp.data.total
+        })
+      },
       handleDelete (index, row) {
         // 设置类似于console类型的功能
         this.$confirm("确定删除该废品?", "提示", {

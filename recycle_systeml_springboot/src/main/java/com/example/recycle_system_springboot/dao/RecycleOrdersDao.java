@@ -1,11 +1,9 @@
 package com.example.recycle_system_springboot.dao;
 
 import com.example.recycle_system_springboot.pojo.entity.RecycleOrders;
-import com.example.recycle_system_springboot.pojo.vo.CollectorDoingOrdersVo;
-import com.example.recycle_system_springboot.pojo.vo.CollectorOrdersVo;
-import com.example.recycle_system_springboot.pojo.vo.DoingOrdersVo;
-import com.example.recycle_system_springboot.pojo.vo.RecycleOrdersVo;
+import com.example.recycle_system_springboot.pojo.vo.*;
 import com.github.pagehelper.Page;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -22,11 +20,35 @@ public interface RecycleOrdersDao {
 
     int updateByPrimaryKey(RecycleOrders record);
 
-    Page<RecycleOrdersVo> selectOrderByUserId(Integer userid);
+    List<EchartsTimeVo> userselectCountbytime(Integer id);
 
-    Page<DoingOrdersVo> selectDoingOrderByUserId(Integer userid);
+    List<EchartsTimeVo> userselectCountbydate(Integer id);
 
-    Page<CollectorOrdersVo> selectOrderByCollectorId(Integer collectorid);
+    List<EchartsTimeVo> adminselectCountbytime();
 
-    Page<CollectorDoingOrdersVo> selectDoingOrderByCollectorId(Integer collectorid);
+    List<EchartsTimeVo> adminselectCountbydate();
+
+    List<EchartsTimeVo> adminselectAmountbydate();
+
+    List<EchartsTimeVo> collectorselectCountbytime(Integer collectorid);
+
+    List<EchartsTimeVo> collectorselectCountbydate(Integer collectorid);
+
+    List<EchartsTimeVo> collectorselectAmountbydate(Integer collectorid);
+
+    Page<OrdersVo> selectAllByuser(Integer userid,String collectorname,String date,String datepick);
+
+    Page<OrdersVo> selectDoingByuser(Integer userid,String collectorname,String date,String datepick);
+
+    Page<OrdersVo> selectAllBycollector(Integer collectorid,String username,String date,String datepick);
+
+    Page<OrdersVo> selectDoingBycollector(Integer collectorid,String username,String date,String datepick);
+
+    Page<OrdersVo> selectAllByadmin(String username,String collectorname,String date,String datepick);
+
+    Page<OrdersVo> selectDoingByadmin(String username,String collectorname,String date,String datepick);
+
+    int updateCollector(@Param("recycleOrderId") int recycleOrderId, @Param("collectorId") int collectorId);
+
+    Double selectsumamount();
 }

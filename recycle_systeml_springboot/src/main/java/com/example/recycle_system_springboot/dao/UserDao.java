@@ -5,6 +5,8 @@ import com.example.recycle_system_springboot.pojo.vo.UserVo;
 import com.github.pagehelper.Page;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.List;
+
 public interface UserDao {
     int deleteByPrimaryKey(Integer userId);
 
@@ -21,7 +23,10 @@ public interface UserDao {
     User selectByUserName(String username);
 
     UserVo selectAddress(Integer userId);
+    //查询所有的用户
+    List<User> selectAllUser();
 
     int updatePhoneByPrimaryKey(@Param("userId") int userId,@Param("phone") String phone);
 
+    int selectSum();
 }
