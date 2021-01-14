@@ -21,9 +21,11 @@ public interface DonationService {
 
     PageInfo<DonationVo> selectDoingbyadmin(String username,String collectorname,String datebyday,String datebymonth,String datepick,int start,int limit);
 
-    boolean placecollector(int donateId,String collectorName);
+    int placecollector(int donateId,String collectorName);
 
     Boolean Evaluatedonation(EvaluationVo order);
 
     Boolean confirmDonation(Donation order);
+
+    Boolean DeleteDonation(int donateId);
 }

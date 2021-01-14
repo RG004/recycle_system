@@ -1,21 +1,23 @@
 <template>
+  <div class="user_skills">
   <el-container direction="vertical" >
     <!--      <el-header style="height: 1px"></el-header>-->
     <div>
 
       <div class="menu-wrapper" ref="menuWrapper">
-        <el-menu class="el-menu-demo" mode="horizontal" @select="handleSelect" background-color="#545c64" text-color="#fff" active-text-color="#ffd04b" style="width: 100%;">
+        <el-menu class="el-menu-demo" mode="horizontal" @select="handleSelect" background-color="#96AABF" text-color="#fff" active-text-color="#ffd04b" style="width: 100%;">
           <el-menu-item style="width: 14%" v-for="(item,index) in orderform.tableData"  @click="selectMenu(index)" :key="index">{{item.itemTypeName}}</el-menu-item>
         </el-menu>
       </div>
-      <div style="height: 380px;overflow: hidden;padding-left: 0px;"  class="foods-wrapper" ref="foodsWrapper">
+      <div style="height: 380px;overflow: hidden;padding-left: 0px;position:relative;left:-52px;width:1325px;"  class="foods-wrapper" ref="foodsWrapper">
         <ul style="list-style:none;">
           <li v-for="item in orderform.tableData" class="food-list food-list-hook" :key="item.itemTypeId">
             <h1 class="title">{{item.itemTypeName}}</h1>
             <ul v-for="good in item.itemsList" class="food-item " :key="good.itemId">
               <div class="content" style="float: left">
-                <div class="name" >{{good.itemName}}</div>
-                <div class="price" >单价：{{good.itemPrice}}（元/斤）</div>
+                <div style="display: inline-block;float: left;left:-25px;position:relative;top:10px;" ><img style="width: 50px; height: 50px" :src="good.itemPic"/></div>
+                <div class="name" >{{good.itemName}}<br><br><span style="color:#F01414;">单价：{{good.itemPrice}}（元/斤）</span></div>
+<!--                <div class="price" >单价：{{good.itemPrice}}（元/斤）</div>-->
                 <div class="weight" ><el-input-number  v-model="good.quantity"  :min="0" :precision="1" :step="0.5" ></el-input-number></div>
                 <div>{{good.weight}}</div>
               </div>
@@ -25,10 +27,11 @@
       </div>
     </div>
     <div style="float: left;margin-top: 50px;">
-      <div>确认货物数量都正确后请确认订单，系统将直接支付相应的费用给用户</div>
+      <div style="color:#F01414; ">确认货物数量都正确后请确认订单，系统将直接支付相应的费用给用户</div>
       <el-button style="margin-top: 12px;"  @click="finish" > 确认订单</el-button>
     </div>
   </el-container>
+  </div>
 </template>
 <script>
   import BScroll from 'better-scroll'
@@ -60,32 +63,8 @@
                   itemId:1,
                   itemName:'塑料瓶',
                   itemPrice:'5',
-                  quantity:0
-                },
-
-                {
-                  itemId:1,
-                  itemName:'塑料瓶',
-                  itemPrice:'5',
-                  quantity:0.5
-                },
-                {
-                  itemId:1,
-                  itemName:'塑料瓶',
-                  itemPrice:'5',
-                  quantity:0.5
-                },
-                {
-                  itemId:1,
-                  itemName:'1451651651',
-                  itemPrice:'5',
-                  quantity:0.5
-                },
-                {
-                  itemId:1,
-                  itemName:'1451651651',
-                  itemPrice:'5',
-                  quantity:0.5
+                  quantity:0,
+                  itemPic:'',
                 },
               ],
             }
@@ -110,9 +89,10 @@
           ":" +
           new Date().getSeconds();
       }, 0);
-      axios.get('http://localhost:8181/getallitem').then(function (resp) {
+      axios.get('http://localhost:8181/getallitem/'+_this.$route.query.recycleOrderId+'').then(function (resp) {
         // console.log(resp);
         _this.orderform.tableData=resp.data;
+        _this.orderform.recycleOrderId=_this.$route.query.recycleOrderId
         _this.$nextTick(() => {
           _this._initScroll()
           _this._calculateHeight()
@@ -124,20 +104,6 @@
       axios.get('http://localhost:8181/userAlladdress/'+this.$store.getters.getUserId+'').then(function (resp) {
         // console.log(resp)
         _this.addressList=resp.data.addressList
-      })
-      _this.orderform.recycleOrderId=_this.$route.query.recycleOrderId
-      axios.get('http://localhost:8181/OrdersDetail/'+_this.orderform.recycleOrderId+'').then(function (resp2) {
-        console.log(resp2)
-        for(var i=0,len=resp2.data.length;i<len;i++){
-          var itemName=resp2.data[i].itemName
-          for(var j=0,len2=_this.orderform.tableData.length;j<len2;j++){
-            for(var k=0,len3=_this.orderform.tableData[j].itemsList.length;k<len3;k++){
-              if(_this.orderform.tableData[j].itemsList[k].itemName==itemName){
-                _this.orderform.tableData[j].itemsList[k].quantity=resp2.data[i].quantity
-              }
-            }
-          }
-        }
       })
       axios.get('http://localhost:8181/getAnOrder/'+_this.orderform.recycleOrderId+'').then(function (resp) {
         _this.orderform.scheduledTime=resp.data.scheduledTime
@@ -234,23 +200,81 @@
         this.orderform.addressId=addressID;
       },
       finish(){
+        const _this=this
         this.orderform.finishedTime=this.currentTime
         this.orderform.collectorPersonId=this.$store.getters.getCollectorId
-        axios.post('http://localhost:8181/confirmorder',this.orderform).then(function (resp) {
-          console.log(resp)
-        })
-        this.$router.push({
-          path:'/collectorallinorder'
-        })
-
+        var test=false
+        for(var j=0,len=this.orderform.tableData.length;j<len;j++){
+          for(var t=0,len1=this.orderform.tableData[j].itemsList.length;t<len1;t++){
+            if(this.orderform.tableData[j].itemsList[t].quantity>0){
+              test=true
+            }
+          }
+        }
+        if(test){
+          axios.post('http://localhost:8181/confirmorder',this.orderform).then(function (resp) {
+            console.log(resp)
+            _this.$alert('捐赠订单确定成功','消息',{
+              confirmButtonText:'确定',
+              callback:action => {
+                _this.$router.push('/collectorallinorder')
+              }
+            })
+          })
+        }else{
+          _this.$alert('不能将所有物品全部置为0','警告',{
+            confirmButtonText:'确定',
+          })
+        }
       }
     }
   }
 </script>
-<style   scoped>
+<style scoped>
+  * {
+    background-color: transparent;
+  }
+
+
+  /deep/ .el-input-number__decrease{
+    background: transparent;
+    color: #000000;
+  }
+  /deep/ .el-input-number__increase{
+    background: transparent;
+    color: #000000;
+  }
+  /deep/ .el-input__inner{
+    background: transparent;
+    color: #000000;
+  }
+  /*/deep/ .el-step__icon{*/
+  /*  background: transparent;*/
+  /*}*/
+  .user_skills /deep/  .el-table, .el-table__expanded-cell {
+    background-color: transparent;
+  }
+  .user_skills /deep/ .el-table tr {
+    background-color: transparent!important;
+  }
+  .user_skills /deep/  .el-table--enable-row-transition .el-table__body td, .el-table .cell{
+    background-color: transparent;
+  }
+  .demonstration{
+    position: relative;
+    top:-100px;
+    background-color:#96AABF;
+    color: #fff;
+    text-align: center;
+    font-size: 17px;
+    font-weight: 400;
+    width: 1275px;
+    height: 58px;
+  }
   .menu-wrapper{
     height: 58px;
     overflow: hidden;
+    border-bottom:rgba(7,17,27,.1) 1PX solid;
   }
   .foods-wrapper .title{
     border-left: 2px solid #d9dde1;
@@ -274,29 +298,35 @@
     flex: 1;
   }
   .food-item .name{
-    /*display: inline-block;*/
+    display: inline-block;
     margin: auto 0;
     float: left;
     line-height: 14px;
     font-size: 14px;
     color: rgb(7,17,27);
+    position: relative;
+    top:20px;
 
   }
-  .price{
-    /*display: inline-block;*/
-    float: left;
-    line-height: 14px;
-    font-size: 14px;
-    color: rgb(240,20,20);
-    font-weight: 700;
-
-  }
+  /*.price{*/
+  /*  display: inline-block;*/
+  /*  float: left;*/
+  /*  line-height: 14px;*/
+  /*  font-size: 14px;*/
+  /*  color: rgb(240,20,20);*/
+  /*  font-weight: 700;*/
+  /*  position: relative;*/
+  /*  top:40px;*/
+  /*  left:0px;*/
+  /*}*/
   .weight{
     margin-top: 20px;
     vertical-align: middle;
     display: inline-block;
     float: right;
   }
+
+
 </style>
 
 

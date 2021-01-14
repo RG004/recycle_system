@@ -11,9 +11,9 @@ import UserAlterInfo from '../views/User/useralterinfo'
 import userupdateorder from '../views/User/userupdateorder'
 import useralldonate from '../views/User/useralldonate'
 import userdoingdonate from '../views/User/userdoingdonate'
+import userecharts from '../views/User/userecharts'
 import evaluate from '../views/User/evaluate'
 import UserHomePage from '../views/User/userhomepage'
-import maptest from '../views/User/maptest'
 import CollectorLayout from '../views/Collector/collectorlayout'
 import CollectorHomePage from '../views/Collector/collectorhomepage'
 import CollectorAllInorder from '../views/Collector/collectorallInorder'
@@ -22,6 +22,7 @@ import CollectorAlterInfo from '../views/Collector/collectoralterinfo'
 import collectoralldonate from '../views/Collector/collectoralldonate'
 import collectordoingdonate from '../views/Collector/collectordoingdonate'
 import confirmorder from '../views/Collector/confirmorder'
+import collectorecharts from '../views/Collector/collectorecharts'
 import NotFound from '../views/404'
 import AdminLayout from '../views/Admin/adminlayout'
 import ItemTypeManager from '../views/Admin/ItemTypeManager'
@@ -32,8 +33,10 @@ import adminalldonate from '../views/Admin/adminalldonate'
 import admindoingdonate from '../views/Admin/admindoingdonate'
 import HelpThePoorManager from '../views/Admin/HelpThePoorManager'
 import AddHelpThePoor from '../views/Admin/AddHelpThePoor'
-import AddItem from '../views/Admin/AddItem'
 import adminCollectorManage from '../views/Admin/adminCollectorManage'
+import adminUserManager from '../views/Admin/adminUserManager'
+import adminecharts from '../views/Admin/adminecharts'
+import adminhomepage from '../views/Admin/adminhomepage'
 import userregister from '../views/userregister'
 import collectorregister from '../views/collectorregister'
 
@@ -67,11 +70,28 @@ export default new Router({
     {
       path:'/adminlayout',
       component:AdminLayout,
+      redirect:"/adminhomepage",
       meta: {
         needLogin: true, //需要登录
         needAdmin:true,
       },
       children:[
+        {
+          path:'/adminhomepage',
+          component:adminhomepage,
+          meta: {
+            needLogin: true, //需要登录
+            needAdmin:true,
+          },
+        },
+        {
+          path:'/adminUserManager',
+          component:adminUserManager,
+          meta: {
+            needLogin: true, //需要登录
+            needAdmin:true,
+          },
+        },
         {
           path:'/ItemTypeManage',
           component:ItemTypeManager,
@@ -83,14 +103,6 @@ export default new Router({
         {
           path:'/ItemManage',
           component:ItemManager,
-          meta: {
-            needLogin: true, //需要登录
-            needAdmin:true,
-          },
-        },
-        {
-          path:'/AddItem',
-          component:AddItem,
           meta: {
             needLogin: true, //需要登录
             needAdmin:true,
@@ -151,7 +163,15 @@ export default new Router({
             needLogin: true, //需要登录
             needAdmin:true,
           },
-        }
+        },
+        {
+          path:'/adminecharts',
+          component:adminecharts,
+          meta: {
+            needLogin: true, //需要登录
+            needAdmin:true,
+          },
+        },
       ]
     },
     {
@@ -214,6 +234,14 @@ export default new Router({
         {
           path: '/collectoralterinfo',
           component: CollectorAlterInfo,
+          meta: {
+            needLogin: true, //需要登录
+            needCollector:true,
+          },
+        },
+        {
+          path: '/collectorecharts',
+          component: collectorecharts,
           meta: {
             needLogin: true, //需要登录
             needCollector:true,
@@ -312,13 +340,13 @@ export default new Router({
           },
         },
         {
-          path:'/maptest',
-          component:maptest,
+          path: '/userecharts',
+          component: userecharts,
           meta: {
             needLogin: true, //需要登录
             needUser:true,
           },
-        }
+        },
       ]
     }
 

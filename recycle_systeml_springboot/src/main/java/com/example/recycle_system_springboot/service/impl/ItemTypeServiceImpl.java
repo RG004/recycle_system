@@ -12,19 +12,19 @@ public class ItemTypeServiceImpl implements ItemTypeService {
 
     @Resource
     ItemTypeDao itemTypeDao;
-
+    //查询所有的itemtype信息并返回给管理员（业务逻辑:查询所有）
     @Override
     public List<ItemType> selectAll() {
         List<ItemType> result= itemTypeDao.selectAll();
         return result;
     }
-
+    //更新一条itemtype记录
     @Override
     public boolean update(ItemType itemType) {
         itemTypeDao.updateByPrimaryKey(itemType);
         return true;
     }
-
+    //添加一条itemtype记录
     @Override
     public ItemType insert(ItemType itemType) {
         itemTypeDao.insert(itemType);

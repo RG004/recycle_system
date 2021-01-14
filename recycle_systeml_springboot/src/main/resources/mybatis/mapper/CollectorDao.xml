@@ -48,12 +48,20 @@
     select
     <include refid="Base_Column_List" />
     from collector
+    where User_Status="T"
   </select>
   <select id="selectBycollectorname" resultType="java.lang.Integer">
     select
     Collector_Person_ID
     from collector
     where Collector_Name=#{collectorname,jdbcType=VARCHAR}
+  </select>
+  <select id="selectAllCollector" resultType="com.example.recycle_system_springboot.pojo.vo.CollectorVo">
+    select
+      c.Collector_Person_ID,c.Collector_Name,c.User_Name,c.IDcard_Number,c.Phone,c.User_Status,r.Site_Name
+    from collector c
+    left join recycle_site r
+    on c.Site_ID=r.Site_ID
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from collector
@@ -167,6 +175,11 @@
   <update id="updatePhoneByPrimaykey">
     update collector
     set Phone = #{phone,jdbcType=VARCHAR}
+    where Collector_Person_ID = #{collectorPersonId,jdbcType=INTEGER}
+  </update>
+  <update id="updateStatusByPrimaykey">
+    update collector
+    set User_Status = #{userStatus,jdbcType=VARCHAR}
     where Collector_Person_ID = #{collectorPersonId,jdbcType=INTEGER}
   </update>
 </mapper>

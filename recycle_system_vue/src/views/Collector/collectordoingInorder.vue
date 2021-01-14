@@ -1,40 +1,47 @@
 <template>
   <div v-if="show">
-    根据用户名姓名查询订单:<el-input v-model="collectorrequire.username" placeholder="请输入用户名" style="width: 200px"></el-input>
-    根据日期查询订单：
+    <div style="display: inline-block;margin-right: 6px;"><h1 class="title" style="width: 90%">根据快递员姓名查询订单:</h1></div>
+    <el-input v-model="collectorrequire.username" placeholder="请输入用户名" style="width: 200px"></el-input>
+    <div style="display: inline-block;margin-right: 6px;"><h1 class="title" >根据日期查询订单：</h1></div>
     <el-select v-model="collectorrequire.datepick" placeholder="请选择">
       <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value"></el-option>
     </el-select>
     <el-date-picker v-if="this.collectorrequire.datepick=='day'" v-model="collectorrequire.datebyday" type="date" placeholder="选择日期" format="yyyy 年 MM 月 dd 日" value-format="yyyy-MM-dd"></el-date-picker>
     <el-date-picker v-if="this.collectorrequire.datepick=='month'" v-model="collectorrequire.datebymonth" type="month" placeholder="选择月" format="yyyy年MM月" value-format="yyyy-MM"></el-date-picker>
-    <el-button  type="primary" round  @click="findbyusername">查询</el-button>
-    <el-button  type="primary" round  @click="findall">查询全部</el-button>
-    <el-table :data="tableData">
-      <el-table-column prop="recycleOrderId" label="订单号" width="140">
+    <el-button   icon="el-icon-search"   @click="findbyusername">查询</el-button>
+    <el-button   icon="el-icon-search"     @click="findall">查询全部</el-button>
+    <div class="user_skills" style="margin-top:20px;" >
+    <el-table :data="tableData" :header-cell-style="{background:'transparent'}">
+      <el-table-column prop="recycleOrderId" label="订单号" width="80" align="center">
       </el-table-column>
-      <el-table-column prop="scheduledTime" label="预约时间" width="300">
+      <el-table-column prop="addressDetails" label="用户地址" width="300" align="center">
       </el-table-column>
-      <el-table-column prop="username" label="用户" width="140">
+      <el-table-column prop="scheduledTime" label="预约时间" width="200" align="center">
       </el-table-column>
-      <el-table-column prop="phone" label="联系电话" >
+      <el-table-column prop="totalAmount" label="总价" width="100" align="center">
       </el-table-column>
-      <el-table-column fixed="right" label="操作">
+      <el-table-column prop="username" label="用户" width="140" align="center">
+      </el-table-column>
+      <el-table-column prop="phone" label="联系电话" align="center">
+      </el-table-column>
+      <el-table-column fixed="right" label="操作" align="center">
         <template slot-scope="scope">
-          <el-popover placement="right" width="400" trigger="click">
+          <el-popover placement="left" width="400" trigger="click" align="center">
             <el-table :data="recycleOrdersDetailVoList">
               <el-table-column width="100" prop="itemName" label="物品"></el-table-column>
               <el-table-column width="100" prop="quantity" label="数量(斤)"></el-table-column>
               <el-table-column width="100" prop="itemPrice" label="单价(元/斤)"></el-table-column>
               <el-table-column width="100" prop="sum" label="总价(元)"></el-table-column>
             </el-table>
-            <el-button  type="primary" round slot="reference" @click="getDetail(scope.row.recycleOrderId)" >查询订单详情</el-button>
+            <el-button  icon="el-icon-more-outline" round slot="reference" @click="getDetail(scope.row.recycleOrderId)" ></el-button>
           </el-popover>
-          <el-button  type="primary" round @click="jumpConfirm(scope.row.recycleOrderId)">确认订单</el-button>
+          <el-button  icon="el-icon-check"  circle @click="jumpConfirm(scope.row.recycleOrderId)"></el-button>
         </template>
 
       </el-table-column>
     </el-table>
-    <el-pagination background layout="total, prev, pager, next, jumper" :page-size="pageSize" :total="total" @current-change="page"></el-pagination>
+    </div>
+    <el-pagination :background="isBackground"  layout="total, prev, pager, next, jumper" :page-size="pageSize" :total="total" @current-change="page"></el-pagination>
   </div>
 </template>
 <script>
@@ -48,7 +55,7 @@
       },
       findbyusername () {
         const _this = this
-        axios.post('http://localhost:8181/collectorfindAllDoingOrders/1/4',this.collectorrequire).then(function (resp) {
+        axios.post('http://localhost:8181/collectorfindAllDoingOrders/1/7',this.collectorrequire).then(function (resp) {
           _this.tableData = resp.data.list
           _this.pageSize = resp.data.pageSize
           _this.total = resp.data.total
@@ -60,7 +67,7 @@
         this.collectorrequire.datebymonth=''
         this.collectorrequire.datebyday=''
         this.collectorrequire.datepick='day'
-        axios.post('http://localhost:8181/collectorfindAllDoingOrders/1/4',this.collectorrequire).then(function (resp) {
+        axios.post('http://localhost:8181/collectorfindAllDoingOrders/1/7',this.collectorrequire).then(function (resp) {
           _this.tableData = resp.data.list
           _this.pageSize = resp.data.pageSize
           _this.total = resp.data.total
@@ -70,15 +77,11 @@
         const _this = this
         axios.get('http://localhost:8181/OrdersDetail/' + recycleOrderId + '').then(function (resp) {
           _this.recycleOrdersDetailVoList = resp.data
-          for (var j = 0, len = _this.recycleOrdersDetailVoList.length; j < len; j++) {
-            _this.recycleOrdersDetailVoList[j].sum = _this.recycleOrdersDetailVoList[j].quantity * _this.recycleOrdersDetailVoList[j].itemPrice
-          }
-
         })
       },
       page (currentPage) {
         const _this = this
-        axios.post('http://localhost:8181/collectorfindAllDoingOrders/' + currentPage + '/4',this.collectorrequire).then(function (resp) {
+        axios.post('http://localhost:8181/collectorfindAllDoingOrders/' + currentPage + '/7',this.collectorrequire).then(function (resp) {
           _this.tableData = resp.data.list
           _this.pageSize = resp.data.pageSize
           _this.total = resp.data.total
@@ -92,7 +95,7 @@
     },
       created () {
         const _this = this;
-        axios.post('http://localhost:8181/collectorfindAllDoingOrders/1/4',this.collectorrequire).then(function (resp) {
+        axios.post('http://localhost:8181/collectorfindAllDoingOrders/1/7',this.collectorrequire).then(function (resp) {
           _this.tableData = resp.data.list
           _this.pageSize = resp.data.pageSize
           _this.total = resp.data.total
@@ -101,6 +104,7 @@
       },
       data () {
         return {
+          isBackground: true,
           show:false,
           pageSize: 1,
           total: 1,
@@ -146,6 +150,8 @@
             recycleOrderId: 1,
             scheduledTime: '12月15日 下午17：00',
             username: '陈南',
+            totalAmount:'',
+            addressDetails:'',
             phone: 13615787610,
           }],
         }
@@ -155,4 +161,41 @@
 
 <style scoped>
 
+  * {
+    background-color: transparent;
+  }
+  /deep/ .el-input__inner{
+    background-color: transparent;
+  }
+  .user_skills /deep/  .el-table, .el-table__expanded-cell {
+    background-color: transparent;
+  }
+  .user_skills /deep/ .el-table tr {
+    background-color: transparent!important;
+  }
+  .user_skills /deep/  .el-table--enable-row-transition .el-table__body td, .el-table .cell{
+    background-color: transparent;
+  }
+  /deep/ .el-pagination.is-background .el-pager li:not(.disabled) {
+    color: rgb(147,153,159);
+    background-color: transparent;
+  }
+  /deep/ .el-pagination.is-background  .btn-next{
+    background-color: transparent;
+  }
+  /deep/ .el-pagination.is-background  .btn-prev{
+    background-color: transparent;
+  }
+  /deep/ .btn-prev{
+    background-color: transparent;
+  }
+  .title{
+    font-size: 15px;
+    font-weight: 700;
+    height: 26px;
+    line-height: 26px;
+    padding-left: 10px;
+    margin-left: 12PX;
+    color: rgb(147,153,159);
+  }
 </style>

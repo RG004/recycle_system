@@ -1,15 +1,16 @@
 <template>
-  <el-container style="height:750px; border: 1px solid #eee">
-    <el-aside width="220px" style="background-color: rgb(238, 241, 246)">
-      <el-menu :default-active="this.$route.path" router>
-        <el-menu-item index="/userhomepage">
+  <div class="all">
+  <el-container style="height:750px; ">
+    <el-aside width="220px" >
+      <el-menu :default-active="this.$route.path" router class="el-menu">
+        <el-menu-item index="/userhomepage" class="el-menu-item">
           <i class="el-icon-s-home"></i>
           <span  slot="title">主页</span>
         </el-menu-item>
         <el-submenu index="2">
           <template slot="title">操作</template>
           <el-menu-item-group>
-            <el-menu-item index="/recycle" >资源回收</el-menu-item>
+            <el-menu-item index="/recycle" class="menu">资源回收</el-menu-item>
             <el-menu-item index="/donate" >资源捐赠</el-menu-item>
           </el-menu-item-group>
         </el-submenu>
@@ -25,10 +26,9 @@
         <el-submenu index="4">
           <template slot="title">设置</template>
           <el-menu-item-group>
-            <el-menu-item index="/useralterinfo">修改个人信息</el-menu-item>
+            <el-menu-item index="/useralterinfo">个人中心</el-menu-item>
+            <el-menu-item index="/userecharts">数据统计</el-menu-item>
             <el-menu-item index="/login" @click="d">退出登录</el-menu-item>
-            <el-menu-item index="/test" >测试</el-menu-item>
-            <el-menu-item index="/maptest" >地图测试</el-menu-item>
           </el-menu-item-group>
         </el-submenu>
       </el-menu>
@@ -37,15 +37,12 @@
     <el-container>
       <el-header style="text-align: right; font-size: 12px">
 
-        <el-menu  class="el-menu-demo" mode="horizontal" @select="handleSelect"  router>
-          <el-menu-item  style="width: 930px"></el-menu-item>
-          <el-menu-item><i class="el-icon-edit" style="font-size: 25px;"></i></el-menu-item>
+        <el-menu  class="el-menu-demo" mode="horizontal" @select="handleSelect"  router style="margin-left: 900px">
+          <el-menu-item index="/userhomepage"><i class="el-icon-s-home" style="font-size: 25px;" ></i></el-menu-item>
           <el-menu-item><i class="el-icon-share" style="font-size: 25px;"></i></el-menu-item>
-          <el-menu-item><i class="el-icon-set-up" style="font-size: 25px;"></i></el-menu-item>
+          <el-menu-item index="/useralterinfo"><i class="el-icon-set-up" style="font-size: 25px;"></i></el-menu-item>
           <el-submenu index="4">
             <template slot="title"><i class="el-icon-user" style="font-size: 25px ;"></i>{{this.$store.getters.getUserName}}</template>
-            <el-menu-item index="/userallinorder">我的订单</el-menu-item>
-            <el-menu-item index="/useralterinfo">修改个人信息</el-menu-item>
             <el-menu-item index="/login" @click="d">退出登录</el-menu-item>
 
 
@@ -59,7 +56,7 @@
 
     </el-container>
   </el-container>
-
+  </div>
 
 </template>
 <script>
@@ -79,13 +76,39 @@
 </script>
 
 <style scoped>
-  .el-header {
-
-    color: #333;
-    line-height: 60px;
+  * {
+    background-color: transparent;
+  }
+  /deep/ .el-menu--inline{
+    background-color: transparent;
+  }
+  .all{
+    margin: 0;
+    width: 100%;
+    height: 100vh;
+    font-family: "Exo", sans-serif;
+    color: #fff;
+    background: linear-gradient(-45deg, #ECF5FF, #d9eeff, #D5C1D1, #d5abb1);
+    background-size: 400% 400%;
+    animation: gradientBG 15s ease infinite;
+    position: fixed;
+  }
+  @keyframes gradientBG {
+    0% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+    100% {
+      background-position: 0% 50%;
+    }
   }
 
-  .el-aside {
-    color: #333;
+
+  input{
+    margin-top: 100px;
+    z-index: 999;
+    position: relative;
   }
 </style>

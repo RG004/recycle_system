@@ -2,10 +2,13 @@ package com.example.recycle_system_springboot.controller;
 
 import com.example.recycle_system_springboot.dao.UserDao;
 import com.example.recycle_system_springboot.pojo.entity.HelpThePoor;
+import com.example.recycle_system_springboot.pojo.entity.User;
 import com.example.recycle_system_springboot.pojo.vo.AddressVo;
 import com.example.recycle_system_springboot.pojo.vo.UserVo;
 import com.example.recycle_system_springboot.service.HelpThePoorService;
 import com.example.recycle_system_springboot.service.UserService;
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageInfo;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -36,5 +39,19 @@ public class UserController {
     public List<HelpThePoor> userfindAllHelp(){//查找
         List<HelpThePoor> list = userService.userfindAllHelp();
         return list;
+    }
+
+    @GetMapping("/usercount")
+    @ResponseBody
+    public int usercount(){
+        int result=userService.getsum();
+        return result;
+    }
+
+    @GetMapping("/alluser/{start}/{limit}")
+    @ResponseBody
+    public PageInfo<User> allUser(@PathVariable("start") int start, @PathVariable("limit") int limit){
+        PageInfo<User> result=userService.selectAll(start,limit);
+        return result;
     }
 }

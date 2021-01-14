@@ -10,6 +10,10 @@ public class DonationVo {
 
     private Integer addressId;
 
+    private String addressDetails;
+
+    private String helpName;
+
     private String collectorName;
 
     private Integer evaluationId;

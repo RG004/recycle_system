@@ -1,6 +1,5 @@
 package com.example.recycle_system_springboot.controller;
 
-import com.example.recycle_system_springboot.pojo.dto.OrderDto;
 import com.example.recycle_system_springboot.pojo.entity.Donation;
 import com.example.recycle_system_springboot.pojo.query.AdminReqirueQuery;
 import com.example.recycle_system_springboot.pojo.query.CollectorRequireQuery;
@@ -70,12 +69,8 @@ public class DonateController {
     @GetMapping("/donateplacecollector/{donateId}/{collectorName}")
     @ResponseBody
     public int placeCollector(@PathVariable("donateId") int donateId,@PathVariable("collectorName") String collectorName){
-        boolean result=donationService.placecollector(donateId,collectorName);
-        if(result){
-            return donateId;
-        }else {
-            return 0;
-        }
+        int result=donationService.placecollector(donateId,collectorName);
+        return result;
     }
 
     @PostMapping("/evaluationdonation")
@@ -85,11 +80,18 @@ public class DonateController {
         return result;
     }
 
-    //派送员确认捐赠订单
     @PostMapping("/confirmdonation")
     @ResponseBody
     public Boolean confirmDonation(@RequestBody Donation order){
         Boolean result=donationService.confirmDonation(order);
+        return result;
+    }
+
+    //删除订单
+    @DeleteMapping("/userdeletedonation/{donateId}")
+    @ResponseBody
+    public Boolean DeleteDonation(@PathVariable("donateId") int donateId){
+        Boolean result=donationService.DeleteDonation(donateId);
         return result;
     }
 }

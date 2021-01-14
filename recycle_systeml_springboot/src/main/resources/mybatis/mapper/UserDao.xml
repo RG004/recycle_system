@@ -49,13 +49,20 @@
   </select>
    <select id="selectAddress" resultMap="AddressResultMap">
     select
-
     u.User_ID,u.User_name,u.User_RealName,u.Password,u.Phone,a.Address_Details,a.Address_ID
-
     from user u
     left join address a
     on u.User_ID=a.User_ID
     where u.User_ID = #{userId,jdbcType=INTEGER}
+  </select>
+  <select id="selectSum" resultType="java.lang.Integer">
+    select count(*)
+    from user
+  </select>
+  <select id="selectAll" resultType="com.example.recycle_system_springboot.pojo.entity.User">
+    select
+    User_ID, User_Name, User_RealName, Phone
+    from user
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from user

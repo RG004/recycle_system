@@ -1,23 +1,23 @@
 <template>
   <div>
     <div style="text-align: center; position:absolute;top:20px;z-index: 1;">
-      <el-button type="primary" @click="toadd" icon="el-icon-plus" style ="background-color: #B3C0D1; border-color: #B3C0D1;"></el-button>
+      <el-button  @click="toadd" icon="el-icon-plus" ></el-button>
     </div>
-    <el-table :data="tableData">
-      <el-table-column prop="helpName" label="名字" width="300"></el-table-column>
-      <el-table-column prop="helpDetail" label="详细信息" width="300"></el-table-column>
-      <el-table-column prop="helpStatus" label="状态" width="300"></el-table-column>
-      <el-table-column  fixed="right" label="操作">
+    <div class="user_skills" style="margin-top:20px;" >
+    <el-table :data="tableData" :header-cell-style="{background:'transparent'}">
+      <el-table-column prop="helpName" label="名字" width="300" align="center"></el-table-column>
+      <el-table-column prop="helpDetail" label="详细信息" width="300" align="center"></el-table-column>
+      <el-table-column prop="helpStatus" label="状态" width="300" align="center"></el-table-column>
+      <el-table-column  fixed="right" label="操作" align="center">
         <template slot-scope="scope">
-          <el-button  type="primary" round slot="reference" icon="el-icon-edit-outline" style="background-color: #B3C0D1;
-        border-color: #B3C0D1"  @click="edit(scope.row)"></el-button>
-          <el-button  type="primary" round slot="reference" icon="el-icon-delete" style="background-color: #B3C0D1;
-        border-color: #B3C0D1"  @click="dele(scope.row)"></el-button>
+          <el-button  round   slot="reference" icon="el-icon-edit-outline"  @click="edit(scope.row)"></el-button>
+          <el-button   round slot="reference" icon="el-icon-delete"   @click="dele(scope.row)"></el-button>
         </template>
       </el-table-column>
     </el-table>
-    <el-pagination background layout="total, prev, pager, next, jumper" :page-size="pageSize" :total="total" @current-change="page"></el-pagination>
-    <el-dialog :visible.sync="editVisible">
+    </div>
+    <el-pagination :background="isBackground" layout="total, prev, pager, next, jumper" :page-size="pageSize" :total="total" @current-change="page"></el-pagination>
+    <el-dialog :append-to-body="true" :visible.sync="editVisible">
       <el-form  :model="editform" :rules="rules" ref="editform" @submit.prevent.native >
         <el-form-item label="修改地址名字"  prop="helpName">
           <el-input v-model="editform.helpName"></el-input>
@@ -33,7 +33,7 @@
         </el-form-item>
         <div>
           <el-button @click="closeDialog()">取消</el-button>
-          <el-button type="primary" @click="submit('editForm')">确定</el-button>
+          <el-button type="primary" @click="submit('editForm')" style="color: black;">确定</el-button>
         </div>
       </el-form>
     </el-dialog>
@@ -44,7 +44,7 @@
   export default {
     created () {
       const _this=this
-      axios.get('http://localhost:8181/allHelpThePoor/1/4').then(function (resp) {
+      axios.get('http://localhost:8181/allHelpThePoor/1/2').then(function (resp) {
         console.log(resp)
         _this.tableData=resp.data.list
         _this.pageSize = resp.data.pageSize
@@ -97,9 +97,11 @@
       submit(){
         const _this=this
         axios.get('https://restapi.amap.com/v3/geocode/geo?address='+this.editform.helpName+'&key=8c922d0176df163a311ac3425db373c6').then(function (resp) {
+          console.log(resp)
           _this.jingwei=resp.data.geocodes[0].location
-          _this.editform.longitude=parseFloat(_this.jingwei.substr(0,10))
-          _this.editform.latitude=parseFloat(_this.jingwei.substr(11,10))
+          _this.jw=_this.jingwei.split(",")
+          _this.editform.longitude=parseFloat(_this.jw[0])
+          _this.editform.latitude=parseFloat(_this.jw[1])
           axios.post('http://localhost:8181/updateHelpThePoor',_this.editform).then(function (r) {
             if(r.data){
               for(var j=0,len=_this.tableData.length;j<len;j++){
@@ -118,7 +120,7 @@
       },
       page(currentPage){
         const _this=this
-        axios.get('http://localhost:8181/allHelpThePoor/'+currentPage+'/4').then(function (resp) {
+        axios.get('http://localhost:8181/allHelpThePoor/'+currentPage+'/2').then(function (resp) {
           _this.tableData=resp.data.list
           _this.pageSize = resp.data.pageSize
           _this.total = resp.data.total
@@ -132,6 +134,7 @@
     },
     data(){
       return{
+        isBackground: true,
         pageSize:1,
         total:1,
         tableData:[{
@@ -143,6 +146,7 @@
             helpStatus:'',
         }],
         jingwei:'',
+        jw:'',
         editVisible:false,
         editform:{
           helpId:1,
@@ -172,4 +176,41 @@
 
 <style scoped>
 
+  * {
+    background-color: transparent;
+  }
+  /deep/ .el-input__inner{
+    background-color: transparent;
+  }
+  .user_skills /deep/  .el-table, .el-table__expanded-cell {
+    background-color: transparent;
+  }
+  .user_skills /deep/ .el-table tr {
+    background-color: transparent!important;
+  }
+  .user_skills /deep/  .el-table--enable-row-transition .el-table__body td, .el-table .cell{
+    background-color: transparent;
+  }
+  /deep/ .el-pagination.is-background .el-pager li:not(.disabled) {
+    color: rgb(147,153,159);
+    background-color: transparent;
+  }
+  /deep/ .el-pagination.is-background  .btn-next{
+    background-color: transparent;
+  }
+  /deep/ .el-pagination.is-background  .btn-prev{
+    background-color: transparent;
+  }
+  /deep/ .btn-prev{
+    background-color: transparent;
+  }
+  .title{
+    font-size: 13px;
+    font-weight: 700;
+    height: 26px;
+    line-height: 26px;
+    padding-left: 10px;
+    margin-left: 12PX;
+    color: rgb(147,153,159);
+  }
 </style>

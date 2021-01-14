@@ -16,6 +16,7 @@
     <id column="Donate_ID" jdbcType="INTEGER" property="donateId" />
     <result column="Address_ID" jdbcType="INTEGER" property="addressId" />
     <result column="Collector_Name" jdbcType="VARCHAR" property="collectorName" />
+    <result column="Help_Name" jdbcType="VARCHAR" property="helpName" />
     <result column="Evaluation_ID" jdbcType="INTEGER" property="evaluationId" />
     <result column="Scheduled_Time" jdbcType="TIMESTAMP" property="scheduledTime" />
     <result column="Finished_Time" jdbcType="TIMESTAMP" property="finishedTime" />
@@ -25,6 +26,7 @@
   <resultMap id="UserDoingMap" type="com.example.recycle_system_springboot.pojo.vo.DonationVo">
     <id column="Donate_ID" jdbcType="INTEGER" property="donateId" />
     <result column="Address_ID" jdbcType="INTEGER" property="addressId" />
+    <result column="Address_Details" jdbcType="VARCHAR" property="addressDetails" />
     <result column="Collector_Name" jdbcType="VARCHAR" property="collectorName" />
     <result column="Scheduled_Time" jdbcType="TIMESTAMP" property="scheduledTime" />
     <result column="Donate_Detail" jdbcType="VARCHAR" property="donateDetail" />
@@ -33,6 +35,7 @@
   <resultMap id="CollectorAllMap" type="com.example.recycle_system_springboot.pojo.vo.DonationVo">
     <id column="Donate_ID" jdbcType="INTEGER" property="donateId" />
     <result column="Address_ID" jdbcType="INTEGER" property="addressId" />
+    <result column="Address_Details" jdbcType="VARCHAR" property="addressDetails" />
     <result column="User_Name" jdbcType="VARCHAR" property="userName" />
     <result column="Evaluation_ID" jdbcType="INTEGER" property="evaluationId" />
     <result column="Scheduled_Time" jdbcType="TIMESTAMP" property="scheduledTime" />
@@ -43,6 +46,7 @@
   <resultMap id="collectorDoingMap" type="com.example.recycle_system_springboot.pojo.vo.DonationVo">
     <id column="Donate_ID" jdbcType="INTEGER" property="donateId" />
     <result column="Address_ID" jdbcType="INTEGER" property="addressId" />
+    <result column="Address_Details" jdbcType="VARCHAR" property="addressDetails" />
     <result column="User_Name" jdbcType="VARCHAR" property="userName" />
     <result column="Scheduled_Time" jdbcType="TIMESTAMP" property="scheduledTime" />
     <result column="Donate_Detail" jdbcType="VARCHAR" property="donateDetail" />
@@ -51,6 +55,7 @@
   <resultMap id="adminAllMap" type="com.example.recycle_system_springboot.pojo.vo.DonationVo">
     <id column="Donate_ID" jdbcType="INTEGER" property="donateId" />
     <result column="Address_ID" jdbcType="INTEGER" property="addressId" />
+    <result column="Address_Details" jdbcType="VARCHAR" property="addressDetails" />
     <result column="User_Name" jdbcType="VARCHAR" property="userName" />
     <result column="Collector_Name" jdbcType="VARCHAR" property="collectorName" />
     <result column="Evaluation_ID" jdbcType="INTEGER" property="evaluationId" />
@@ -61,6 +66,7 @@
   <resultMap id="adminDoingMap" type="com.example.recycle_system_springboot.pojo.vo.DonationVo">
     <id column="Donate_ID" jdbcType="INTEGER" property="donateId" />
     <result column="Address_ID" jdbcType="INTEGER" property="addressId" />
+    <result column="Address_Details" jdbcType="VARCHAR" property="addressDetails" />
     <result column="User_Name" jdbcType="VARCHAR" property="userName" />
     <result column="Collector_Name" jdbcType="VARCHAR" property="collectorName" />
     <result column="Evaluation_ID" jdbcType="INTEGER" property="evaluationId" />
@@ -79,10 +85,14 @@
   </select>
   <select id="selectAllByuser" resultMap="UserAllMap">
     select
-    d.Donate_ID,d.Address_ID,d.Scheduled_Time,d.Finished_Time,d.Donate_Detail,d.Evaluation_ID,c.Collector_Name,c.Phone
+    d.Donate_ID,d.Address_ID,d.Scheduled_Time,d.Finished_Time,d.Donate_Detail,d.Evaluation_ID,c.Collector_Name,c.Phone,h.Help_Name,a.Address_Details
     from donation d
     left join collector c
     on d.Collector_Person_ID=c.Collector_Person_ID
+    left join help_the_poor h
+    on d.Help_ID=h.Help_ID
+    left join address a
+    on d.Address_ID=a.Address_ID
     where d.User_ID= #{userid,jdbcType=INTEGER}
     <if test="collectorname != ''and collectorname!=null">
       and c.Collector_Name like "%"#{collectorname,jdbcType=VARCHAR}"%"
@@ -97,10 +107,14 @@
   </select>
   <select id="selectDoingByuser" resultMap="UserDoingMap">
     select
-    d.Donate_ID,d.Address_ID,d.Scheduled_Time,d.Donate_Detail,c.Collector_Name,c.Phone
+    d.Donate_ID,d.Address_ID,d.Scheduled_Time,d.Donate_Detail,c.Collector_Name,c.Phone,h.Help_Name,a.Address_Details
     from donation d
     left join collector c
     on d.Collector_Person_ID=c.Collector_Person_ID
+    left join help_the_poor h
+    on d.Help_ID=h.Help_ID
+    left join address a
+    on d.Address_ID=a.Address_ID
     where d.User_ID= #{userid,jdbcType=INTEGER} and d.Finished_Time is null
     <if test="collectorname != ''and collectorname!=null">
       and c.Collector_Name like "%"#{collectorname,jdbcType=VARCHAR}"%"
@@ -115,10 +129,14 @@
   </select>
   <select id="selectAllBycollector" resultMap="CollectorAllMap">
     select
-    d.Donate_ID,d.Address_ID,d.Scheduled_Time,d.Finished_Time,d.Donate_Detail,d.Evaluation_ID,u.User_Name,u.Phone
+    d.Donate_ID,d.Address_ID,d.Scheduled_Time,d.Finished_Time,d.Donate_Detail,d.Evaluation_ID,u.User_Name,u.Phone,h.Help_Name,a.Address_Details
     from donation d
     left join user u
     on d.User_ID=u.User_ID
+    left join help_the_poor h
+    on d.Help_ID=h.Help_ID
+    left join address a
+    on d.Address_ID=a.Address_ID
     where d.Collector_Person_ID= #{collectorid,jdbcType=INTEGER}
     <if test="username != ''and username!=null">
       and u.User_Name like "%"#{username,jdbcType=VARCHAR}"%"
@@ -133,10 +151,14 @@
   </select>
   <select id="selectDoingBycollector" resultMap="collectorDoingMap">
     select
-    d.Donate_ID,d.Address_ID,d.Scheduled_Time,d.Donate_Detail,d.Evaluation_ID,u.User_Name,u.Phone
+    d.Donate_ID,d.Address_ID,d.Scheduled_Time,d.Donate_Detail,d.Evaluation_ID,u.User_Name,u.Phone,h.Help_Name,a.Address_Details
     from donation d
     left join user u
     on d.User_ID=u.User_ID
+    left join help_the_poor h
+    on d.Help_ID=h.Help_ID
+    left join address a
+    on d.Address_ID=a.Address_ID
     where d.Collector_Person_ID= #{collectorid,jdbcType=INTEGER} and d.Finished_Time is null
     <if test="username != ''and username!=null">
       and u.User_Name like "%"#{username,jdbcType=VARCHAR}"%"
@@ -151,12 +173,16 @@
   </select>
   <select id="selectAllByadmin" resultType="com.example.recycle_system_springboot.pojo.vo.DonationVo">
     select
-    d.Donate_ID,d.Address_ID,d.Scheduled_Time,d.Finished_Time,u.User_Name,Donate_Detail,d.Evaluation_ID,c.Collector_Name
+    d.Donate_ID,d.Address_ID,d.Scheduled_Time,d.Finished_Time,u.User_Name,Donate_Detail,d.Evaluation_ID,c.Collector_Name,h.Help_Name,a.Address_Details
     from donation d
     left join collector c
     on d.Collector_Person_ID=c.Collector_Person_ID
     left join user u
     on d.User_ID=u.User_ID
+    left join help_the_poor h
+    on d.Help_ID=h.Help_ID
+    left join address a
+    on d.Address_ID=a.Address_ID
     where d.Donate_ID is not null
     <if test="username!=null and username!=''">
       and u.User_Name like "%"#{username,jdbcType=VARCHAR}"%"
@@ -174,12 +200,16 @@
   </select>
   <select id="selectDoingByadmin" resultMap="adminDoingMap">
     select
-    d.Donate_ID,d.Address_ID,d.Scheduled_Time,d.Donate_Detail,d.Evaluation_ID,c.Collector_Name,u.User_Name
+    d.Donate_ID,d.Address_ID,d.Scheduled_Time,d.Donate_Detail,d.Evaluation_ID,c.Collector_Name,u.User_Name,h.Help_Name,a.Address_Details
     from donation d
     left join collector c
     on d.Collector_Person_ID=c.Collector_Person_ID
     left join user u
     on d.User_ID=u.User_ID
+    left join help_the_poor h
+    on d.Help_ID=h.Help_ID
+    left join address a
+    on d.Address_ID=a.Address_ID
     where d.Finished_Time is null
     <if test="username!=null and username!=''">
       and u.User_Name like "%"#{username,jdbcType=VARCHAR}"%"

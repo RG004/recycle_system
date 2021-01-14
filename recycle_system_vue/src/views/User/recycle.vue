@@ -1,19 +1,21 @@
 <template>
+  <div class="user_skills">
   <el-container direction="vertical" v-if="show">
     <div v-if="active==1">
       <div class="menu-wrapper" ref="menuWrapper">
-        <el-menu class="el-menu-demo" mode="horizontal" @select="handleSelect" background-color="#545c64" text-color="#fff" active-text-color="#ffd04b" style="width: 100%;">
+        <el-menu class="el-menu-demo" mode="horizontal" @select="handleSelect"  background-color="#96AABF" text-color="#fff" active-text-color="#ffd04b" style="width: 100%;">
           <el-menu-item style="width: 14%" v-for="(item,index) in orderform.tableData"  @click="selectMenu(index)" :key="index">{{item.itemTypeName}}</el-menu-item>
         </el-menu>
       </div>
-      <div style="height: 380px;overflow: hidden;padding-left: 0px;"  class="foods-wrapper" ref="foodsWrapper">
+      <div style="height: 380px;overflow: hidden;padding-left: 0px;position:relative;left:-52px;width:1325px;"  class="foods-wrapper" ref="foodsWrapper">
         <ul style="list-style:none;">
           <li v-for="item in orderform.tableData" class="food-list food-list-hook" :key="item.itemTypeId">
             <h1 class="title">{{item.itemTypeName}}</h1>
             <ul v-for="good in item.itemsList" class="food-item " :key="good.itemId">
               <div class="content" style="float: left">
-                <div class="name" >{{good.itemName}}</div>
-                <div class="price" >单价：{{good.itemPrice}}（元/斤）</div>
+                <div style="display: inline-block;float: left;left:-25px;position:relative;top:10px;" ><img style="width: 50px; height: 50px" :src="good.itemPic"/></div>
+                <div class="name" >{{good.itemName}}<br><br><span style="color:#F01414;">单价：{{good.itemPrice}}（元/斤）</span></div>
+<!--                <div class="price" >单价：{{good.itemPrice}}（元/斤）</div>-->
                 <div class="weight" ><el-input-number  v-model="good.quantity"  :min="0" :precision="1" :step="0.5" ></el-input-number></div>
               </div>
             </ul>
@@ -23,19 +25,20 @@
     </div>
 
     <div class="block" v-if="active==2" style="margin: 0 auto ;height: 280px;padding-top: 100px;">
-      <span class="demonstration">请选择上门时间</span>
-      <div>{{this.orderform.scheduledTime}}</div>
+      <div class="demonstration"><div style="position: relative;top: 15px;">请选择上门时间</div></div>
+
       <el-date-picker
+        style="position: absolute;left: 770px;top:300px;"
         v-model="orderform.scheduledTime"
         type="datetime"
         value-format="yyyy-MM-dd HH:mm:ss"
         placeholder="选择日期时间">
       </el-date-picker>
     </div>
-    <div class="block2" v-if="active==3" style="width:900px; margin:  0 auto ;height: 280px;padding-top: 100px;">
-      <span class="demonstration">请选择上门地址</span>
-      <div>{{this.orderform.addressId}}</div>
-      <el-table :data="addressList" >
+    <div class="block2" v-if="active==3" style="margin: 0 auto ;height: 280px;padding-top: 100px;">
+      <div class="demonstration"><div style="position: relative;top: 15px;">请选择上门地址</div></div>
+
+      <el-table :data="addressList" :header-cell-style="{background:'transparent'}">
         <el-table-column label="序号" width="200">
           <template slot-scope="scope">
             <span>{{scope.$index + 1}}</span>
@@ -45,23 +48,24 @@
         </el-table-column>
         <el-table-column  fixed="right" label="操作">
           <template slot-scope="scope">
-            <el-button  type="primary" round slot="reference" icon="el-icon-check" style="background-color: #B3C0D1;border-color: #B3C0D1"  @click="choose(scope.row.addressId)">选择</el-button>
+            <el-button   circle slot="reference" icon="el-icon-check"  @click="choose(scope.row.addressId)"></el-button>
           </template>
         </el-table-column>
       </el-table>
     </div>
-    <el-steps :active="active" finish-status="success" style="float: left ;padding-top: 40px" >
+    <el-steps :active="active" finish-status="success" style="float: left ;padding-top: 40px;position: absolute;top:500px;width: 1270px;" >
       <el-step title="挑选物品"></el-step>
       <el-step title="预约时间"></el-step>
       <el-step title="选择地址"></el-step>
     </el-steps>
-    <div style="float: left;">
+    <div style="float: left;position: absolute;top:600px;">
       <el-button style="margin-top: 12px;"  @click="back" v-if="active!=1"> 上一步</el-button>
       <el-button style="margin-top: 12px;"  @click="next1" v-if="active==1"> 下一步</el-button>
       <el-button style="margin-top: 12px;"  @click="next2" v-if="active==2"> 下一步</el-button>
       <el-button style="margin-top: 12px;"  @click="finish"  v-if="active==3"> 完成</el-button>
     </div>
   </el-container>
+  </div>
 </template>
 
 <script>
@@ -92,31 +96,8 @@
                   itemId:1,
                   itemName:'塑料瓶',
                   itemPrice:'5',
-                  quantity:0
-                },
-                {
-                  itemId:1,
-                  itemName:'塑料瓶',
-                  itemPrice:'5',
-                  quantity:0.5
-                },
-                {
-                  itemId:1,
-                  itemName:'塑料瓶',
-                  itemPrice:'5',
-                  quantity:0.5
-                },
-                {
-                  itemId:1,
-                  itemName:'塑料瓶',
-                  itemPrice:'5',
-                  quantity:0.5
-                },
-                {
-                  itemId:1,
-                  itemName:'塑料瓶',
-                  itemPrice:'5',
-                  quantity:0.5
+                  quantity:0,
+                  itemPic:'',
                 },
 
               ],
@@ -129,7 +110,7 @@
     created(){
       const _this=this;
 
-      axios.get('http://localhost:8181/getallitem').then(function (resp) {
+      axios.get('http://localhost:8181/getallitembyrecycle').then(function (resp) {
           console.log(resp);
           _this.orderform.tableData=resp.data;
           _this.show=true
@@ -206,14 +187,18 @@
           }
         }
         if(this.maxWeight==0){
-          alert('请选择货物')
+          this.$alert('请选择物品', '消息', {
+            confirmButtonText: '确定',
+          })
         }
         else this.active = 2;
       },
       next2() {
 
         if(this.orderform.scheduledTime==''){
-          alert('请选择预约时间')
+          this.$alert('请预约时间', '消息', {
+            confirmButtonText: '确定',
+          })
         }
         else this.active = 3;
       },
@@ -249,9 +234,50 @@
   }
 </script>
 <style   scoped>
+  * {
+    background-color: transparent;
+  }
+
+
+  /deep/ .el-input-number__decrease{
+    background: transparent;
+    color: #000000;
+  }
+  /deep/ .el-input-number__increase{
+    background: transparent;
+    color: #000000;
+  }
+  /deep/ .el-input__inner{
+    background: transparent;
+    color: #000000;
+  }
+  /*/deep/ .el-step__icon{*/
+  /*  background: transparent;*/
+  /*}*/
+  .user_skills /deep/  .el-table, .el-table__expanded-cell {
+    background-color: transparent;
+  }
+  .user_skills /deep/ .el-table tr {
+    background-color: transparent!important;
+  }
+  .user_skills /deep/  .el-table--enable-row-transition .el-table__body td, .el-table .cell{
+    background-color: transparent;
+  }
+  .demonstration{
+    position: relative;
+    top:-100px;
+    background-color:#96AABF;
+    color: #fff;
+    text-align: center;
+    font-size: 17px;
+    font-weight: 400;
+    width: 1275px;
+    height: 58px;
+  }
   .menu-wrapper{
     height: 58px;
     overflow: hidden;
+    border-bottom:rgba(7,17,27,.1) 1PX solid;
   }
   .foods-wrapper .title{
     border-left: 2px solid #d9dde1;
@@ -275,23 +301,27 @@
     flex: 1;
   }
   .food-item .name{
-    /*display: inline-block;*/
+    display: inline-block;
     margin: auto 0;
     float: left;
     line-height: 14px;
     font-size: 14px;
     color: rgb(7,17,27);
+    position: relative;
+    top:20px;
 
   }
-  .price{
-    /*display: inline-block;*/
-    float: left;
-    line-height: 14px;
-    font-size: 14px;
-    color: rgb(240,20,20);
-    font-weight: 700;
-
-  }
+  /*.price{*/
+  /*  display: inline-block;*/
+  /*  float: left;*/
+  /*  line-height: 14px;*/
+  /*  font-size: 14px;*/
+  /*  color: rgb(240,20,20);*/
+  /*  font-weight: 700;*/
+  /*  position: relative;*/
+  /*  top:40px;*/
+  /*  left:0px;*/
+  /*}*/
   .weight{
     margin-top: 20px;
     vertical-align: middle;

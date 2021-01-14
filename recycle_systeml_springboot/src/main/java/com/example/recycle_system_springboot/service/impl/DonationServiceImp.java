@@ -25,6 +25,7 @@ public class DonationServiceImp implements DonationService {
     @Resource
     Donation donation;
     @Override
+    //增加一个捐赠订单
     public boolean placeAnDonation(Donation order) {
         boolean result=false;
         int i=donationDao.insert(order);
@@ -33,7 +34,7 @@ public class DonationServiceImp implements DonationService {
         }
         return result;
     }
-
+    //用户查询所有的捐赠信息(业务逻辑：根据用户提供的相关信息对所有的相关信息进行查询，运用动态sql，动态的根据用户的需求进行查询)
     @Override
     public PageInfo<DonationVo> selectAllbyuser(int userid, String collectorname, String datebyday, String datebymonth, String datepick, int start, int limit) {
         PageHelper.startPage(start,limit);
@@ -47,7 +48,7 @@ public class DonationServiceImp implements DonationService {
             return result;
         }
     }
-
+    //用户查询进行中捐赠信息(业务逻辑：根据用户提供的相关信息对所有的相关信息进行查询，运用动态sql，动态的根据用户的需求进行查询，正在进行中的订单是根据捐赠订单表中的finished_time为空的记录)
     @Override
     public PageInfo<DonationVo> selectDoingbyuser(int userid, String collectorname, String datebyday, String datebymonth, String datepick, int start, int limit) {
         PageHelper.startPage(start,limit);
@@ -61,7 +62,7 @@ public class DonationServiceImp implements DonationService {
             return result;
         }
     }
-
+    //与用户类似
     @Override
     public PageInfo<DonationVo> selectAllbycollector(int collectorid, String username, String datebyday, String datebymonth, String datepick, int start, int limit) {
         PageHelper.startPage(start,limit);
@@ -117,28 +118,37 @@ public class DonationServiceImp implements DonationService {
             return result;
         }
     }
-
+    //用于管理员给捐赠订单安排一个派送员(业务逻辑：根据前端返回的派送员名字，查找到派送员的主键，再将它更新到捐赠订单表中)
     @Override
-    public boolean placecollector(int donateId, String collectorName) {
+    public int placecollector(int donateId, String collectorName) {
         int collectorid=collectorDao.selectBycollectorname(collectorName);
-        donationDao.updatecollector(donateId,collectorid);
-        return true;
+        boolean result=donationDao.updatecollector(donateId,collectorid);
+        if(result){
+            return donateId;
+        }else {
+            return 0;
+        }
     }
-
+    //用户对捐赠订单进行评价(业务逻辑：先将评价的相关信息添加到数据库表中，根据生成的主键号，更新捐赠订单表中的评价表外键信息)
     @Override
     public Boolean Evaluatedonation(EvaluationVo order) {
-        Boolean result=false;
-        int i=evaluationDao.insert(order);
+        evaluationDao.insert(order);
         donation.setDonateId(order.getDonateId());
         donation.setEvaluationId(order.getEvaluationId());
         donationDao.updateByPrimaryKeySelective(donation);
-        return result;
+        return true;
     }
-
+    //派送员对捐赠订单进行确认(业务逻辑：派送员确认捐赠订单时，自动生成当前的时间，并传到后端，更新捐赠订单表中的finished_time)
     @Override
     public Boolean confirmDonation(Donation order) {
-        System.out.println(order);
         donationDao.updateByPrimaryKeySelective(order);
         return true;
     }
+    //用于删除一个捐赠订单(业务逻辑：删除一个捐赠订单表中的记录)
+    @Override
+    public Boolean DeleteDonation(int donateId) {
+        donationDao.deleteByPrimaryKey(donateId);
+        return true;
+    }
+
 }

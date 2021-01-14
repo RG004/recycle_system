@@ -116,14 +116,20 @@
                     path:'/userlayout',
                   })
               }else if(_this.loginForm.identity==2&&resp.data.login){
-                sessionStorage.setItem('token',resp.data.token)
-                sessionStorage.setItem('identity',_this.loginForm.identity)
-                _this.$store.commit('setCollectorId',resp.data.id)
-                _this.$store.commit('setCollectorName',resp.data.name)
-                _this.$router.push({
-                  path:'/collectorlayout',
-                })
+                if(resp.data.name=="审核中"){
+                _this.$alert('请等待管理员进行审核','提示');
+                }else{
+                  sessionStorage.setItem('token',resp.data.token)
+                  sessionStorage.setItem('identity',_this.loginForm.identity)
+                  _this.$store.commit('setCollectorId',resp.data.id)
+                  _this.$store.commit('setCollectorName',resp.data.name)
+                  _this.$router.push({
+                    path:'/collectorlayout',
+                  })
+                }
+
               }else if(_this.loginForm.identity==3&&resp.data.login){
+
                 sessionStorage.setItem('token',resp.data.token)
                 sessionStorage.setItem('identity',_this.loginForm.identity)
                 _this.$store.commit('setAdminId',resp.data.id)

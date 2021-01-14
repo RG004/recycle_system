@@ -1,47 +1,57 @@
 <template>
   <div v-if="show">
-    根据用户名查询订单：<el-input v-model="adminrequire.username" placeholder="请输入快递员名" style="width: 130px"></el-input>
-    根据快递员姓名查询订单:<el-input v-model="adminrequire.collectorname" placeholder="请输入用户名" style="width: 120px"></el-input>
-    根据日期查询订单：
+    <div style="display: inline-block;"><h1 class="title" >根据用户查询订单:</h1></div>
+    <el-input v-model="adminrequire.username" placeholder="请输入用户名" style="width: 130px"></el-input>
+    <div style="display: inline-block;"><h1 class="title" >根据快递员姓名查询订单:</h1></div>
+    <el-input v-model="adminrequire.collectorname" placeholder="请输入快递员" style="width: 120px"></el-input>
+    <div style="display: inline-block;"><h1 class="title" >根据日期查询订单：</h1></div>
     <el-select v-model="adminrequire.datepick" placeholder="请选择" style="width: 110px">
       <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value"></el-option>
     </el-select>
     <el-date-picker v-if="this.adminrequire.datepick=='day'" v-model="adminrequire.datebyday" type="date" placeholder="选择日期" format="yyyy 年 MM 月 dd 日" value-format="yyyy-MM-dd" style="width: 190px;"></el-date-picker>
     <el-date-picker v-if="this.adminrequire.datepick=='month'" v-model="adminrequire.datebymonth" type="month" placeholder="选择月" format="yyyy年MM月" value-format="yyyy-MM" style="width: 150px;"></el-date-picker>
-    <el-button  type="primary" round  @click="findbyrequire" style="width: 80px">查询</el-button>
-    <el-button  type="primary" round  @click="findall">查询全部</el-button>
+    <el-button  icon="el-icon-search" round  @click="findbyrequire" style="width: 80px">查询</el-button>
+    <el-button  icon="el-icon-search" round  @click="findall">查询全部</el-button>
 
-    <el-table :data="tableData">
-      <el-table-column prop="donateId" label="捐赠单号" width="140px ">
+    <div class="user_skills" style="margin-top:20px;" >
+    <el-table :data="tableData" :header-cell-style="{background:'transparent'}">
+      <el-table-column prop="donateId" label="捐赠单号" width="80 " align="center">
+    </el-table-column>
+      <el-table-column prop="helpName" label="捐赠地" width="250" align="center">
       </el-table-column>
-      <el-table-column prop="scheduledTime" label="预约时间" width="200px">
+      <el-table-column prop="addressDetails" label="用户地址" width="300" align="center">
       </el-table-column>
-      <el-table-column prop="userName" label="用户" width="200">
+      <el-table-column prop="scheduledTime" label="预约时间" width="200" align="center">
       </el-table-column>
-      <el-table-column label="派送员" width="200px">
+      <el-table-column prop="userName" label="用户" width="100" align="center">
+      </el-table-column>
+      <el-table-column label="派送员" width="100" align="center">
         <template slot-scope="scope" >
           <span v-if="scope.row.collectorName!=null">{{scope.row.collectorName}}</span>
-          <span v-else><el-button  type="primary" round @click="edit(scope.row)">选择派送员</el-button></span>
+          <span v-else style="color: red">未分配</span>
         </template>
       </el-table-column>
-      <el-table-column fixed="right" label="操作">
+      <el-table-column fixed="right" label="操作" align="center">
         <template slot-scope="scope">
-          <el-popover placement="right" width="400" trigger="click">
+          <el-button  round style="background-color: #F01414;color: #ffffff " icon="el-icon-plus" @click="edit(scope.row)"></el-button>
+          <el-popover placement="left" width="400" trigger="click">
             <div>{{scope.row.donateDetail}}</div>
-            <el-button  type="primary" round slot="reference" >捐赠详情</el-button>
+            <el-button icon="el-icon-more-outline" round slot="reference" ></el-button>
           </el-popover>
         </template>
       </el-table-column>
     </el-table>
-    <el-pagination background layout="total, prev, pager, next, jumper" :page-size="pageSize" :total="total" @current-change="page"></el-pagination>
-    <el-dialog :visible.sync="editVisible">
+    </div>
+    <el-pagination  :background="isBackground" layout="total, prev, pager, next, jumper" :page-size="pageSize" :total="total" @current-change="page"></el-pagination>
+    <el-dialog :append-to-body="true" :visible.sync="editVisible">
       <el-form  :model="editForm" ref="editForm" @submit.prevent.native >
         <el-select v-model="editForm.collectorName" placeholder="请选择" style="width: 500px">
           <el-option v-for="item in collector" :key="item.collectorId" :label="item.collectorName" :value="item.collectorName"></el-option>
         </el-select>
+        <div style="height: 30px;"></div>
         <div>
           <el-button @click="closeDialog()">取消</el-button>
-          <el-button type="primary" @click="submit()">确定</el-button>
+          <el-button type="primary" @click="submit()" style="color: black;">确定</el-button>
         </div>
       </el-form>
     </el-dialog>
@@ -76,7 +86,7 @@
       },
       findbyrequire(){
         const _this = this
-        axios.post('http://localhost:8181/adminfinddoingdonate/1/3',this.adminrequire).then(function (resp) {
+        axios.post('http://localhost:8181/adminfinddoingdonate/1/7',this.adminrequire).then(function (resp) {
           _this.tableData=resp.data.list
           _this.pageSize = resp.data.pageSize
           _this.total = resp.data.total
@@ -89,7 +99,7 @@
         this.adminrequire.datebymonth=''
         this.adminrequire.datebyday=''
         this.adminrequire.datepick='day'
-        axios.post('http://localhost:8181/adminfinddoingdonate/1/3',this.adminrequire).then(function (resp) {
+        axios.post('http://localhost:8181/adminfinddoingdonate/1/7',this.adminrequire).then(function (resp) {
           _this.tableData=resp.data.list
           _this.pageSize = resp.data.pageSize
           _this.total = resp.data.total
@@ -97,7 +107,7 @@
       },
       page (currentPage) {
         const _this = this
-        axios.post('http://localhost:8181/adminfinddoingdonate/'+currentPage+'/3',this.adminrequire).then(function (resp) {
+        axios.post('http://localhost:8181/adminfinddoingdonate/'+currentPage+'/7',this.adminrequire).then(function (resp) {
           _this.tableData = resp.data.list
           _this.pageSize = resp.data.pageSize
           _this.total = resp.data.total
@@ -106,7 +116,7 @@
     },
       created () {
         const _this = this;
-        axios.post('http://localhost:8181/adminfinddoingdonate/1/3',this.adminrequire).then(function (resp) {
+        axios.post('http://localhost:8181/adminfinddoingdonate/1/7',this.adminrequire).then(function (resp) {
           _this.tableData = resp.data.list
           _this.pageSize = resp.data.pageSize
           _this.total = resp.data.total
@@ -119,6 +129,7 @@
       },
       data () {
         return {
+          isBackground: true,
           show:false,
           editVisible:false,
           editForm:{
@@ -183,7 +194,9 @@
             recycleOrderId: 1,
             scheduledTime: '12月15日 下午17：00',
             addressDetails:'',
+            helpName:'',
             userName: '陈南',
+            addressDetails:'',
             collectorName: '陈南',
           }],
         }
@@ -193,4 +206,41 @@
 
 <style scoped>
 
+  * {
+    background-color: transparent;
+  }
+  /deep/ .el-input__inner{
+    background-color: transparent;
+  }
+  .user_skills /deep/  .el-table, .el-table__expanded-cell {
+    background-color: transparent;
+  }
+  .user_skills /deep/ .el-table tr {
+    background-color: transparent!important;
+  }
+  .user_skills /deep/  .el-table--enable-row-transition .el-table__body td, .el-table .cell{
+    background-color: transparent;
+  }
+  /deep/ .el-pagination.is-background .el-pager li:not(.disabled) {
+    color: rgb(147,153,159);
+    background-color: transparent;
+  }
+  /deep/ .el-pagination.is-background  .btn-next{
+    background-color: transparent;
+  }
+  /deep/ .el-pagination.is-background  .btn-prev{
+    background-color: transparent;
+  }
+  /deep/ .btn-prev{
+    background-color: transparent;
+  }
+  .title{
+    font-size: 13px;
+    font-weight: 700;
+    height: 26px;
+    line-height: 26px;
+    padding-left: 10px;
+    margin-left: 12PX;
+    color: rgb(147,153,159);
+  }
 </style>

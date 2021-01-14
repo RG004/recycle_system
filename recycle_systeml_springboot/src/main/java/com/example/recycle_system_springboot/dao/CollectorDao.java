@@ -25,7 +25,11 @@ public interface CollectorDao {
 
     int updatePhoneByPrimaykey(@Param("collectorPersonId") int collectorPersonId, @Param("phone") String phone);
 
-    List<Collector> selectAll();
+    List<Collector> selectAll();//用于管理员与分配订单给派送员
 
     Integer selectBycollectorname(String collectorname);
+
+    int updateStatusByPrimaykey(@Param("collectorPersonId") int collectorPersonId,@Param("userStatus") String userStatus);
+
+    List<CollectorVo> selectAllCollector();//用于管理员管理所有的派送员
 }

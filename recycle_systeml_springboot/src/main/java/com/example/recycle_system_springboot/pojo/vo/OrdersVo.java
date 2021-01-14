@@ -8,6 +8,8 @@ public class OrdersVo {
 
     private int addressId;
 
+    private String addressDetails;
+
     private String collectorName;
 
     private String username;
@@ -20,4 +22,5 @@ public class OrdersVo {
 
     private String phone;
 
+    private Double totalAmount;
 }

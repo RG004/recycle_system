@@ -30,5 +30,5 @@ public interface DonationDao {
 
     Page<DonationVo> selectDoingByadmin(String username,String collectorname,String date,String datepick);
 
-    int updatecollector(Integer donateId,Integer collectorid);
+    boolean updatecollector(Integer donateId,Integer collectorid);
 }

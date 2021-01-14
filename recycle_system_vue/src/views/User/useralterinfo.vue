@@ -1,20 +1,21 @@
 <template>
   <div>
+    <div class="user_skills" style="margin-top:20px;" >
   <el-card class="box-card">
     <div slot="header" class="clearfix">
       <span>个人信息</span>
     </div>
     <div class="text item">
       <div style="margin: 20px">
-      <div>ID：{{userId}}</div><div style="position: relative; top:-18px;left:600px">用户名：{{userName}}</div>
+      <div>ID：{{userinfo.userId}}</div><div style="position: relative; top:-18px;left:600px">用户名：{{userinfo.userName}}</div>
       </div>
       <div style="margin: 20px">
-      <div>真实姓名：{{userRealname}}</div><div style="position: relative; top:-18px;left:600px">手机号：{{phone}}</div>
-        <div style="position: relative; top:-38px;left:-430px"><el-button style="float: right; padding: 3px 0"  icon="el-icon-edit-outline" @click="modifyPhone(phone)"></el-button></div>
+      <div>真实姓名：{{userinfo.userRealname}}</div><div style="position: relative; top:-18px;left:600px">手机号：{{userinfo.phone}}</div>
+        <div style="position: relative; top:-38px;left:-425px"><el-button style="float: right; padding: 3px 0"  icon="el-icon-edit-outline" @click="modifyPhone(userinfo.phone)"></el-button></div>
       </div>
     </div>
   </el-card>
-  <el-table :data="addressList">
+  <el-table :data="this.userinfo.addressList" :header-cell-style="{background:'transparent'}">
     <el-table-column label="序号" width="375">
       <template slot-scope="scope">
         <span>{{scope.$index + 1}}</span>
@@ -24,18 +25,17 @@
     </el-table-column>
     <el-table-column  fixed="right" label="操作">
       <template slot-scope="scope">
-        <el-button  type="primary" round slot="reference" icon="el-icon-edit-outline" style="background-color: #B3C0D1;
-        border-color: #B3C0D1"  @click="modifyData(scope.$index, scope.row)"></el-button>
-        <el-button  type="primary" round icon="el-icon-delete" style="background-color: #B3C0D1; border-color: #B3C0D1" slot="reference"
+        <el-button   round slot="reference" icon="el-icon-edit-outline"  @click="modifyData(scope.$index, scope.row)"></el-button>
+        <el-button   round icon="el-icon-delete" slot="reference"
                     @click="handleDelete(scope.$index, scope.row)"></el-button>
       </template>
     </el-table-column>
   </el-table>
     <div style="text-align: center; position:relative;">
-      <el-button type="primary" @click="add" icon="el-icon-plus" style ="background-color: #B3C0D1; border-color: #B3C0D1;"></el-button>
+      <el-button @click="add" icon="el-icon-plus" ></el-button>
     </div>
 
-    <el-dialog title="新增地址" :visible.sync="dialogFormVisible">
+    <el-dialog title="新增地址" :append-to-body="true" :visible.sync="dialogFormVisible">
       <!-- 在el-dialog中进行嵌套el-form实现弹出表格的效果 -->
       <el-form :model="form" @submit.native.prevent>
         <el-form-item label="地址" :label-width="formLabelWidth">
@@ -43,12 +43,12 @@
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button @click="cancel">取 消</el-button>
+        <el-button @click="cancel">取消</el-button>
         <!-- 设置触发更新的方法 -->
-        <el-button type="primary"  @click="update">确 定</el-button>
+        <el-button type="primary"  @click="update" style="color: black;">确定</el-button>
       </div>
     </el-dialog>
-    <el-dialog :visible.sync="centerDialogVisible">
+    <el-dialog :append-to-body="true" :visible.sync="centerDialogVisible">
       <el-form  :model="editForm" @submit.native.prevent>
         <el-form-item label="修改地址">
           <el-input v-model="editForm.addressDetails2"  @keyup.enter.native="submitEditRow()"></el-input>
@@ -56,21 +56,22 @@
       </el-form>
       <div>
         <el-button @click="closeDialog()">取消</el-button>
-        <el-button type="primary"  @click="submitEditRow()">确定</el-button>
+        <el-button type="primary"  @click="submitEditRow()" style="color: black;">确定</el-button>
       </div>
     </el-dialog>
 
-    <el-dialog :visible.sync="editPhoneVisible">
+    <el-dialog :append-to-body="true" :visible.sync="editPhoneVisible">
       <el-form  :model="editForm" :rules="rules" ref="editForm" @submit.prevent.native >
         <el-form-item label="修改手机号码"  prop="phone2">
           <el-input v-model="editForm.phone2" @keyup.enter.native="sumbitEditPhone('editForm')"></el-input>
         </el-form-item>
         <div>
           <el-button @click="closePhoneDialog()">取消</el-button>
-          <el-button type="primary" @click="sumbitEditPhone('editForm')">确定</el-button>
+          <el-button type="primary" @click="sumbitEditPhone('editForm')" style="color: black;">确定</el-button>
         </div>
       </el-form>
     </el-dialog>
+    </div>
   </div>
 </template>
 
@@ -82,11 +83,7 @@
       const _this=this
       axios.get('http://localhost:8181/userAlladdress/'+this.$store.getters.getUserId+'').then(function (resp) {
         console.log(resp)
-        _this.userId=resp.data.userId
-        _this.userName=resp.data.userName
-        _this.userRealname=resp.data.userRealname
-        _this.phone=resp.data.phone
-        _this.addressList=resp.data.addressList
+        _this.userinfo=resp.data
       })
     },
     data() {
@@ -98,6 +95,7 @@
         }
       };
       return {
+        userinfo:{
           userId:1,
           userName:'yxy',
           userRealname:'杨昕语',
@@ -106,6 +104,7 @@
             addressId:1,
             addressDetails:'浙江省杭州市西湖区留和路288号浙江工业大学屏峰校区'
           }],
+        },
           centerDialogVisible: false,
           dialogFormVisible: false,
           formLabelWidth: "80px",
@@ -117,6 +116,7 @@
             userId:this.$store.getters.getUserId
           },
           jingwei:'',
+          jw:'',
           value6: "",
           currentPage3: 1,
           currentIndex: "",
@@ -148,8 +148,8 @@
         const _this=this
         this.$refs[formName].validate((valid) => {//检验手机
           if (valid) {
-            this.phone = this.editForm.phone2;
-            axios.post('http://localhost:8181/userupdatePhone/'+this.userId+'/'+this.phone+'').then(function (resp) {
+            this.userinfo.phone = this.editForm.phone2;
+            axios.post('http://localhost:8181/userupdatePhone/'+this.userinfo.userId+'/'+this.userinfo.phone+'').then(function (resp) {
               console.log(resp)
             })
             this.editPhoneVisible = false;
@@ -172,7 +172,7 @@
         })
           .then(() => {
             // 移除对应索引位置的数据，可以对row进行设置向后台请求删除数据
-            this.addressList.splice(index, 1);
+            this.userinfo.addressList.splice(index, 1);
             axios.delete('http://localhost:8181/userDeleteAddress/'+row.addressId+'').then(function (resp) {
             })
             this.$message({
@@ -195,20 +195,22 @@
       submitEditRow() {
         const _this=this
         let editData = _index;
-        this.addressList[editData].addressDetails = this.editForm.addressDetails2;
-        this.updateaddress.addressDetails=this.addressList[editData].addressDetails
-        this.updateaddress.addressId=this.addressList[editData].addressId
+        this.userinfo.addressList[editData].addressDetails = this.editForm.addressDetails2;
+        this.updateaddress.addressDetails=this.userinfo.addressList[editData].addressDetails
+        this.updateaddress.addressId=this.userinfo.addressList[editData].addressId
         this.updateaddress.userId=this.$store.getters.getUserId
         axios.get('https://restapi.amap.com/v3/geocode/geo?address='+this.updateaddress.addressDetails+'&key=8c922d0176df163a311ac3425db373c6').then(function (resp) {
           _this.jingwei=resp.data.geocodes[0].location
-          _this.updateaddress.longitude=parseFloat(_this.jingwei.substr(0,10))
-          _this.updateaddress.latitude=parseFloat(_this.jingwei.substr(11,10))
+          _this.jw=_this.jingwei.split(",")
+          _this.form.longitude=parseFloat(_this.jw[0])
+          _this.form.latitude=parseFloat(_this.jw[1])
           axios.post('http://localhost:8181/updateAddress',_this.updateaddress).then(function (r) {
+            console.log(r)
             _this.$alert(_this.updateaddress.addressDetails+'修改成功','消息',{
               confirmButtonText:'确定',
           })
         })
-          this.centerDialogVisible = false;
+          _this.centerDialogVisible = false;
         })
       },
       closeDialog(){
@@ -230,8 +232,9 @@
         this.addressList.push(this.form);
         axios.get('https://restapi.amap.com/v3/geocode/geo?address='+this.form.addressDetails+'&key=8c922d0176df163a311ac3425db373c6').then(function (resp) {
           _this.jingwei=resp.data.geocodes[0].location
-          _this.form.longitude=parseFloat(_this.jingwei.substr(0,10))
-          _this.form.latitude=parseFloat(_this.jingwei.substr(11,10))
+          _this.jw=_this.jingwei.split(",")
+          _this.form.longitude=parseFloat(_this.jw[0])
+          _this.form.latitude=parseFloat(_this.jw[1])
           axios.post('http://localhost:8181/insertAddress',_this.form).then(function (r) {
           })
         })
@@ -246,6 +249,21 @@
 </script>
 
 <style scoped>
+  * {
+    background-color: transparent;
+  }
+
+  .user_skills /deep/  .el-table, .el-table__expanded-cell {
+    background-color: transparent;
+  }
+  .user_skills /deep/ .el-table tr {
+    background-color: transparent!important;
+  }
+  .user_skills /deep/  .el-table--enable-row-transition .el-table__body td, .el-table .cell{
+    background-color: transparent;
+  }
+
+
   .text {
     font-size: 14px;
   }

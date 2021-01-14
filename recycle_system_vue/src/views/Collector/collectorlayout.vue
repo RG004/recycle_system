@@ -1,6 +1,7 @@
 <template>
-  <el-container style="height:750px; border: 1px solid #eee">
-    <el-aside width="220px" style="background-color: rgb(238, 241, 246)">
+  <div class="all">
+  <el-container style="height:750px;">
+    <el-aside width="220px" >
       <el-menu :default-active="this.$route.path" router>
         <el-menu-item index="/collectorhomepage">
           <i class="el-icon-s-home"></i>
@@ -23,7 +24,8 @@
         <el-submenu index="4">
           <template slot="title">设置</template>
           <el-menu-item-group>
-            <el-menu-item index="/collectoralterinfo">修改个人信息</el-menu-item>
+            <el-menu-item index="/collectoralterinfo">个人中心</el-menu-item>
+            <el-menu-item index="/collectorecharts">数据统计</el-menu-item>
             <el-menu-item index="/login" @click="d">退出登录</el-menu-item>
           </el-menu-item-group>
         </el-submenu>
@@ -33,18 +35,13 @@
     <el-container>
       <el-header style="text-align: right; font-size: 12px">
 
-        <el-menu  class="el-menu-demo" mode="horizontal" @select="handleSelect"  router>
-          <el-menu-item  style="width: 930px"></el-menu-item>
-          <el-menu-item><i class="el-icon-edit" style="font-size: 25px;"></i></el-menu-item>
+        <el-menu  class="el-menu-demo" mode="horizontal" @select="handleSelect"  router  style="margin-left: 900px">
+          <el-menu-item index="/collectorhomepage"><i class="el-icon-s-home" style="font-size: 25px;" ></i></el-menu-item>
           <el-menu-item><i class="el-icon-share" style="font-size: 25px;"></i></el-menu-item>
-          <el-menu-item><i class="el-icon-set-up" style="font-size: 25px;"></i></el-menu-item>
+          <el-menu-item index="/collectoralterinfo"><i class="el-icon-set-up" style="font-size: 25px;"></i></el-menu-item>
           <el-submenu index="4">
             <template slot="title"><i class="el-icon-user" style="font-size: 25px ;"></i>{{this.$store.getters.getCollectorName}}</template>
-            <el-menu-item index="/collectorallinorder">我的订单</el-menu-item>
-            <el-menu-item index="/collectoralterinfo">修改个人信息</el-menu-item>
             <el-menu-item index="/login" @click="d">退出登录</el-menu-item>
-
-
           </el-submenu>
         </el-menu>
 
@@ -56,7 +53,7 @@
     </el-container>
   </el-container>
 
-
+  </div>
 </template>
 <script>
   export default {
@@ -75,13 +72,40 @@
 </script>
 
 <style scoped>
-  .el-header {
-
-    color: #333;
-    line-height: 60px;
+  * {
+    background-color: transparent;
+  }
+  /deep/ .el-menu--inline{
+    background-color: transparent;
+  }
+  .all{
+    margin: 0;
+    width: 100%;
+    height: 100vh;
+    font-family: "Exo", sans-serif;
+    color: #fff;
+    background: linear-gradient(-45deg, #ff727a, #F2F0FF, #d4a1d5, #d5c5cb);
+    background-size: 400% 400%;
+    animation: gradientBG 15s ease infinite;
+    position: fixed;
+  }
+  @keyframes gradientBG {
+    0% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+    100% {
+      background-position: 0% 50%;
+    }
   }
 
-  .el-aside {
-    color: #333;
+
+  input{
+    margin-top: 100px;
+    z-index: 999;
+    position: relative;
   }
+
 </style>

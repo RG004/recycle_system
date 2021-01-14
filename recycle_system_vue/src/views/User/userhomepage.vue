@@ -1,6 +1,6 @@
 <template>
   <div class="block">
-    <el-carousel :interval="4000" type="card" height="150px">
+    <el-carousel :interval="4000" type="card" height="300px">
       <el-carousel-item v-for="item in imagebox" :key="item.id" >
         <img :src="item.idView" class="image">
       </el-carousel-item>
@@ -9,14 +9,24 @@
 <!--      左侧-->
       <div>
         <div style="display: flex;margin:30px 0px" >
-          <el-card class="box-card" style="margin-right: 60px;margin-left: 60px">
+          <el-card class="box-card" style=" margin-right: 60px;margin-left: 60px">
             <div slot="header" class="clearfix">
               <span>我的订单</span>
-              <el-button style="float: right; padding: 3px 0" type="text"  @click="doingInorder">查看</el-button>
+              <el-button style="float: right; padding: 3px 0" type="text"  @click="doingInorder">查看订单</el-button>
             </div>
-            您有3个正在进行的订单
+            您有{{total}}个正在进行的订单
           </el-card>
           <el-button style="width: 200px;height: 120px; box-shadow: 0px 1px 5px #cbcaca; " @click="recycle">立即下单</el-button>
+        </div>
+        <div style="display: flex;margin:30px 0px" >
+          <el-card class="box-card" style="margin-right: 60px;margin-left: 60px">
+            <div slot="header" class="clearfix">
+              <span>我的捐赠订单</span>
+              <el-button style="float: right; padding: 3px 0" type="text"  @click="doingDonation">查看捐赠订单</el-button>
+            </div>
+            您有{{total2}}个正在进行中的捐赠订单
+          </el-card>
+          <el-button style="width: 200px;height: 120px; box-shadow: 0px 1px 5px #cbcaca; " @click="donate">立即捐赠</el-button>
         </div>
         <el-card class="box-card" style="margin-left: 60px; width: 740px;height: 180px">
             <div slot="header" class="clearfix">
@@ -65,6 +75,15 @@ export default {
   name: 'index',
   data(){
     return{
+      total:1,
+      total2:1,
+      userrequire:{
+        id:this.$store.getters.getUserId,
+        collectorname:'',
+        datebyday:'',
+        datebymonth:'',
+        datepick:'day',//判断是按月查询还是按日查询
+      },
       tableData: [{
         id: 1304,
         booktime: '12月15日 下午17：00',
@@ -86,83 +105,109 @@ export default {
         idView:require('../../assets/imagebox/1.png')
       },{
         id:1,
-        idView:require('../../assets/imagebox/1.png')
+        idView:require('../../assets/imagebox/2.png')
       },{
         id:2,
-        idView:require('../../assets/imagebox/1.png')
+        idView:require('../../assets/imagebox/3.png')
       },{
         id:3,
-        idView:require('../../assets/imagebox/1.png')
+        idView:require('../../assets/imagebox/4.png')
       }
 
       ]
     }
   },
+  created () {
+    const _this=this;
+    axios.post('http://localhost:8181/userfindAllDoingOrders/1/8',this.userrequire).then(function (resp) {
+      console.log(resp)
+      _this.show=true
+      _this.total = resp.data.total
+    })
+    axios.post('http://localhost:8181/userfinddoingdonate/1/8',this.userrequire).then(function (resp) {
+      console.log(resp)
+      _this.show=true
+      _this.total2 = resp.data.total
+
+    })
+  },
   methods: {
     doingInorder () {
       this.$router.push('/userdoingInorder')
     },
+    doingDonation () {
+      this.$router.push('/userdoingdonate')
+    },
     recycle () {
       this.$router.push('/recycle')
-    }
+    },
+    donate () {
+      this.$router.push('/donate')
+    },
+
 
   }
 }
 </script>
 
-<style>
-.el-carousel__item h3 {
-  color: #475669;
-  font-size: 14px;
-  opacity: 0.75;
-  line-height: 200px;
-  margin: 0;
-}
+<style scoped>
+  * {
+    background-color: transparent;
+  }
+  .el-card{
+    background-color: transparent;
+  }
+  .el-carousel__item h3 {
+    color: #475669;
+    font-size: 14px;
+    opacity: 0.75;
+    line-height: 200px;
+    margin: 0;
+  }
 
-.el-carousel__item:nth-child(2n) {
-  background-color: #99a9bf;
-}
+  .el-carousel__item:nth-child(2n) {
+    background-color: #99a9bf;
+  }
 
-.el-carousel__item:nth-child(2n+1) {
-  background-color: #d3dce6;
-}
+  .el-carousel__item:nth-child(2n+1) {
+    background-color: #d3dce6;
+  }
 
-.text {
-  font-size: 14px;
-}
+  .text {
+    font-size: 14px;
+  }
 
-.item {
-  margin-bottom: 18px;
-}
+  .item {
+    margin-bottom: 18px;
+  }
 
-.clearfix:before,
-.clearfix:after {
-  display: table;
-  content: "";
-}
-.clearfix:after {
-  clear: both
-}
+  .clearfix:before,
+  .clearfix:after {
+    display: table;
+    content: "";
+  }
+  .clearfix:after {
+    clear: both
+  }
 
-.box-card {
-  width: 480px;
-}
-.el-icon-shopping-cart-2,.el-icon-refresh,.el-icon-circle-check,.el-icon-chat-dot-square{
-  font-size: 40px;margin-right: 45px
-}
-.el-icon-arrow-right{
-  font-size: 20px;margin-right: 45px;
-}
-.el-icon-question{
-  margin-right: 10px;
-  font-size: 18px;
-  color: #6dbf6d;
-}
-.el-icon-s-opportunity{
-  margin-right: 10px;
-  font-size: 18px;
-  color: #fa914b;
-}
-
+  .box-card {
+    width: 480px;
+  }
+  .el-icon-shopping-cart-2,.el-icon-refresh,.el-icon-circle-check,.el-icon-chat-dot-square{
+    font-size: 40px;margin-right: 45px
+  }
+  .el-icon-arrow-right{
+    font-size: 20px;margin-right: 45px;
+  }
+  .el-icon-question{
+    margin-right: 10px;
+    font-size: 18px;
+    color: #6dbf6d;
+  }
+  .el-icon-s-opportunity{
+    margin-right: 10px;
+    font-size: 18px;
+    color: #fa914b;
+  }
 
 </style>

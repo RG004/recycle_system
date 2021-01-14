@@ -1,26 +1,18 @@
 <template>
   <el-container direction="vertical">
-  <div class="menu-wrapper" ref="menuWrapper">
-    <el-menu class="el-menu-demo" mode="horizontal"  background-color="#545c64" text-color="#fff" active-text-color="#ffd04b" style="width: 100%;">
-      <el-menu-item>物资捐赠</el-menu-item>
-    </el-menu>
-  </div>
-    <div>
-      <div style="height: 550px;width:50%;float:left;padding-left: 0px;display: inline-block;"  class="foods-wrapper" ref="foodsWrapper">
+
+    <div style="margin-top: 20px;">
+      <div style="height: 550px;width:50%;float:left;padding-left: 0px;display: inline-block;position: relative;left:-12px;"    class="foods-wrapper" ref="foodsWrapper">
         <div>
-          <div style="display: inline-block;">请选择捐赠地址：</div>
+          <div style="display: inline-block;margin-right: 6px;"><h1 class="title" style="width: 85%">请选择捐赠地址：</h1></div>
           <el-select  style="width: 400px"v-model="form.helpId"  clearable placeholder="请选择捐赠地点">
             <el-option v-for="item in help_the_poor" :key="item.helpId" :label="item.helpName" :value="item.helpId"></el-option>
           </el-select>
         </div>
-        <div>
-          <div>{{this.help_the_poor[0].latitude }}</div>
-          <div>请填写捐赠物品详细信息：</div>
-          <el-input type="textarea" :rows="5" v-model="form.donateDetail"></el-input>
-        </div>
         <div class="block"  style="margin: 0 auto ;">
-          <div class="demonstration" style="width: 128px;display: inline-block;">请选择上门时间:  </div>
+          <div style="width: 128px;display: inline-block;"><h1 class="title" style="width: 95%">请选择上门时间: </h1> </div>
           <el-date-picker
+            style="margin-left: 20px;"
             v-model="form.scheduledTime"
             type="datetime"
             value-format="yyyy-MM-dd hh:mm:ss"
@@ -28,8 +20,8 @@
           </el-date-picker>
         </div>
         <div>
-          <div style="display: inline-block;">请选择上门地址：</div>
-          <el-select style="width: 400px" v-model="form.addressId"  clearable placeholder="请选择捐赠地点">
+          <div style="display: inline-block;"><h1 class="title" style="width: 85%">请选择上门地址：</h1></div>
+          <el-select style="width: 400px;margin-left: 3px;" v-model="form.addressId"  clearable placeholder="请选择地址">
             <el-option
               v-for="item in addressList"
               :key="item.addressId"
@@ -38,11 +30,31 @@
             </el-option>
           </el-select>
         </div>
-        <div style="float: left;">
+        <div>
+          <div><h1 class="title" style="width: 98%">请填写捐赠物品详细信息：</h1></div>
+          <div style="position: relative;left: 12px;"><el-input  type="textarea" :rows="5" v-model="form.donateDetail" ></el-input></div>
+        </div>
+        <div>
+          <div><h1 class="title" style="width: 98%">请选择所含有的物品类型：</h1></div>
+          <div>
+            <el-checkbox-group v-model="checkList" style="padding-left: 30px">
+              <el-checkbox label="日用品"></el-checkbox>
+              <el-checkbox label="食品"></el-checkbox>
+              <el-checkbox label="衣物"></el-checkbox>
+              <el-checkbox label="数码产品" ></el-checkbox>
+              <el-checkbox label="文件" ></el-checkbox>
+            </el-checkbox-group>
+          </div>
+        </div>
+        <div>
+          <h1 class="title" style="width: 200px;display: inline-block;">请填写大概的重量（千克）：</h1>
+          <div style="width: 200px;display: inline-block;"><el-input    v-model="weight" ></el-input></div>
+        </div>
+        <div style="float: left;margin-left: 10px;">
           <el-button style="margin-top: 12px;"  @click="finish" >确认捐赠</el-button>
         </div>
       </div>
-      <div style="display: inline-block;float: left;width: 50%;height: 550px" id="all-map"></div>
+      <div style="display: inline-block;float: left;width: 50%;height: 550px;color: black;" id="all-map"></div>
     </div>
 
   </el-container>
@@ -53,34 +65,14 @@
     export default {
       data(){
         return {
-          jing:120.047668,
-          wei:30.234097,
-          address:'',//经纬度
-          detail:'',//地址信息
-          lnglats: [{
-            j:120.047668,
-            w:30.234097,
-            content:'zqy笨比'
-          },{
-            j:120.047668,
-            w:30.235197,
-            content:'zqy笨比'
-          },{
-            j:120.047668,
-            w:30.236297,
-            content:'zqy笨比'
-          },{
-            j:120.047668,
-            w:30.237397,
-            content:'zqy笨比'
-          }
-          ],
+          weight:'',
+          checkList: [],
           form:{
-            helpId:1,
-            userId:1,
+            helpId:'',
+            userId:this.$store.getters.getUserId,
             scheduledTime:'',
             donateDetail:'',
-            addressId:1,
+            addressId:'',
           },
           addressList: [{
             addressId:1,
@@ -101,11 +93,9 @@
       created(){
         const _this=this;
         axios.get('http://localhost:8181/userAlladdress/'+this.$store.getters.getUserId+'').then(function (resp) {
-          console.log(resp)
           _this.addressList=resp.data.addressList
         })
         axios.get('http://localhost:8181/userAllHelp').then(function (resp) {
-          console.log(resp)
           _this.help_the_poor=resp.data
           _this.GaodeMap()
         })
@@ -113,18 +103,44 @@
       methods: {
         finish(){
           const _this=this
-          this.form.userId=this.$store.getters.getUserId;
-          axios.post('http://localhost:8181/placeandonation',this.form).then(function (resp) {
-            console.log(resp)
-            if(resp.data){
-              _this.$alert('捐赠成功','消息',{
-                confirmButtonText:'确定',
-                })
+          _this.form.donateDetail+='    所含有的物品类型有：'+_this.checkList+'。     包裹的重量大约有：'+_this.weight+'(千克)'
+          if(isNaN(_this.weight)){
+            _this.$alert('重量请填写数字', '消息', {
+              confirmButtonText: '确定',
+            })
+          }
+          else if(this.form.donateDetail=='') {
+            _this.$alert('请填写捐赠信息', '消息', {
+              confirmButtonText: '确定',
+            })
+          }
+          else if(this.form.helpId==''){
+            _this.$alert('请选择捐赠地址', '消息', {
+              confirmButtonText: '确定',
+            })
+          }
+          else if(this.form.scheduledTime=='') {
+            _this.$alert('请预约时间', '消息', {
+              confirmButtonText: '确定',
+            })
+          }
+          else if(this.form.addressId==''){
+            _this.$alert('请预约地址', '消息', {
+              confirmButtonText: '确定',
+            })
+          }
+          else {
+              axios.post('http://localhost:8181/placeandonation',this.form).then(function (resp) {
+                if(resp.data){
+                  _this.$alert('捐赠订单已生成','消息',{
+                    confirmButtonText:'确定',
+                    callback:action => {
+                      _this.$router.push('/userdoingdonate')
+                    }
+                  })
+                }
+              })
             }
-          })
-          this.$router.push({
-            path:'/userdoingdonate'
-          })
         },
         GaodeMap () {
           let map = new AMap.Map('all-map', {
@@ -158,13 +174,42 @@
 </script>
 
 <style scoped>
-.foods-wrapper{
-width: 50%;
-}
-.food-item{
-  display: flex;
-  margin: 18px;
-  padding-bottom: 18px;
-  border:rgba(7,17,27,.1) 1PX solid;
-}
+  .el-button {
+    background-color: transparent;
+  }
+  /deep/ .el-textarea__inner{
+    background: transparent;
+  }
+  /deep/ .el-input__inner{
+    background: transparent;
+  }
+  .foods-wrapper{
+    width: 50%;
+  }
+  .food-item{
+    display: flex;
+    margin: 18px;
+    padding-bottom: 18px;
+    border:rgba(7,17,27,.1) 1PX solid;
+  }
+  .demonstration{
+    position: relative;
+    top:0px;
+    background-color:#96AABF;
+    color: #fff;
+    text-align: center;
+    font-size: 17px;
+    font-weight: 400;
+    width: 1275px;
+    height: 58px;
+  }
+  .title{
+    font-size: 15px;
+    font-weight: 700;
+    height: 26px;
+    line-height: 26px;
+    padding-left: 10px;
+    margin-left: 12PX;
+    color: rgb(147,153,159);
+  }
 </style>

@@ -16,7 +16,7 @@ public class ItemServiceImpl implements ItemService {
 
     @Resource
     ItemDao itemDao;
-
+    //返回所有的Item信息给管理员(业务逻辑：查询所有的Item信息，同时包括Item属于的Item_Type中的信息)
     @Override
     public PageInfo<ItemManageVo> selectAll(int start, int limit) {
         PageHelper.startPage(start,limit);
@@ -24,21 +24,20 @@ public class ItemServiceImpl implements ItemService {
         PageInfo<ItemManageVo> result= new PageInfo<>(list);
         return result;
     }
-
+    //用于添加一个item记录
     @Override
     public Item insert(Item item){
         itemDao.insert(item);
         Item result = itemDao.selectByPrimaryKey(item.getItemId());
         return result;
     }
-
+    //用于删除一个item记录
     @Override
     public int delete(Item item){
-
         int result=itemDao.deleteByPrimaryKey(item.getItemId());
         return result;
     }
-
+    //用于更新一个item记录
     @Override
     public int update(Item item){
         int result=itemDao.updateByPrimaryKey(item);

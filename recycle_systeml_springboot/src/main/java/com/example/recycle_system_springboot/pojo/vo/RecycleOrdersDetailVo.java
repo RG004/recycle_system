@@ -10,4 +10,6 @@ public class RecycleOrdersDetailVo {
     private Double itemPrice;
 
     private Double quantity;
+
+    private Double sum;
 }

@@ -28,4 +28,7 @@ public interface UserDao {
 
     int updatePhoneByPrimaryKey(@Param("userId") int userId,@Param("phone") String phone);
 
+    int selectSum();
+
+    Page<User> selectAll();
 }

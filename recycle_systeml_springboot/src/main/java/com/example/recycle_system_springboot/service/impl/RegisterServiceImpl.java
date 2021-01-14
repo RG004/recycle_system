@@ -12,7 +12,7 @@ public class RegisterServiceImpl implements RegisterService {
 
     @Resource
     UserDao userDao;
-
+    //用于用于的注册(业务逻辑：用户表中添加一个记录)
     @Override
     public boolean insertuser(User user) {
         User u=userDao.selectByUserName(user.getUserName());

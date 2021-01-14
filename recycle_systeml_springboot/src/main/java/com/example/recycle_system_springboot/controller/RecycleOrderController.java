@@ -63,12 +63,72 @@ public class RecycleOrderController {
         PageInfo<OrdersVo> result = recycleOrderService.adminfindAllDoingOrders(a.getUsername(),a.getCollectorname(),a.getDatebyday(),a.getDatebymonth(),a.getDatepick(),start,limit);
         return result;
     }
-
-
-    @GetMapping("/getallitem")
+    //Echarts根据预约时间统计订单
+    @GetMapping("/collectorselectCountbytime/{id}")
     @ResponseBody
-    public List<ItemVo> getAllItem(){
-        List<ItemVo> result=recycleOrderService.getAllItems();
+    public List<EchartsTimeVo> collectorselectCountbytime(@PathVariable("id") int id){
+        List<EchartsTimeVo> result=recycleOrderService.collectorselectCountbytime(id);
+        return result;
+    }
+    @GetMapping("/adminselectCountbytime")
+    @ResponseBody
+    public List<EchartsTimeVo> adminselectCountbytime(){
+        List<EchartsTimeVo> result=recycleOrderService.adminselectCountbytime();
+        return result;
+    }
+    @GetMapping("/userselectCountbytime/{id}")
+    @ResponseBody
+    public List<EchartsTimeVo> userselectCountbytime(@PathVariable("id") int id){
+        List<EchartsTimeVo> result=recycleOrderService.userselectCountbytime(id);
+        return result;
+    }
+
+    //Echarts根据日期统计订单
+    @GetMapping("/collectorselectCountbydate/{id}")
+    @ResponseBody
+    public List<EchartsTimeVo> collectorselectCountbydate(@PathVariable("id") int id){
+        List<EchartsTimeVo> result=recycleOrderService.collectorselectCountbydate(id);
+        return result;
+    }
+    @GetMapping("/adminselectCountbydate")
+    @ResponseBody
+    public List<EchartsTimeVo> adminselectCountbydate(){
+        List<EchartsTimeVo> result=recycleOrderService.adminselectCountbydate();
+        return result;
+    }
+    @GetMapping("/userselectCountbydate/{id}")
+    @ResponseBody
+    public List<EchartsTimeVo> userselectCountbydate(@PathVariable("id") int id){
+        List<EchartsTimeVo> result=recycleOrderService.userselectCountbydate(id);
+        return result;
+    }
+
+    //Echarts根据日期统计回收金额
+    @GetMapping("/collectorselectAmountbydate/{id}")
+    @ResponseBody
+    public List<EchartsTimeVo> collectorselectAmountbydate(@PathVariable("id") int id){
+        List<EchartsTimeVo> result=recycleOrderService.collectorselectAmountbydate(id);
+        return result;
+    }
+    @GetMapping("/adminselectAmountbydate")
+    @ResponseBody
+    public List<EchartsTimeVo> adminselectAmountbydate(){
+        List<EchartsTimeVo> result=recycleOrderService.adminselectAmountbydate();
+        return result;
+    }
+
+    @GetMapping("/getallitem/{id}")
+    @ResponseBody
+    public List<ItemVo> getAllItem(@PathVariable("id") int id){
+        List<ItemVo> result=recycleOrderService.getAllItems(id);
+        return result;
+
+    }
+
+    @GetMapping("/getallitembyrecycle")
+    @ResponseBody
+    public List<ItemVo> getAllitembyrecycle(){
+        List<ItemVo> result=recycleOrderService.getAllItemsbyrecycle();
         return result;
 
     }
@@ -97,13 +157,8 @@ public class RecycleOrderController {
     @GetMapping("/placecollector/{recycleorderId}/{collectorName}")
     @ResponseBody
     public int placeCollector(@PathVariable("recycleorderId") int recycleorderId,@PathVariable("collectorName") String collectorName){
-        boolean result=recycleOrderService.placecollector(recycleorderId,collectorName);
-        if(result){
-            return recycleorderId;
-        }
-        else{
-            return 0;
-        }
+        int result=recycleOrderService.placecollector(recycleorderId,collectorName);
+        return result;
     }
 
     //派送员确认订单
@@ -112,5 +167,27 @@ public class RecycleOrderController {
     public Boolean confirmOrder(@RequestBody OrderDto order){
         Boolean result=recycleOrderService.confirmOrder(order);
         return result;
+    }
+
+    @PostMapping("/evaluationorder")
+    @ResponseBody
+    public Boolean Evaluationdonation(@RequestBody EvaluationVo order){
+        Boolean result=recycleOrderService.Evaluateorder(order);
+        return result;
+    }
+
+    //删除订单
+    @DeleteMapping("/userdeleteorder/{recycleorderId}")
+    @ResponseBody
+    public Boolean DeleteOrder(@PathVariable("recycleorderId") int recycleorderId){
+        Boolean result=recycleOrderService.DeleteOrder(recycleorderId);
+        return result;
+    }
+
+    @GetMapping("/totalAmount")
+    @ResponseBody
+    public Double getSumAmount(){
+       Double result=recycleOrderService.getSumAmount();
+       return result;
     }
 }
